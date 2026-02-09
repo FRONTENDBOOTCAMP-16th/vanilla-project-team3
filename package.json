@@ -1,5 +1,5 @@
 {
-    "type": "module",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "prod": "vite build",
