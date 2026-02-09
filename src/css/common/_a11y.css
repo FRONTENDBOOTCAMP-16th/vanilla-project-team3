@@ -1,0 +1,11 @@
+/* 접근성 관련 CSS */
+.sr_only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  margin: -1px;
+  clip-path: polygon(0 0, 0 0, 0 0);
+  padding: 0;
+  border-width: 0;
+}
