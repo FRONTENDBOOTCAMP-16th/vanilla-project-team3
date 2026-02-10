@@ -77,8 +77,8 @@ VS Code
 ---
 
 # 폴더 구조
-
-`VANILLA-PROJECT-TEAM3/
+```
+VANILLA-PROJECT-TEAM3/
 ├── public/ # 정적 파일 (빌드 시 루트로 복사됨, favicon 등)
 ├───── src/ # 소스 코드 (실제 개발 작업 공간)
 | | ├──css/ # 스타일 시트
@@ -99,7 +99,8 @@ VS Code
 ├── package.json # 의존성 관리
 ├── .gitignore # Git 제외 파일 목록
 ├── eslint.config.mjs # eslint 설정 파일
-└── vite.config.mjs # Vite 설정 파일`
+└── vite.config.mjs # Vite 설정 파일
+```
 
 ---
 
@@ -120,7 +121,7 @@ VS Code
 
 ### Step1
 
-`bun install` node\*modules 폴더 생성 확인
+`bun install` node_modules 폴더 생성 확인
 
 ### Step2
 
@@ -128,7 +129,7 @@ VS Code
 
 ### Step3
 
-`bun run prepare` .husky/\* 경로 생성 확인
+`bun run prepare` .husky/ 경로 생성 확인
 
 ### Step 4
 
