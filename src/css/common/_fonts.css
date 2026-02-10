@@ -14,3 +14,11 @@ http://scripts.sil.org/OFL
   font-display: swap;
   src: url('/src/font/PretendardVariable.woff2') format('woff2-variations');
 }
+
+
+@font-face {
+  font-family: 'JejuHallasan';
+  font-weight: normal;
+  font-style: normal;
+  src: url('/src/font/JejuHallasan.woff2') format('woff2');
+}
