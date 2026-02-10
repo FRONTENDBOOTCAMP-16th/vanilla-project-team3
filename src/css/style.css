@@ -1,0 +1,11 @@
+@layer font, ally, normalize, base, theme, components;
+
+/* 기본 CSS */
+@import './common/_fonts.css' layer(font);
+@import './common/_a11y.css' layer(a11y);
+@import './common/_normalize.css' layer(normalize);
+@import './common/_base.css' layer(base);
+@import './common/_theme.css' layer(theme);
+
+/* 추가된 레이아웃 CSS */
+@import './components/_example.css' layer(components);
