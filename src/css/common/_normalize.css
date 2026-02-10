@@ -1,7 +1,8 @@
 /*! yamoo9-normalize v1.0.0 */
 html {
   -webkit-text-size-adjust: 100%;
-  font-family: 'Pretendard Variable', 'JejuHallasan', sans-serif, Roboto, Helvetica, Arial;
+  font-family:
+    'Pretendard Variable', 'JejuHallasan', sans-serif, Roboto, Helvetica, Arial;
   tab-size: 2;
 }
 body {
