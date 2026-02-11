@@ -5,7 +5,7 @@
   color: var(--title-color);
 }
 .page-layout-subtitle {
- font-size: 2rem; 
- color: var(--white);
- margin-block: 40px;
+  font-size: 2rem;
+  color: var(--white);
+  margin-block: 40px;
 }

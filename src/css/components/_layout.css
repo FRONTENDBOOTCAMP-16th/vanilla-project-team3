@@ -21,7 +21,7 @@
   }
 
   /* 날씨 선택 이모지 */
-  .select-weather { 
+  .select-weather {
     .radio-button-area {
       position: relative;
     }
@@ -32,7 +32,7 @@
       left: 50%;
       translate: -50% -50%;
       &:focus-visible {
-        &+.radio-weather-label {
+        & + .radio-weather-label {
           outline: 10px solid black;
         }
       }
@@ -43,7 +43,6 @@
   }
 }
 
- 
 /* 이모지 레이아웃 */
 .radio-mood-button {
   border: 1px solid black;
