@@ -1,1 +1,64 @@
-/*  */
+/* 이모지 레이아웃 */
+.section-page-area {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+
+  .select-weather {
+    display: flex;
+    gap: 20px;
+  }
+
+  .select-mood {
+    display: flex;
+    gap: 20px;
+    margin-block-start: 10px;
+  }
+
+  /* 날씨 선택 이모지 */
+  .select-mood,
+  .select-weather {
+    .radio-button-area {
+      display: flex;
+      position: relative;
+    }
+
+    .radio-mood-input,
+    .radio-weather-input {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      z-index: -1;
+
+      &:focus-visible {
+        & + .radio-mood-label,
+        & + .radio-weather-label {
+          outline: 2px solid var(--focus-color);
+          border-radius: 8px;
+        }
+      }
+
+      &:checked {
+        & + .radio-mood-label,
+        & + .radio-weather-label {
+          outline: 2px solid var(--focus-color);
+          border-radius: 8px;
+        }
+      }
+    }
+
+    .radio-mood-label,
+    .radio-weather-label {
+      cursor: pointer;
+      padding: 10px;
+      transition: transform 300ms ease-in-out;
+      transform: translateY(-5px);
+
+      &:hover {
+        transform: translateY(-10px);
+      }
+    }
+  }
+}
