@@ -54,10 +54,9 @@
       cursor: pointer;
       padding: 10px;
       transition: transform 300ms ease-in-out;
-      transform: translateY(-5px);
 
       &:hover {
-        transform: translateY(-10px);
+        transform: translateY(-5px);
       }
     }
   }
