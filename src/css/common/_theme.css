@@ -1,11 +1,10 @@
 :root {
-  --white: #FFFFFF;
---black: #000000;
---title-color : #FFFDE5;
---button-color : #FFFDE5;
---button-text: #342F5A;
---popup-button-color: #328BB8;
---popup-close-button: #AAAAAA;
---profile: #323363;
-
+  --white: #ffffff;
+  --black: #000000;
+  --title-color: #fffde5;
+  --button-color: #fffde5;
+  --button-text: #342f5a;
+  --popup-button-color: #328bb8;
+  --popup-close-button: #aaaaaa;
+  --profile: #323363;
 }
