@@ -9,3 +9,5 @@
 
 /* 추가된 레이아웃 CSS */
 @import './components/index.css' layer(components);
+@import './components/_emoji.css' layer(components);
+@import './components/_button.css' layer(components);
