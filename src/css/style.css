@@ -9,3 +9,4 @@
 
 /* 추가된 레이아웃 CSS */
 @import './components/_example.css' layer(components);
+@import './components/result-display.css' layer(components);
