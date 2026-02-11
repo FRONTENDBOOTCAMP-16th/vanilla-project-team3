@@ -1,0 +1,95 @@
+/* 팝업 본체 */
+.common-dialog {
+  border: none;
+  border-radius: 24px;
+  padding: 40px 30px;
+  width: 90%;
+  max-width: 320px;
+  text-align: center;   
+}
+
+/* 팝업 뒤 배경 블러처리 */
+.common-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.popup-title {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  color: var(--black);
+}
+
+.popup-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 30px;
+  color: var(--black);
+}
+
+.confirm-button {
+  width: 80%;
+  background-color: var(--popup-button-color);
+  color: var(--white);
+  border-radius: 8px;
+  padding: 14px 0;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.confirm-button:hover{
+  outline: 3px solid var(--primary-color);
+}
+
+.close-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: var(--popup-close-button);
+  border-radius: 50%;
+  color: var(--white);
+  width: 24px;
+  height: 24px;
+  font-size: 15px;
+  line-height: 1;
+
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.heart-btn {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: start;
+  justify-content: start;
+}
+
+.heart-btn svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.heart-btn .icon-heart-on { 
+  opacity: 0; 
+  transform: translate(-50%, -50%) scale(1); 
+}
+.heart-btn.active .icon-heart-on { 
+  opacity: 1; 
+  transform: translate(-50%, -50%) scale(1); 
+}
+
+.heart-btn.active .icon-heart-off { 
+  opacity: 0; 
+}
+

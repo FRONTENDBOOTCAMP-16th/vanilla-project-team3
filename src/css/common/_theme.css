@@ -1,3 +1,15 @@
 :root {
-  /* 테마 색상 */
+  --white: #FFFFFF;
+  --black: #000000;
+  --title-color : #FFFDE5;
+  --button-color : #FFFDE5;
+  --button-text: #342F5A;
+  --popup-button-color: #328BB8;
+  --popup-close-button: #AAAAAA;
+  --profile: #323363;
+
+  color-scheme: light dark;
+  --deep-yellow-color: #ffcb29;
+  --deep-purple-color: #5237a4;
+  --primary-color: light-dark(var(--deep-purple-color), var(--deep-yellow-color));
 }
