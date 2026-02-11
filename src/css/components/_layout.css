@@ -3,8 +3,19 @@
   display: flex;
   flex-flow: column;
   justify-content: center;
-  min-height: 640px;
 
-  /* 테스트 배경 */
+  /* 테스트를 위한 배경 */
   background-color: #222;
+}
+
+/* 책 레이아웃 > 로그인 레이아웃 */
+.user-submit-area {
+  margin-block-start: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    'check check'
+    'login join';
+  gap: 10px;
 }

@@ -1,1 +1,24 @@
-/* 버튼 CSS */
+/* 비회원 확인하기 버튼 */
+.user-test-check {
+  background-color: var(--button-color);
+  border-radius: 25px;
+  grid-area: check;
+  color: var(--button-text);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* 회원가입 버튼 */
+/* 로그인 버튼 */
+.user-join,
+.user-login {
+  background-color: var(--button-color);
+  border-radius: 25px;
+  grid-area: login;
+  color: var(--button-text);
+  font-size: 1.25rem;
+}
+/* 회원가입 버튼 */
+.user-join {
+  grid-area: join;
+}
