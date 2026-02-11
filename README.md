@@ -77,6 +77,7 @@ VS Code
 ---
 
 # 폴더 구조
+
 ```
 VANILLA-PROJECT-TEAM3/
 ├── public/ # 정적 파일 (빌드 시 루트로 복사됨, favicon 등)
