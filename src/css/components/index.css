@@ -1,0 +1,10 @@
+/* 이 컴포넌트는 예시입니다 */
+body{
+  background-image: url(../../image/background.jpg);
+  inline-size: 100vw;
+  block-size: 100vh;
+}
+
+@media screen(max-width:768px){
+
+}
