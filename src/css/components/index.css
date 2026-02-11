@@ -5,8 +5,8 @@ body {
   block-size: 100vh;
 }
 
- @media screen(max-width:768px) {
-  .container{
-    border: 2px solid var(--)
+@media screen(max-width:768px) {
+  .container {
+    border: 2px solid var(--);
   }
-} 
+}
