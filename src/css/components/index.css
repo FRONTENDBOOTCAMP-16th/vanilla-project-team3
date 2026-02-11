@@ -1,12 +1,39 @@
 /* 이 컴포넌트는 예시입니다 */
+
+/* PC ---------------------- */
 body {
-  background-image: url(../../image/background.jpg);
+  position: relative;
   inline-size: 100vw;
   block-size: 100vh;
+  background-image: url(../../image/background.jpg);
+  background-repeat: no-repeat;
+  overflow: hidden;
 }
 
-@media screen(max-width:768px) {
+.container{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  inline-size: 1020px;
+  block-size: 700px;
+  background-color: rgba(255,255,255,0.2);
+  border: 2px solid var(--title-color);
+  border-radius: 15px;
+}
+
+/* 모바일 ---------------------- */
+@media (max-width:768px) {
   .container {
-    border: 2px solid var(--);
+    inline-size: 80%;
+    border: 2px solid var(--title-color);
+  }
+}
+
+/* 노트북 ---------------------- */
+@media (min-width: 769px) and (max-width: 1280px) {
+  .container {
+    width: 900px;
+    max-width: 1200px;
   }
 }
