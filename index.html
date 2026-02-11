@@ -7,49 +7,102 @@
     <title>바닐라 팀프로젝트 문학소녀팀</title>
   </head>
   <body>
-    <!-- 이모지 영역 시작 -->
-    <section>
-      <h2>당신의 기분을 이해해봐요</h2>
-      <span class="sr-only">날씨를 선택해 주세요</span>
 
-      <ul role="radiogroup">
-        <li>
-          <input type="radio" name="radio-mood" id="radio-mood-sunny" />
-          <label class="radio-mood-button" for="radio-mood-sunny">
-            <img aria-hidden="true" src="/src/image/sunny.svg" alt="" />
-            <span class="sr-only">날씨 - 해</span>
-          </label>
-        </li>
-        <li>
-          <input type="radio" name="radio-mood" id="radio-mood-cloud" />
-          <label class="radio-mood-button" for="radio-mood-cloud">
-            <img aria-hidden="true" src="/src/image/cloud.svg" alt="" />
-            <span class="sr-only">날씨 - 구름</span>
-          </label>
-        </li>
-        <li>
-          <input type="radio" name="radio-mood" id="radio-mood-rain" />
-          <label class="radio-mood-button" for="radio-mood-rain">
-            <img aria-hidden="true" src="/src/image/rainy.svg" alt="" />
-            <span class="sr-only">날씨 - 비</span>
-          </label>
-        </li>
-        <li>
-          <input type="radio" name="radio-mood" id="radio-mood-snow" />
-          <label class="radio-mood-button" for="radio-mood-snow">
-            <img aria-hidden="true" src="/src/image/snowdrop.svg" alt="" />
-            <span class="sr-only">날씨 - 눈</span>
-          </label>
-        </li>
-        <li>
-          <input type="radio" name="radio-mood" id="radio-mood-dustwind" />
-          <label class="radio-mood-button" for="radio-mood-dustwind">
-            <img aria-hidden="true" src="/src/image/dustwind.svg" alt="" />
-            <span class="sr-only">날씨 - 눈</span>
-          </label>
-        </li>
-      </ul>
+    <!-- 책 레이아웃 시작 -->
+    <section class="section-page-layout">
+      <h2 class="page-layout-title">나의 작은 마음 도서관</h2>
+      <p class="page-layout-subtitle">당신에 대해 알려주세요.</p>
+
+      <!-- 이모지 영역 시작 -->
+      <article class="section-page-area">
+        <span class="sr-only">날씨를 선택해 주세요</span>
+  
+        <ul class="select-weather" role="radiogroup">
+          <li class="radio-button-area">
+            <input type="radio" class="radio-weather-input" name="radio-weather" id="radio-weather-sunny" />
+            <label class="radio-weather-label" for="radio-weather-sunny">
+              <img aria-hidden="true" src="/src/image/sunny.svg" alt="" />
+              <span class="sr-only">해</span>
+            </label>
+          </li>
+          <li class="radio-button-area">
+            <input type="radio" class="radio-weather-input" name="radio-weather" id="radio-weather-cloud" />
+            <label class="radio-weather-label" for="radio-weather-cloud">
+              <img aria-hidden="true" src="/src/image/cloud.svg" alt="" />
+              <span class="sr-only">구름</span>
+            </label>
+          </li>
+          <li class="radio-button-area">
+            <input type="radio" class="radio-weather-input" name="radio-weather" id="radio-weather-rain" />
+            <label class="radio-weather-label" for="radio-weather-rain">
+              <img aria-hidden="true" src="/src/image/rainy.svg" alt="" />
+              <span class="sr-only">비</span>
+            </label>
+          </li>
+          <li class="radio-button-area">
+            <input type="radio" class="radio-weather-input" name="radio-weather" id="radio-weather-snow" />
+            <label class="radio-weather-label" for="radio-weather-snow">
+              <img aria-hidden="true" src="/src/image/snowdrop.svg" alt="" />
+              <span class="sr-only">눈</span>
+            </label>
+          </li>
+          <li class="radio-button-area">
+            <input
+              type="radio"
+              class="radio-weather-input" name="radio-weather"
+              id="radio-weather-dustwind"
+            />
+            <label class="radio-weather-label" for="radio-weather-dustwind">
+              <img aria-hidden="true" src="/src/image/dustwind.svg" alt="" />
+              <span class="sr-only">눈</span>
+            </label>
+          </li>
+        </ul>
+
+        <!-- 기분 선택 영역 시작 -->
+        <span class="sr-only">기분을 선택해 주세요</span>
+        <ul class="select-mood" role="radiogroup">
+          <li class="radio-button-area">
+            <input type="radio" class="radio-mood-input" name="radio-mood" id="radio-mood-smile" />
+            <label class="radio-mood-label" for="radio-mood-smile">
+              <img aria-hidden="true" src="/src/image/smile.png" alt="" />
+              <span class="sr-only">행복</span>
+            </label>
+          </li>
+          <li class="radio-button-area">
+            <input type="radio" class="radio-mood-input" name="radio-mood" id="radio-mood-sad" />
+            <label class="radio-mood-label" for="radio-mood-sad">
+              <img aria-hidden="true" src="/src/image/sad.png" alt="" />
+              <span class="sr-only">슬픔</span>
+            </label>
+          </li>
+          <li class="radio-button-area">
+            <input type="radio" class="radio-mood-input" name="radio-mood" id="radio-mood-impassive" />
+            <label class="radio-mood-label" for="radio-mood-impassive">
+              <img aria-hidden="true" src="/src/image/impassive.png" alt="" />
+              <span class="sr-only">그저그럼</span>
+            </label>
+          </li>
+          <li class="radio-button-area">
+            <input type="radio" class="radio-mood-input" name="radio-mood" id="radio-mood-tired" />
+            <label class="radio-mood-label" for="radio-mood-tired">
+              <img aria-hidden="true" src="/src/image/tired.png" alt="" />
+              <span class="sr-only">피곤함</span>
+            </label>
+          </li>
+        </ul>
+        <!-- 기분 선택 영역 끝 -->
+      </article>
+      <!-- 이모지 영역 꿑 -->
+
+      <!-- 로그인 영역 시작 -->
+      <article class="user-submit-area">
+        <button class="user-test-check">비회원 확인하기</button>
+        <button class="user-login">로그인</button>
+        <button class="user-join">회원가입</button>
+       </article>
+      <!-- 로그인 영역 끝 -->
     </section>
-    <!-- 이모지 영역 꿑 -->
+    
   </body>
 </html>

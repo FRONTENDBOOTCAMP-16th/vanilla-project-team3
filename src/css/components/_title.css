@@ -1,0 +1,11 @@
+/* 책 레이아웃의 타이틀 스타일 */
+.page-layout-title {
+  font-family: 'JejuHallasan';
+  font-size: 4rem;
+  color: var(--title-color);
+}
+.page-layout-subtitle {
+ font-size: 2rem; 
+ color: var(--white);
+ margin-block: 40px;
+}

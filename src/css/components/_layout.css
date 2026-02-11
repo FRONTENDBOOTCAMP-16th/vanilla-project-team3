@@ -1,0 +1,54 @@
+/* 책 레이아웃 */
+.section-page-layout {
+  background-color: #222;
+}
+
+/* 이모지 레이아웃 */
+.section-page-area {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+
+  .select-weather {
+    display: flex;
+    gap: 30px;
+  }
+
+  .select-mood {
+    display: flex;
+    gap: 30px;
+  }
+
+  /* 날씨 선택 이모지 */
+  .select-weather { 
+    .radio-button-area {
+      position: relative;
+    }
+
+    .radio-weather-input {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      &:focus-visible {
+        &+.radio-weather-label {
+          outline: 10px solid black;
+        }
+      }
+    }
+    .radio-weather-label {
+      z-index: 2;
+    }
+  }
+}
+
+ 
+/* 이모지 레이아웃 */
+.radio-mood-button {
+  border: 1px solid black;
+  img,
+  span {
+    border: 1px solid black;
+  }
+}
