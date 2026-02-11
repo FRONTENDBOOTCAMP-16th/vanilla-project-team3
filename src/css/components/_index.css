@@ -10,6 +10,7 @@ body {
   overflow: hidden;
 }
 
+/* 겉 박스 CSS */
 .container {
   position: absolute;
   top: 50%;
@@ -20,10 +21,34 @@ body {
   background-color: rgba(255, 255, 255, 0.2);
   border: 2px solid var(--title-color);
   border-radius: 15px;
+
+  .my-page-box {
+    position: absolute;
+    z-index: 9999;
+    inline-size: 100vw;
+    block-size: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    .profile-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      inline-size: 800px;
+      block-size: 550px;
+      padding-block: 60px;
+      padding-inline: 30px;
+      background-color: var(--white);
+      border-radius: 15px;
+    }
+  }
 }
+
+/* 마이페이지 CSS */
 
 /* 모바일 ---------------------- */
 @media (max-width: 768px) {
+  /* 겉 박스 CSS */
   .container {
     inline-size: 80%;
     border: 2px solid var(--title-color);
@@ -32,6 +57,7 @@ body {
 
 /* 노트북 ---------------------- */
 @media (min-width: 769px) and (max-width: 1280px) {
+  /* 겉 박스 CSS */
   .container {
     width: 900px;
     max-width: 1200px;
