@@ -28,7 +28,7 @@ body {
   /* 마이페이지 레이아웃 */
   .my-page-box {
     position: absolute;
-    z-index: 9999; 
+    z-index: 9999;
     inline-size: 100vw;
     block-size: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
@@ -46,20 +46,20 @@ body {
       background-color: var(--white);
       border-radius: 15px;
 
-      .my-page-contents{
-        display:flex;
+      .my-page-contents {
+        display: flex;
         flex-flow: nowrap column;
 
-        .mypage-top-title-close{
+        .mypage-top-title-close {
           display: flex;
           justify-content: space-between;
 
-          .page-title{
+          .page-title {
             color: var(--black);
             font-size: 32px;
             font-weight: 700;
           }
-          .mypage-close{
+          .mypage-close {
             inline-size: 24px;
             block-size: 24px;
             padding: 0;
@@ -68,61 +68,61 @@ body {
           }
         }
 
-        .profile-container{
-            display:flex;
-            flex-flow: nowrap row;
-            justify-content: flex-start;
-            gap: 24px;
-            margin-block-start: 30px;
+        .profile-container {
+          display: flex;
+          flex-flow: nowrap row;
+          justify-content: flex-start;
+          gap: 24px;
+          margin-block-start: 30px;
 
-            .profile{
-              inline-size: 100px;
-              block-size: 100px;
-              border-radius: 100%;
+          .profile {
+            inline-size: 100px;
+            block-size: 100px;
+            border-radius: 100%;
           }
 
-          .profile-setting{
+          .profile-setting {
             background-color: red;
             inline-size: 254px;
             position: relative;
 
-            .personal-infomation{
-              display:flex;
+            .personal-infomation {
+              display: flex;
               flex-flow: nowrap column;
               justify-content: space-between;
 
-              .info-text{
+              .info-text {
                 background-color: green;
-                display:flex;
+                display: flex;
                 flex-flow: nowrap row;
                 gap: 20px;
-                .personal-box{
+                .personal-box {
                   background-color: #fff;
                   display: block;
                 }
               }
             }
 
-            .setting-button{
+            .setting-button {
               position: absolute;
               bottom: 0;
-              display:flex;
+              display: flex;
               flex-flow: nowrap row;
               gap: 14px;
 
-            .change-btn{
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              inline-size: 120px;
-              block-size: 30px;
-              background-color: var(--popup-button-color); 
-              border-radius: 5px;
-              color: var(--white);   
-              font-size: 14px; 
-              font-weight: 400;      
+              .change-btn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                inline-size: 120px;
+                block-size: 30px;
+                background-color: var(--popup-button-color);
+                border-radius: 5px;
+                color: var(--white);
+                font-size: 14px;
+                font-weight: 400;
+              }
             }
-          }
           }
         }
       }
@@ -135,15 +135,13 @@ body {
 /* 모바일 ---------------------- */
 @media (min-width: 1024px) {
   /* 겉 박스 CSS */
-  body{
-  inline-size: 100vw;
-  block-size: 100vh;
+  body {
+    inline-size: 100vw;
+    block-size: 100vh;
   }
   .container {
-      max-inline-size: 1020px;
-      max-block-size: 700px;
-      border: 2px solid var(--title-color);
+    max-inline-size: 1020px;
+    max-block-size: 700px;
+    border: 2px solid var(--title-color);
   }
 }
-
-
