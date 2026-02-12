@@ -1,12 +1,13 @@
-body {
-  background: black;
-}
-
 .result-display {
   margin: auto;
-  background: black;
+  background-image: url('https://image.yes24.com/goods/1470060/XL');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: multiply;
   max-width: 640px;
-  min-width: 400px;
+  min-width: 300px;
   height: auto;
   min-height: 700px;
   display: flex;
@@ -15,6 +16,12 @@ body {
   justify-content: center;
   align-items: center;
   border: 1px solid var(--title-color);
+}
+@media (min-width: 1024px) {
+  .result-display {
+    width: 510px;
+    border-radius: 1.5%;
+  }
 }
 
 .loading-display {
@@ -84,8 +91,28 @@ body {
   width: 30%;
   min-width: 100px;
   aspect-ratio: 1/1.25;
-  border: solid var(--white) 1px;
   margin-inline: 10px;
+  position: relative;
+}
+
+.save-button {
+  padding: 0;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: none;
+}
+.book-list img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .book-list {
+    max-width: 100px;
+  }
 }
 
 @keyframes spin {
