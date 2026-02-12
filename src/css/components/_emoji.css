@@ -19,13 +19,13 @@
   /* 날씨 선택 이모지 */
   .select-mood,
   .select-weather {
-    .radio-button-area {
+    .checkbox-button-area {
       display: flex;
       position: relative;
     }
 
-    .radio-mood-input,
-    .radio-weather-input {
+    .checkbox-mood-input,
+    .checkbox-weather-input {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -33,24 +33,24 @@
       z-index: -1;
 
       &:focus-visible {
-        & + .radio-mood-label,
-        & + .radio-weather-label {
+        & + .checkbox-mood-label,
+        & + .checkbox-weather-label {
           outline: 2px solid var(--focus-color);
           border-radius: 8px;
         }
       }
 
       &:checked {
-        & + .radio-mood-label,
-        & + .radio-weather-label {
+        & + .checkbox-mood-label,
+        & + .checkbox-weather-label {
           outline: 2px solid var(--focus-color);
           border-radius: 8px;
         }
       }
     }
 
-    .radio-mood-label,
-    .radio-weather-label {
+    .checkbox-mood-label,
+    .checkbox-weather-label {
       cursor: pointer;
       padding: 10px;
       transition: transform 300ms ease-in-out;
