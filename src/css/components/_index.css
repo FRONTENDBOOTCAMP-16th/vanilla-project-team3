@@ -3,8 +3,9 @@
 /* PC ---------------------- */
 body {
   position: relative;
-  inline-size: 100vw;
-  block-size: 100vh;
+  max-inline-size: 100vw;
+  max-block-size: 100vh;
+  box-shadow: 2px 2px 2px red;
   background-image: url(../../image/background.jpg);
   background-repeat: no-repeat;
   overflow: hidden;
@@ -16,15 +17,18 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  inline-size: 1020px;
-  block-size: 700px;
+  max-inline-size: 640px;
+  inline-size: 80%;
+  max-block-size: 100vh;
+  block-size: 80%;
   background-color: rgba(255, 255, 255, 0.2);
   border: 2px solid var(--title-color);
   border-radius: 15px;
 
+  /* 마이페이지 레이아웃 */
   .my-page-box {
     position: absolute;
-    z-index: 9999;
+    z-index: 9999; 
     inline-size: 100vw;
     block-size: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
@@ -34,7 +38,8 @@ body {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      inline-size: 800px;
+      max-inline-size: 640px;
+      inline-size: 80%;
       block-size: 550px;
       padding-block: 60px;
       padding-inline: 30px;
@@ -42,7 +47,6 @@ body {
       border-radius: 15px;
 
       .my-page-contents{
-        background: red;
         display:flex;
         flex-flow: nowrap column;
 
@@ -64,10 +68,62 @@ body {
           }
         }
 
-        .my-page-profile{
-          display:flex;
-          flex-flow: nowrap row;
-          justify-content: flex-start;
+        .profile-container{
+            display:flex;
+            flex-flow: nowrap row;
+            justify-content: flex-start;
+            gap: 24px;
+            margin-block-start: 30px;
+
+            .profile{
+              inline-size: 100px;
+              block-size: 100px;
+              border-radius: 100%;
+          }
+
+          .profile-setting{
+            background-color: red;
+            inline-size: 254px;
+            position: relative;
+
+            .personal-infomation{
+              display:flex;
+              flex-flow: nowrap column;
+              justify-content: space-between;
+
+              .info-text{
+                background-color: green;
+                display:flex;
+                flex-flow: nowrap row;
+                gap: 20px;
+                .personal-box{
+                  background-color: #fff;
+                  display: block;
+                }
+              }
+            }
+
+            .setting-button{
+              position: absolute;
+              bottom: 0;
+              display:flex;
+              flex-flow: nowrap row;
+              gap: 14px;
+
+            .change-btn{
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              inline-size: 120px;
+              block-size: 30px;
+              background-color: var(--popup-button-color); 
+              border-radius: 5px;
+              color: var(--white);   
+              font-size: 14px; 
+              font-weight: 400;      
+            }
+          }
+          }
         }
       }
     }
@@ -77,19 +133,17 @@ body {
 /* 마이페이지 CSS */
 
 /* 모바일 ---------------------- */
-@media (max-width: 375px) {
+@media (min-width: 1024px) {
   /* 겉 박스 CSS */
+  body{
+  inline-size: 100vw;
+  block-size: 100vh;
+  }
   .container {
-    inline-size: 80%;
-    border: 2px solid var(--title-color);
+      max-inline-size: 1020px;
+      max-block-size: 700px;
+      border: 2px solid var(--title-color);
   }
 }
 
-/* 노트북 ---------------------- */
-@media (max-width : 768px) {
-  /* 겉 박스 CSS */
-  .container {
-    width: 900px;
-    max-width: 1200px;
-  }
-}
+
