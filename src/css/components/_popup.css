@@ -1,5 +1,4 @@
 .needlogin-dialog-area {
-  background: black;
   box-sizing: border-box;
 }
 
@@ -56,14 +55,9 @@
   position: absolute;
   top: 15px;
   right: 15px;
-  background-color: var(--popup-close-button);
-  border-radius: 50%;
-  color: var(--white);
   width: 24px;
   height: 24px;
-  font-size: 15px;
 
-  border: none;
   cursor: pointer;
   padding: 0;
 }
@@ -88,15 +82,14 @@
   opacity: 0;
   transform: translate(-50%, -50%) scale(1);
 }
-.heart-btn.active .icon-heart-on {
+.heart-btn.heart-active .icon-heart-on {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }
 
-.heart-btn.active .icon-heart-off {
+.heart-btn.heart-active .icon-heart-off {
   opacity: 0;
 }
-
 
 /* mypage */
 .my-page-dialog {
@@ -142,25 +135,24 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 8px;
-  width: 100%; 
+  width: 100%;
 }
 
 .data-row dt {
-  width: 70px; 
+  width: 70px;
   font-weight: bold;
   font-size: 14px;
   color: var(--black);
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
 
 .data-row dd {
   margin: 0;
   font-size: 15px;
   color: var(--black);
-  flex: 1; 
-  text-align: left; 
+  flex: 1;
+  text-align: left;
 }
-
 
 .button-group {
   display: flex;
@@ -225,11 +217,11 @@
     text-align: left;
   }
 
-  .profile-circle{
+  .profile-circle {
     flex: 0 0 120px;
     height: 120px;
   }
-  
+
   .book-list {
     grid-template-columns: repeat(6, 1fr);
     gap: 15px;
@@ -242,10 +234,6 @@
   position: absolute;
   top: -5px;
   right: -5px;
-  background: rgba(255, 0, 0, 0.8);
-  color: white;
-  border: none;
-  border-radius: 50%;
 
   width: 24px;
   height: 24px;
@@ -256,8 +244,6 @@
 
   align-items: center;
   justify-content: center;
-
-  font-size: 18px;
   padding: 0;
 }
 
@@ -274,5 +260,14 @@
 
 .book-list li {
   position: relative;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.empty-msg {
+  grid-column: 1 / -1;
+  padding: 40px;
+  color: var(--black);
+  text-align: center;
 }
