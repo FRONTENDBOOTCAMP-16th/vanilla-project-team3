@@ -1,11 +1,16 @@
-/* 팝업 본체 */
+.needlogin-dialog-area {
+  background: black;
+  box-sizing: border-box;
+}
+
+/* 팝업 공통 */
 .common-dialog {
   border: none;
-  border-radius: 24px;
+  border-radius: 20px;
   padding: 40px 30px;
   width: 90%;
   max-width: 320px;
-  text-align: center;   
+  text-align: center;
 }
 
 /* 팝업 뒤 배경 블러처리 */
@@ -40,7 +45,7 @@
   cursor: pointer;
 }
 
-.confirm-button:hover{
+.confirm-button:hover {
   outline: 3px solid var(--primary-color);
 }
 
@@ -57,7 +62,6 @@
   width: 24px;
   height: 24px;
   font-size: 15px;
-  line-height: 1;
 
   border: none;
   cursor: pointer;
@@ -80,16 +84,195 @@
   transform: translate(-50%, -50%);
 }
 
-.heart-btn .icon-heart-on { 
-  opacity: 0; 
-  transform: translate(-50%, -50%) scale(1); 
+.heart-btn .icon-heart-on {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1);
 }
-.heart-btn.active .icon-heart-on { 
-  opacity: 1; 
-  transform: translate(-50%, -50%) scale(1); 
-}
-
-.heart-btn.active .icon-heart-off { 
-  opacity: 0; 
+.heart-btn.active .icon-heart-on {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
+.heart-btn.active .icon-heart-off {
+  opacity: 0;
+}
+
+
+/* mypage */
+.my-page-dialog {
+  width: calc(100% - 40px);
+  max-width: 335px;
+  padding: 30px 20px;
+  border-radius: 20px;
+  border: none;
+  background-color: var(--white);
+  margin: auto;
+}
+
+.my-page-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.user-info-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.profile-circle {
+  flex: 0 0 70px;
+  height: 70px;
+  background-color: #3a92c0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-data {
+  flex: 1;
+  min-width: 0;
+}
+
+.data-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  width: 100%; 
+}
+
+.data-row dt {
+  width: 70px; 
+  font-weight: bold;
+  font-size: 14px;
+  color: var(--black);
+  flex-shrink: 0; 
+}
+
+.data-row dd {
+  margin: 0;
+  font-size: 15px;
+  color: var(--black);
+  flex: 1; 
+  text-align: left; 
+}
+
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  width: 100%;
+  clear: both;
+}
+
+.my-page-button {
+  flex: 1;
+  font-size: 13px;
+  white-space: nowrap;
+  text-align: center;
+  background-color: var(--popup-button-color);
+  color: var(--white);
+  border-radius: 8px;
+  padding: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.my-page-button:hover {
+  outline: 3px solid var(--primary-color);
+}
+
+.book-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+.book-list li img {
+  background: skyblue;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.book-list li:hover {
+  outline: 3px solid var(--primary-color);
+}
+
+/* 데스크탑 사이즈 */
+@media (min-width: 1024px) {
+  .my-page-dialog {
+    width: 60%;
+    max-width: 800px;
+    min-width: 640px;
+    padding: 50px;
+    margin: auto;
+  }
+
+  .user-info-section {
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    text-align: left;
+  }
+
+  .profile-circle{
+    flex: 0 0 120px;
+    height: 120px;
+  }
+  
+  .book-list {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
+  }
+}
+
+/* 찜항목 삭제 버튼 눌렀을때 활성화되는 삭제버튼 */
+.delete-item-button {
+  display: none;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: rgba(255, 0, 0, 0.8);
+  color: white;
+  border: none;
+  border-radius: 50%;
+
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+
+  cursor: pointer;
+  z-index: 10;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  padding: 0;
+}
+
+.my-page-dialog.edit-mode .delete-item-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.my-page-dialog.edit-mode .book-list img {
+  opacity: 0.7;
+  filter: grayscale(0.5);
+}
+
+.book-list li {
+  position: relative;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}

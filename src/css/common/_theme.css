@@ -1,15 +1,18 @@
 :root {
-  --white: #FFFFFF;
+  --white: #ffffff;
   --black: #000000;
-  --title-color : #FFFDE5;
-  --button-color : #FFFDE5;
-  --button-text: #342F5A;
-  --popup-button-color: #328BB8;
-  --popup-close-button: #AAAAAA;
+  --title-color: #fffde5;
+  --button-color: #fffde5;
+  --button-text: #342f5a;
+  --popup-button-color: #328bb8;
+  --popup-close-button: #aaaaaa;
   --profile: #323363;
 
   color-scheme: light dark;
   --deep-yellow-color: #ffcb29;
   --deep-purple-color: #5237a4;
-  --primary-color: light-dark(var(--deep-purple-color), var(--deep-yellow-color));
+  --primary-color: light-dark(
+    var(--deep-purple-color),
+    var(--deep-yellow-color)
+  );
 }
