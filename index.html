@@ -98,7 +98,7 @@
 
         <!-- 기분 선택 영역 시작 -->
         <span class="sr-only">기분을 선택해 주세요</span>
-        <ul class="select-mood" role="checkgroup">
+        <ul class="select-mood" role="checkbox" data-checked="dubbleChecked">
           <li class="checkbox-button-area">
             <input
               type="checkbox"
@@ -159,6 +159,14 @@
         <button class="user-join">회원가입</button>
       </article>
       <!-- 로그인 영역 끝 -->
+
+      <!-- 이모지 노트 시작 -->
+      <div class="emoji-noti" aria-hidden="true">
+        <span class="emoji-noti-text"
+          >감정 / 기분은 최대 두개만 선택 가능해요!</span
+        >
+      </div>
+      <!-- 이모지 노트 끝 -->
     </section>
   </body>
 </html>
