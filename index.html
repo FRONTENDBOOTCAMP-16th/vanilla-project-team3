@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/public/bookicon.svg" />
     <link rel="stylesheet" href="./src/css/style.css" />
     <script type="module" defer src="/src/main.js"></script>
     <title>바닐라 팀프로젝트 문학소녀팀</title>
@@ -142,5 +143,157 @@
         <button class="share-button">공유하기</button>
       </article>
     </section>
+  
+
+      <dialog class="login-dialog common-dialog" aria-labelledby="login-title" aria-describedby="login-desc">
+        <h2 id="login-title" class="popup-title">로그인이 필요합니다.</h2>
+        <p id="login-desc" class="popup-desc">로그인을 하셔야 이용할 수 있는 서비스입니다.</p>
+        <form method="dialog">
+          <button class="confirm-button">확인</button>
+          <button class="close-dialog" aria-label="닫기">x</button>
+        </form>
+      </dialog>
+
+      <dialog
+        class="heart-list-dialog common-dialog"
+        aria-labelledby="heart-list-title"
+        aria-describedby="heart-list-desc"
+      >
+        <h2 id="heart-list-title" class="popup-title">
+          찜 리스트를 추가할 수 없습니다.
+        </h2>
+        <p id="heart-list-desc" class="popup-desc">
+          마이페이지로 이동하시겠습니까?
+        </p>
+        <form method="dialog">
+          <button class="confirm-button">확인</button>
+          <button class="close-dialog" aria-label="닫기">x</button>
+        </form>
+      </dialog>
+
+      <dialog
+        class="my-page-dialog"
+        aria-labelledby="my-page-title"
+      >
+        <h2 id="my-page-title" class="popup-title">My Page</h2>
+
+        <section class="user-info-section" aria-label="사용자 정보">
+          <div class="profile-area">
+            <img class="profile-circle" src="/public/bookicon.svg" alt="프로필 기본 이미지" />
+          </div>
+
+          <dl class="user-data">
+            <div class="data-row">
+              <dt>아이디</dt>
+              <dd>abc111111</dd>
+            </div>
+            <div class="data-row">
+              <dt>비밀번호</dt>
+              <dd>**********</dd>
+              <div class="button-group">
+                <button type="button" class="change-pw-button my-page-button">비밀번호 변경</button>
+                <button type="button" class="delete-book-list-button my-page-button">찜 항목 삭제</button>
+              </div>
+            </div>
+          </dl>
+        </section>
+
+        <section class="heart-list-section">
+          <h3 class="section-title">찜 리스트</h3>
+          <ul class="book-list">
+            <li>
+              <button type="button" class="delete-item-button" aria-label="삭제">×</button>
+              <a href="#"><img src="book1.jpg" alt="책 제목 1" /></a>
+            </li>
+             <li>
+               <button type="button" class="delete-item-button" aria-label="삭제">×</button>
+              <a href="#"><img src="book2.jpg" alt="책 제목 2" /></a>
+            </li>
+             <li>
+               <button type="button" class="delete-item-button" aria-label="삭제">×</button>
+              <a href="#"><img src="book3.jpg" alt="책 제목 3" /></a>
+            </li>
+             <li>
+               <button type="button" class="delete-item-button" aria-label="삭제">×</button>
+              <a href="#"><img src="book4.jpg" alt="책 제목 4" /></a>
+            </li>
+             <li>
+               <button type="button" class="delete-item-button" aria-label="삭제">×</button>
+              <a href="#"><img src="book5.jpg" alt="책 제목 5" /></a>
+            </li>
+             <li>
+               <button type="button" class="delete-item-button" aria-label="삭제">×</button>
+              <a href="#"><img src="book6.jpg" alt="책 제목 6" /></a>
+            </li>
+          </ul>
+        </section>
+
+        <form method="dialog">
+          <button class="close-dialog" aria-label="닫기">x</button>
+        </form>
+      </dialog>
+    <!-- 레이아웃 박스 -->
+    <main class="container">
+      <section class="my-page-box" role="modal-list">
+        <div class="profile-box">
+          <div class="my-page-contents" >
+            <!-- 상단 타이틀 및 닫기버튼 -->
+            <div class="mypage-top-title-close">
+              <p class="page-title">My Page</p>
+              <button type="button" class="mypage-close" aria-label="닫기">
+                <span class="sr_only">창 닫기</span>
+              </button>
+            </div>
+            <!-- 상단 타이틀 및 닫기버튼 끝-->
+            <!-- 상단 info -->
+            <div class="my-page-profile">
+              <div class="profile-container" aria-label="프로필">
+                <img
+                  src="https://picsum.photos/100"
+                  alt="프로필이미지"
+                  class="profile"
+                  aria-label="프로필 이미지"
+                />
+                <div class="profile-setting">
+                  <ul class="personal-infomation">
+                    <li class="id-label">
+                      아이디 <span class="login-id">abc111111</span>
+                    </li>
+                    <li class="pw-label">
+                      비밀번호 <span class="login-pw">********</span>
+                    </li>
+                  </ul>
+                  <ul class="setting-button">
+                    <li class="change-pw-button">
+                      <button type="button" aria-label="비밀번호변경">
+                        비밀번호 변경
+                      </button>
+                    </li>
+                    <li class="">
+                      <button type="button" aria-label="찜항목삭제">
+                        찜 항목 삭제
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- 상단 info 끝 -->
+            <!-- 찜 항목 리스트 -->
+            <div class="like-book-list">
+              <ul>
+                <li class="like-book-list">1</li>
+                <li class="like-book-list">2</li>
+                <li class="like-book-list">3</li>
+                <li class="like-book-list">4</li>
+                <li class="like-book-list">5</li>
+                <li class="like-book-list">6</li>
+              </ul>
+            </div>
+            <!-- 찜 항목 리스트 끝  -->
+          </div>
+        </div>
+      </section>
+    </main>
   </body>
 </html>

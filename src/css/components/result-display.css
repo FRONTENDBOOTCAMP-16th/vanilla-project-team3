@@ -5,14 +5,14 @@
   background-position: center;
   background-color: rgba(1, 1, 1, 0.5);
   background-blend-mode: multiply;
-  
+
   margin: 0 auto;
   max-width: 640px;
   min-width: 300px;
   width: 100%;
   height: auto;
   min-height: 700px;
-  
+
   position: relative;
   display: flex;
   flex-direction: column;
@@ -94,21 +94,20 @@
   }
 }
 @media (min-width: 1024px) {
-.recommend-phrase {
-  .book-title {
-    font-size: 40px;
-  }
+  .recommend-phrase {
+    .book-title {
+      font-size: 40px;
+    }
 
-  .author {
-    font-size: 20px;
-  }
+    .author {
+      font-size: 20px;
+    }
 
-  .phrase {
-    font-size: 24px;
+    .phrase {
+      font-size: 24px;
+    }
   }
 }
-}
-
 
 .recommend-books {
   .recommend-lists {
