@@ -1,2 +1,5 @@
 // CSS 호출
 import './css/style.css'
+
+// JS 호출
+import './js/components/_checked.js'
