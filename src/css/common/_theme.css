@@ -7,4 +7,12 @@
   --popup-button-color: #328bb8;
   --popup-close-button: #aaaaaa;
   --profile: #323363;
+
+  color-scheme: light dark;
+  --deep-yellow-color: #ffcb29;
+  --deep-purple-color: #5237a4;
+  --primary-color: light-dark(
+    var(--deep-purple-color),
+    var(--deep-yellow-color)
+  );
 }
