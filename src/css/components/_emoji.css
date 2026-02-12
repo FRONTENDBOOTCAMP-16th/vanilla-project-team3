@@ -61,3 +61,28 @@
     }
   }
 }
+
+/* 이모지 안내 노트 */
+.emoji-noti {
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  padding: 14px 40px ;
+  background-color: var(--white);
+  border-radius: 32px;
+  transition: bottom 500ms ease-in-out, opacity 500ms ease-in-out;
+  opacity: 0;
+
+  .emoji-noti-text {
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--black);
+    white-space: nowrap;
+  }
+  
+  &.active {
+    opacity: 1;
+    bottom: 45px;
+  }
+}

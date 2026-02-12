@@ -1,5 +1,6 @@
 /* 책 레이아웃 */
 .section-page-layout {
+  position: relative;
   display: flex;
   flex-flow: column;
   justify-content: center;
@@ -12,12 +13,18 @@
 .user-submit-area {
   margin-block-start: 40px;
   display: grid;
+  margin: 40px auto 0;
+  width: 282px;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   grid-template-areas:
     'check check'
     'login join';
   gap: 10px;
+}
+
+.section-page-area {
+  position: relative;
 }
 
 /* 네비게이션 레이아웃 */
