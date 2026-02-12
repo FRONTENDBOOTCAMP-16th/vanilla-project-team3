@@ -8,4 +8,12 @@
   --popup-close-button: #aaaaaa;
   --profile: #323363;
   --focus-color: #0561eb;
+
+  color-scheme: light dark;
+  --deep-yellow-color: #ffcb29;
+  --deep-purple-color: #5237a4;
+  --primary-color: light-dark(
+    var(--deep-purple-color),
+    var(--deep-yellow-color)
+  );
 }
