@@ -1,7 +1,6 @@
 // CSS 호출
 import './css/style.css'
 
-
 const DialogManager = {
   getElements() {
     return {
@@ -15,12 +14,12 @@ const DialogManager = {
       heartListConfirm: document.querySelector(
         '.heart-list-dialog .confirm-button',
       ),
-      
+
       delBookListBtn: document.querySelector('.delete-book-list-button'),
       bookList: document.querySelector('.book-list'),
-      
+
       changePWBtn: document.querySelector('.change-pw-button'),
-      changePWDialog: document.querySelector('.change-pw-dialog'), 
+      changePWDialog: document.querySelector('.change-pw-dialog'),
       pwForm: document.querySelector('.pw-form'),
     }
   },
