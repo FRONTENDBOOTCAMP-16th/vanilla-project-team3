@@ -1,8 +1,90 @@
 /* 이모지 레이아웃 */
-.radio-mood-button {
-  border: 1px solid black;
-  img,
-  span {
-    border: 1px solid black;
+.section-page-area {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+
+  .select-weather {
+    display: flex;
+    gap: 20px;
+  }
+
+  .select-mood {
+    display: flex;
+    gap: 20px;
+    margin-block-start: 10px;
+  }
+
+  /* 날씨 선택 이모지 */
+  .select-mood,
+  .select-weather {
+    .checkbox-button-area {
+      display: flex;
+      position: relative;
+    }
+
+    .checkbox-mood-input,
+    .checkbox-weather-input {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      z-index: -1;
+
+      &:focus-visible {
+        & + .checkbox-mood-label,
+        & + .checkbox-weather-label {
+          outline: 2px solid var(--focus-color);
+          border-radius: 8px;
+        }
+      }
+
+      &:checked {
+        & + .checkbox-mood-label,
+        & + .checkbox-weather-label {
+          outline: 2px solid var(--focus-color);
+          border-radius: 8px;
+        }
+      }
+    }
+
+    .checkbox-mood-label,
+    .checkbox-weather-label {
+      cursor: pointer;
+      padding: 10px;
+      transition: transform 300ms ease-in-out;
+
+      &:hover {
+        transform: translateY(-5px);
+      }
+    }
+  }
+}
+
+/* 이모지 안내 노트 */
+.emoji-noti {
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  padding: 14px 40px;
+  background-color: var(--white);
+  border-radius: 32px;
+  transition:
+    bottom 500ms ease-in-out,
+    opacity 500ms ease-in-out;
+  opacity: 0;
+
+  .emoji-noti-text {
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--black);
+    white-space: nowrap;
+  }
+
+  &.noti-active {
+    opacity: 1;
+    bottom: 45px;
   }
 }

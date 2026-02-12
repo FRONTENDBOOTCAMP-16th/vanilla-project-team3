@@ -1,6 +1,8 @@
 // CSS 호출
 import './css/style.css'
 
+// JS 호출
+import './js/components/_checked.js'
 // 필요한 요소 가져오기 (DOM 선택)
 const heartBtn = document.querySelector('.heart-btn')
 const allCloseBtns = document.querySelectorAll('.close-dialog') 

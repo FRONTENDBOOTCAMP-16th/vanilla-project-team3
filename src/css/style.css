@@ -8,7 +8,10 @@
 @import './common/_theme.css' layer(theme);
 
 /* 추가된 레이아웃 CSS */
+@import './components/_layout.css' layer(components);
 @import './components/_popup.css' layer(components);
 @import './components/_index.css' layer(components);
 @import './components/_emoji.css' layer(components);
 @import './components/_button.css' layer(components);
+@import './components/_title.css' layer(components);
+@import './components/_navi.css' layer(components);
