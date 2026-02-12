@@ -4,9 +4,6 @@
   display: flex;
   flex-flow: column;
   justify-content: center;
-
-  /* 테스트를 위한 배경 */
-  background-color: #222;
 }
 
 /* 책 레이아웃 > 로그인 레이아웃 */
