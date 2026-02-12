@@ -1,26 +1,45 @@
 .result-display {
-  margin: auto;
-  background-image: url('https://image.yes24.com/goods/1470060/XL');
+  background-image: url('https://image.yes24.com/goods/169664844/XL');
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-color: rgba(0, 0, 0, 0.5);
   background-blend-mode: multiply;
+  
+  margin: 0 auto;
   max-width: 640px;
   min-width: 300px;
+  width: 100%;
   height: auto;
   min-height: 700px;
+  
+  position: relative;
   display: flex;
-  border-radius: 0 0 1.5% 1.5%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border: 1px solid var(--title-color);
+  border-radius: 0 0 1.5% 1.5%;
+  overflow: hidden;
+}
+/* 배경용 가상 요소 활용 */
+.result-display::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: inherit;
+  background-size: cover;
+  filter: blur(20px);
+  z-index: -1;
 }
 @media (min-width: 1024px) {
   .result-display {
     width: 510px;
     border-radius: 1.5%;
+    min-height: 900px;
   }
 }
 
@@ -57,7 +76,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-block-end: 60px;
+  margin-block-end: 64px;
 
   .book-title {
     font-size: 32px;
@@ -74,11 +93,27 @@
     font-weight: bold;
   }
 }
+@media (min-width: 1024px) {
+.recommend-phrase {
+  .book-title {
+    font-size: 40px;
+  }
+
+  .author {
+    font-size: 20px;
+  }
+
+  .phrase {
+    font-size: 24px;
+  }
+}
+}
+
 
 .recommend-books {
   .recommend-lists {
     display: flex;
-    margin-block-start: 20px;
+    margin-block-start: 16px;
   }
 }
 
@@ -86,22 +121,35 @@
   font-size: 16px;
   font-weight: 400;
 }
+@media (min-width: 1024px) {
+  .recommend-books h2 {
+    font-size: 20px;
+  }
+}
 
 .book-list {
   width: 30%;
-  min-width: 100px;
+  max-width: 100px;
   aspect-ratio: 1/1.25;
-  margin-inline: 10px;
-  position: relative;
+  margin-inline: 16px;
 }
 
 .save-button {
+  position: relative;
+  width: 100%;
+  height: 100%;
   padding: 0;
+  border: none;
+  overflow: hidden;
+  display: block;
+}
+.save-icon {
   position: absolute;
   top: 10px;
   left: 10px;
-  border: none;
+  z-index: 1;
 }
+
 .book-list img {
   width: 100%;
   height: 100%;
@@ -126,4 +174,12 @@
 
 .loading-icon {
   animation: spin 4s linear infinite;
+}
+
+.share-button {
+  margin-block: 30px;
+  background-color: var(--white);
+  border: 2px solid var(--white);
+  color: var(--black);
+  border-radius: 30px;
 }
