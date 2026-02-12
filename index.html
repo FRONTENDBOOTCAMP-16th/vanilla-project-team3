@@ -141,17 +141,19 @@
     </div>
     <!-- 레이아웃 박스 -->
     <main class="container">
-      <section class="my-page-box">
+      <section class="my-page-box" role="modal-list">
         <div class="profile-box">
-          <div class="my-page-contents" role="modal-list">
+          <div class="my-page-contents" >
+            <!-- 상단 타이틀 및 닫기버튼 -->
             <div class="mypage-top-title-close">
               <p class="page-title">My Page</p>
-              <button type="button" aria-label="닫기">
-                <span class="sr-only">창 닫기</span>
+              <button type="button" class="mypage-close" aria-label="닫기">
+                <span class="sr_only">창 닫기</span>
               </button>
             </div>
+            <!-- 상단 타이틀 및 닫기버튼 끝-->
             <!-- 상단 info -->
-            <div class="my-page-infomation">
+            <div class="my-page-profile">
               <div class="profile-container" aria-label="프로필">
                 <img
                   src="https://picsum.photos/100"
@@ -187,12 +189,12 @@
             <!-- 찜 항목 리스트 -->
             <div class="like-book-list">
               <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
+                <li class="like-book-list">1</li>
+                <li class="like-book-list">2</li>
+                <li class="like-book-list">3</li>
+                <li class="like-book-list">4</li>
+                <li class="like-book-list">5</li>
+                <li class="like-book-list">6</li>
               </ul>
             </div>
             <!-- 찜 항목 리스트 끝  -->
