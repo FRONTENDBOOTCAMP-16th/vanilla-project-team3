@@ -1,0 +1,17 @@
+/* 네비게이션 - 마이페이지 버튼 */
+.navi-mypage-button {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  background: url('/src/image/mypage.svg') center / contain;
+  background-repeat: no-repeat;
+}
+
+/* 네비게이션 - 홈으로 돌아가기 버튼 */
+.navi-home-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: url('/src/image/home.svg') center / contain;
+  background-repeat: no-repeat;
+}
