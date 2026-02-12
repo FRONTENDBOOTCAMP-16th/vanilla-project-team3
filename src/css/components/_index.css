@@ -40,6 +40,36 @@ body {
       padding-inline: 30px;
       background-color: var(--white);
       border-radius: 15px;
+
+      .my-page-contents{
+        background: red;
+        display:flex;
+        flex-flow: nowrap column;
+
+        .mypage-top-title-close{
+          display: flex;
+          justify-content: space-between;
+
+          .page-title{
+            color: var(--black);
+            font-size: 32px;
+            font-weight: 700;
+          }
+          .mypage-close{
+            inline-size: 24px;
+            block-size: 24px;
+            padding: 0;
+            background-image: url(../../image/close.svg);
+            background-repeat: no-repeat;
+          }
+        }
+
+        .my-page-profile{
+          display:flex;
+          flex-flow: nowrap row;
+          justify-content: flex-start;
+        }
+      }
     }
   }
 }
@@ -47,7 +77,7 @@ body {
 /* 마이페이지 CSS */
 
 /* 모바일 ---------------------- */
-@media (max-width: 768px) {
+@media (max-width: 375px) {
   /* 겉 박스 CSS */
   .container {
     inline-size: 80%;
@@ -56,7 +86,7 @@ body {
 }
 
 /* 노트북 ---------------------- */
-@media (min-width: 769px) and (max-width: 1280px) {
+@media (max-width : 768px) {
   /* 겉 박스 CSS */
   .container {
     width: 900px;
