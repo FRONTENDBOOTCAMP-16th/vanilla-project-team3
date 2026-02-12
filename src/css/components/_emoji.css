@@ -83,7 +83,7 @@
     white-space: nowrap;
   }
 
-  &.active {
+  &.noti-active {
     opacity: 1;
     bottom: 45px;
   }

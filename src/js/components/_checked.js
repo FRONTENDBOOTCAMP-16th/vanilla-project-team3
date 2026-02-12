@@ -38,12 +38,12 @@ function checkboxNotDubble(event) {
     // check가 false가 되어 체크가 안됨
     event.target.closest('input').checked = false
     // 안내 노티
-    noti.classList.add('active')
+    noti.classList.add('noti-active')
     noti.setAttribute('aria-hidden', 'false')
   }
 
   // 일정시간이 지난뒤 노티 사라짐
   notiTimeout = setTimeout(() => {
-    noti.classList.remove('active')
+    noti.classList.remove('noti-active')
   }, 1800)
 }
