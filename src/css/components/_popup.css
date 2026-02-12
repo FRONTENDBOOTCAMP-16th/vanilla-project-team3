@@ -97,7 +97,6 @@
   opacity: 0;
 }
 
-
 /* mypage */
 .my-page-dialog {
   width: calc(100% - 40px);
@@ -142,25 +141,24 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 8px;
-  width: 100%; 
+  width: 100%;
 }
 
 .data-row dt {
-  width: 70px; 
+  width: 70px;
   font-weight: bold;
   font-size: 14px;
   color: var(--black);
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
 
 .data-row dd {
   margin: 0;
   font-size: 15px;
   color: var(--black);
-  flex: 1; 
-  text-align: left; 
+  flex: 1;
+  text-align: left;
 }
-
 
 .button-group {
   display: flex;
@@ -225,11 +223,11 @@
     text-align: left;
   }
 
-  .profile-circle{
+  .profile-circle {
     flex: 0 0 120px;
     height: 120px;
   }
-  
+
   .book-list {
     grid-template-columns: repeat(6, 1fr);
     gap: 15px;
@@ -274,5 +272,7 @@
 
 .book-list li {
   position: relative;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }

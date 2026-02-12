@@ -41,21 +41,21 @@ body {
       background-color: var(--white);
       border-radius: 15px;
 
-      .my-page-contents{
+      .my-page-contents {
         background: red;
-        display:flex;
+        display: flex;
         flex-flow: nowrap column;
 
-        .mypage-top-title-close{
+        .mypage-top-title-close {
           display: flex;
           justify-content: space-between;
 
-          .page-title{
+          .page-title {
             color: var(--black);
             font-size: 32px;
             font-weight: 700;
           }
-          .mypage-close{
+          .mypage-close {
             inline-size: 24px;
             block-size: 24px;
             padding: 0;
@@ -64,8 +64,8 @@ body {
           }
         }
 
-        .my-page-profile{
-          display:flex;
+        .my-page-profile {
+          display: flex;
           flex-flow: nowrap row;
           justify-content: flex-start;
         }
@@ -86,7 +86,7 @@ body {
 }
 
 /* 노트북 ---------------------- */
-@media (max-width : 768px) {
+@media (max-width: 768px) {
   /* 겉 박스 CSS */
   .container {
     width: 900px;
