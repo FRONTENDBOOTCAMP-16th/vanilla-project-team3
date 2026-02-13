@@ -10,7 +10,7 @@
   </head>
   <body>
     <main class="container">
-      <section class="login-block">
+      <section class="auth-block login-block">
         <!-- 메인(인트로) 리턴 버튼 -->
         <div class="return-home">
           <button type="button">
@@ -21,15 +21,15 @@
             />
           </button>
         </div>
-        <div class="login" role="login">
+        <div class="autu-box-form login-form" role="login">
           <!-- 메인(인트로) 리턴 버튼 끝 -->
           <!-- 로그인 폼  -->
-          <div class="login-box">
-            <p class="login-title">로그인</p>
+          <div class="autu-login-box login-platform">
+            <p class="autu-title login-title">로그인</p>
             <form
               action=""
               method="get"
-              class="login-box-container"
+              class="autu-box-container login-write"
               id="login-container"
               role="로그인영역"
             >
@@ -68,6 +68,7 @@
                 class="submit-button"
                 id="submit-login"
                 aria-label="로그인버튼"
+                data-role="login-submit"
               >
                 로그인
               </button>

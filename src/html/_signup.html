@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko-KR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/public/bookicon.svg" />
+    <link rel="stylesheet" href="./src/css/style.css" />
+    <script type="module" defer src="/src/main.js"></script>
+    <title>바닐라 팀프로젝트 문학소녀팀</title>
+  </head>
+  <body>
+    <main class="container">
+      <section class="auth-block signup-block">
+        <!-- 메인(인트로) 리턴 버튼 -->
+        <div class="return-home">
+          <button type="button">
+            <img
+              src="../image/home.svg"
+              alt="메인으로 돌아가기"
+              aria-label="메인으로 돌아가기"
+            />
+          </button>
+        </div>
+        <div class="autu-box-form login-form" role="login">
+          <!-- 메인(인트로) 리턴 버튼 끝 -->
+          <!-- 로그인 폼  -->
+          <div class="autu-login-box signup-platform">
+            <p class="autu-title signup-title">회원가입</p>
+            <form
+              action=""
+              method="post"
+              class="autu-box-container signup-write"
+              id="signup-container"
+              role="회원가입영역"
+            >
+              <div class="new-id-input-box" aria-label="아이디입력">
+                <label for="new-id-input-area" class="sr-only new-id-label"
+                  >아이디</label
+                >
+                <input
+                  type="text"
+                  class="add-box new-id-box"
+                  id="new-id-input-area"
+                  placeholder="아이디를 입력해 주세요"
+                  required
+                />
+                <span class="warning-block new-id-blank-warning" hidden
+                  >이 아이디는 사용하실 수 없습니다.</span
+                >
+              </div>
+              <div class="new-pw-input-box" aria-label="비밀번호입력">
+                <label for="new-pw-input-area" class="sr-only new-pw-label"
+                  >비밀번호</label
+                >
+                <input
+                  type="password"
+                  class="add-box new-pw-box"
+                  id="new-pw-input-area"
+                  placeholder="비밀번호를 입력해 주세요"
+                  required
+                />
+                <span class="warning-block new-pw-blank-warning" hidden
+                  >영어, 숫자, 특수문자 혼합 8자리 이상</span
+                >
+              </div>
+              <div class="new-email-input-box" aria-label="이메일입력">
+                <label
+                  for="new-email-input-area"
+                  class="sr-only new-email-label"
+                  >이메일</label
+                >
+                <input
+                  type="email"
+                  class="add-box new-email-box"
+                  id="new-email-input-area"
+                  placeholder="이메일을 입력해 주세요"
+                  required
+                />
+                <span class="warning-block new-pw-blank-warning" hidden
+                  >올바른 이메일 양식으로 작성해주세요.</span
+                >
+              </div>
+              <button
+                type="submit"
+                class="submit-button"
+                id="submit-signup"
+                aria-label="회원가입버튼"
+                data-role="signup-submit"
+              >
+                확인
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
