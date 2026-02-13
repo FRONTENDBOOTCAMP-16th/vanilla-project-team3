@@ -97,5 +97,5 @@ async function postData() {
     console.log(error)
   }
 }
-getData("mood").then(res => console.log(res));
-postData().then(res => console.log(res));
+getData('mood').then((res) => console.log(res))
+postData().then((res) => console.log(res)) // 에러남 확인 중
