@@ -1,20 +1,29 @@
-.needlogin-dialog-area {
-  background: black;
-  box-sizing: border-box;
-}
-
 /* 팝업 공통 */
-.common-dialog {
+.common-dialog,
+.my-page-dialog {
   border: none;
   border-radius: 20px;
   padding: 40px 30px;
-  width: 90%;
-  max-width: 320px;
+  width: calc(100% - 40px);
+  max-width: 335px;
+  background-color: var(--white);
+  box-sizing: border-box;
+  position: relative;
+}
+
+.login-dialog,
+.heart-list-dialog,
+.change-pw-dialog {
   text-align: center;
 }
 
+.my-page-dialog {
+  text-align: left;
+}
+
 /* 팝업 뒤 배경 블러처리 */
-.common-dialog::backdrop {
+.common-dialog::backdrop,
+.my-page-dialog::backdrop {
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
 }
@@ -35,7 +44,7 @@
 }
 
 .confirm-button {
-  width: 80%;
+  width: 100%;
   background-color: var(--popup-button-color);
   color: var(--white);
   border-radius: 8px;
@@ -56,14 +65,9 @@
   position: absolute;
   top: 15px;
   right: 15px;
-  background-color: var(--popup-close-button);
-  border-radius: 50%;
-  color: var(--white);
   width: 24px;
   height: 24px;
-  font-size: 15px;
 
-  border: none;
   cursor: pointer;
   padding: 0;
 }
@@ -88,31 +92,16 @@
   opacity: 0;
   transform: translate(-50%, -50%) scale(1);
 }
-.heart-btn.active .icon-heart-on {
+.heart-btn.heart-active .icon-heart-on {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }
 
-.heart-btn.active .icon-heart-off {
+.heart-btn.heart-active .icon-heart-off {
   opacity: 0;
 }
 
 /* mypage */
-.my-page-dialog {
-  width: calc(100% - 40px);
-  max-width: 335px;
-  padding: 30px 20px;
-  border-radius: 20px;
-  border: none;
-  background-color: var(--white);
-  margin: auto;
-}
-
-.my-page-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-}
-
 .user-info-section {
   display: flex;
   align-items: center;
@@ -213,14 +202,11 @@
     max-width: 800px;
     min-width: 640px;
     padding: 50px;
-    margin: auto;
   }
 
   .user-info-section {
     flex-direction: row;
-    align-items: center;
     gap: 40px;
-    text-align: left;
   }
 
   .profile-circle {
@@ -240,10 +226,6 @@
   position: absolute;
   top: -5px;
   right: -5px;
-  background: rgba(255, 0, 0, 0.8);
-  color: white;
-  border: none;
-  border-radius: 50%;
 
   width: 24px;
   height: 24px;
@@ -254,8 +236,6 @@
 
   align-items: center;
   justify-content: center;
-
-  font-size: 18px;
   padding: 0;
 }
 
@@ -275,4 +255,39 @@
   transition:
     opacity 0.3s ease,
     transform 0.3s ease;
+}
+
+.empty-msg {
+  grid-column: 1 / -1;
+  padding: 40px;
+  color: var(--black);
+  text-align: center;
+}
+
+/* 비밀번호 변경 버튼 눌렀을 때 나오는 팝업 */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.change-pw-dialog input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--black);
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.pw-error-msg {
+  font-size: 13px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: red;
+  display: none;
+}
+
+.button-group {
+  margin-top: 10px;
 }

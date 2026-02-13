@@ -4,17 +4,17 @@
 
 # Personalized Sentence Curation Site(Vanilla JS)
 
-HTML, CSS, JavaScript로 구현한 사용자 맞춤 문학 문장 추천 웹 프로젝트
-배포 링크: 예정
+- HTML, CSS, JavaScript로 구현한 사용자 맞춤 문학 문장 추천 웹 프로젝트
+- 배포 링크: 예정
 
 ---
 
 # 프로젝트 소개
 
-프로젝트명: Personalized Sentence Curation Site
-팀명: 문학소녀
-한 줄 소개: 사용자의 선택에 따라 문학 문장을 추천하는 사이트
-개발 기간: 2026년 02월 09일 - 2026년 03월 04일
+- 프로젝트명: Personalized Sentence Curation Site
+- 팀명: 문학소녀
+- 한 줄 소개: 사용자의 선택에 따라 문학 문장을 추천하는 사이트
+- 개발 기간: 2026년 02월 09일 - 2026년 03월 04일
 
 ---
 
@@ -24,9 +24,10 @@ HTML, CSS, JavaScript로 구현한 사용자 맞춤 문학 문장 추천 웹 프
 <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
 <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
 
-Tools
-Git / GitHub
-VS Code
+### Tools
+
+- Git / GitHub
+- VS Code
 
 ---
 
