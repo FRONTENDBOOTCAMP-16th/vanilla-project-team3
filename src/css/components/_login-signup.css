@@ -1,4 +1,4 @@
-.auth-block{
+.auth-block {
   position: relative;
   max-inline-size: 100vw;
   max-block-size: 100vh;
@@ -11,7 +11,7 @@
     padding: 20px;
   }
 
-  .autu-box-form{
+  .autu-box-form {
     position: absolute;
     top: 50%;
     left: 50%;
