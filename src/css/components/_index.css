@@ -6,6 +6,7 @@ body {
   inline-size: 100vw;
   block-size: 100vh;
   background-image: url(../../image/background.jpg);
+  background-size: cover;
   background-repeat: no-repeat;
   overflow: hidden;
 }
@@ -28,49 +29,6 @@ body {
     inline-size: 100vw;
     block-size: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
-
-    .profile-box {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      inline-size: 800px;
-      block-size: 550px;
-      padding-block: 60px;
-      padding-inline: 30px;
-      background-color: var(--white);
-      border-radius: 15px;
-
-      .my-page-contents {
-        background: red;
-        display: flex;
-        flex-flow: nowrap column;
-
-        .mypage-top-title-close {
-          display: flex;
-          justify-content: space-between;
-
-          .page-title {
-            color: var(--black);
-            font-size: 32px;
-            font-weight: 700;
-          }
-          .mypage-close {
-            inline-size: 24px;
-            block-size: 24px;
-            padding: 0;
-            background-image: url(../../image/close.svg);
-            background-repeat: no-repeat;
-          }
-        }
-
-        .my-page-profile {
-          display: flex;
-          flex-flow: nowrap row;
-          justify-content: flex-start;
-        }
-      }
-    }
   }
 }
 
