@@ -27,13 +27,14 @@
       <article class="section-page-area">
         <span class="sr-only">날씨를 선택해 주세요</span>
 
-        <ul class="select-weather" role="checkbox" data-checked="dubbleChecked">
+        <ul class="select-weather" role="checkbox" data-checked="doubleChecked">
           <li class="checkbox-button-area">
             <input
               type="checkbox"
               class="checkbox-weather-input"
               name="checkbox-weather"
               id="checkbox-weather-sunny"
+              data-value="sunny"
             />
             <label class="checkbox-weather-label" for="checkbox-weather-sunny">
               <img aria-hidden="true" src="/src/image/sunny.svg" alt="" />
@@ -46,6 +47,7 @@
               class="checkbox-weather-input"
               name="checkbox-weather"
               id="checkbox-weather-cloud"
+              data-value="cloud"
             />
             <label class="checkbox-weather-label" for="checkbox-weather-cloud">
               <img aria-hidden="true" src="/src/image/cloud.svg" alt="" />
@@ -58,6 +60,7 @@
               class="checkbox-weather-input"
               name="checkbox-weather"
               id="checkbox-weather-rainy"
+              data-value="rainy"
             />
             <label class="checkbox-weather-label" for="checkbox-weather-rainy">
               <img aria-hidden="true" src="/src/image/rainy.svg" alt="" />
@@ -70,6 +73,7 @@
               class="checkbox-weather-input"
               name="checkbox-weather"
               id="checkbox-weather-snowdrop"
+              data-value="sonwy"
             />
             <label
               class="checkbox-weather-label"
@@ -85,26 +89,28 @@
               class="checkbox-weather-input"
               name="checkbox-weather"
               id="checkbox-weather-dustwind"
+              data-value="dusty"
             />
             <label
               class="checkbox-weather-label"
               for="checkbox-weather-dustwind"
             >
               <img aria-hidden="true" src="/src/image/dustwind.svg" alt="" />
-              <span class="sr-only">눈</span>
+              <span class="sr-only">황사</span>
             </label>
           </li>
         </ul>
 
         <!-- 기분 선택 영역 시작 -->
         <span class="sr-only">기분을 선택해 주세요</span>
-        <ul class="select-mood" role="checkbox" data-checked="dubbleChecked">
+        <ul class="select-mood" role="checkbox" data-checked="doubleChecked">
           <li class="checkbox-button-area">
             <input
               type="checkbox"
               class="checkbox-mood-input"
               name="checkbox-mood"
               id="checkbox-mood-smile"
+              data-value="happy"
             />
             <label class="checkbox-mood-label" for="checkbox-mood-smile">
               <img aria-hidden="true" src="/src/image/smile.png" alt="" />
@@ -117,6 +123,7 @@
               class="checkbox-mood-input"
               name="checkbox-mood"
               id="checkbox-mood-sad"
+              data-value="sad"
             />
             <label class="checkbox-mood-label" for="checkbox-mood-sad">
               <img aria-hidden="true" src="/src/image/sad.png" alt="" />
@@ -129,6 +136,7 @@
               class="checkbox-mood-input"
               name="checkbox-mood"
               id="checkbox-mood-impassive"
+              data-value="soso"
             />
             <label class="checkbox-mood-label" for="checkbox-mood-impassive">
               <img aria-hidden="true" src="/src/image/impassive.png" alt="" />
@@ -141,6 +149,7 @@
               class="checkbox-mood-input"
               name="checkbox-mood"
               id="checkbox-mood-tired"
+              data-value="bad"
             />
             <label class="checkbox-mood-label" for="checkbox-mood-tired">
               <img aria-hidden="true" src="/src/image/tired.png" alt="" />
