@@ -13,6 +13,6 @@
 @import './components/_index.css' layer(components);
 @import './components/_emoji.css' layer(components);
 @import './components/_button.css' layer(components);
-@import './components/result-display.css' layer(components);
+@import './components/_result-display.css' layer(components);
 @import './components/_title.css' layer(components);
 @import './components/_navi.css' layer(components);
