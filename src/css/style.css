@@ -16,4 +16,4 @@
 @import './components/result-display.css' layer(components);
 @import './components/_title.css' layer(components);
 @import './components/_navi.css' layer(components);
-@import './components/_login.css' layer(components);
+@import './components/_login-signup.css' layer(components);
