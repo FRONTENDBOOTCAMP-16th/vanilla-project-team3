@@ -1,10 +1,10 @@
 /* 이 컴포넌트는 예시입니다 */
-
+/*  */
 /* PC ---------------------- */
 body {
   position: relative;
-  inline-size: 100vw;
-  block-size: 100vh;
+  max-inline-size: 100vw;
+  max-block-size: 100vh;
   background-image: url(../../image/background.jpg);
   background-size: cover;
   background-repeat: no-repeat;
@@ -17,8 +17,10 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  inline-size: 1020px;
-  block-size: 700px;
+  max-inline-size: 640px;
+  inline-size: 80%;
+  max-block-size: 100vh;
+  block-size: 80%;
   background-color: rgba(255, 255, 255, 0.2);
   border: 2px solid var(--title-color);
   border-radius: 15px;
@@ -35,19 +37,15 @@ body {
 /* 마이페이지 CSS */
 
 /* 모바일 ---------------------- */
-@media (max-width: 375px) {
-  /* 겉 박스 CSS */
-  .container {
-    inline-size: 80%;
-    border: 2px solid var(--title-color);
+@media (min-width: 1024px) {
+  /* 배경레이아웃 */
+  body {
+    inline-size: 100vw;
+    block-size: 100vh;
   }
-}
-
-/* 노트북 ---------------------- */
-@media (max-width: 768px) {
-  /* 겉 박스 CSS */
   .container {
-    width: 900px;
-    max-width: 1200px;
+    max-inline-size: 1020px;
+    max-block-size: 700px;
+    border: 2px solid var(--title-color);
   }
 }
