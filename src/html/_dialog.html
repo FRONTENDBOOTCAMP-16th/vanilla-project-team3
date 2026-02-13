@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+<body>
+  <dialog class="login-dialog common-dialog" aria-labelledby="login-title" aria-describedby="login-desc">
+    <h2 id="login-title" class="popup-title">로그인이 필요합니다.</h2>
+    <p id="login-desc" class="popup-desc">로그인을 하셔야 이용할 수 있는 서비스입니다.</p>
+    <form method="dialog">
+      <button class="confirm-button">확인</button>
+      <button class="close-dialog" aria-label="닫기">x</button>
+    </form>
+  </dialog>
+
+  <dialog
+    class="heart-list-dialog common-dialog"
+    aria-labelledby="heart-list-title"
+    aria-describedby="heart-list-desc"
+  >
+    <h2 id="heart-list-title" class="popup-title">
+      찜 리스트를 추가할 수 없습니다.
+    </h2>
+    <p id="heart-list-desc" class="popup-desc">
+      마이페이지로 이동하시겠습니까?
+    </p>
+    <form method="dialog">
+      <button class="confirm-button">확인</button>
+      <button class="close-dialog" aria-label="닫기">x</button>
+    </form>
+  </dialog>
+
+  <dialog
+    class="my-page-dialog"
+    aria-labelledby="my-page-title"
+  >
+    <h2 id="my-page-title" class="popup-title">My Page</h2>
+
+    <section class="user-info-section" aria-label="사용자 정보">
+      <div class="profile-area">
+        <img class="profile-circle" src="/public/bookicon.svg" alt="프로필 기본 이미지" />
+      </div>
+
+      <dl class="user-data">
+        <div class="data-row">
+          <dt>아이디</dt>
+          <dd>abc111111</dd>
+        </div>
+        <div class="data-row">
+          <dt>비밀번호</dt>
+          <dd>**********</dd>
+          <div class="button-group">
+            <button type="button" class="change-pw-button my-page-button">비밀번호 변경</button>
+            <button type="button" class="delete-book-list-button my-page-button">찜 항목 삭제</button>
+          </div>
+        </div>
+      </dl>
+    </section>
+
+    <section class="heart-list-section">
+      <h3 class="section-title">찜 리스트</h3>
+      <ul class="book-list">
+        <li>
+          <button type="button" class="delete-item-button" aria-label="삭제">×</button>
+          <a href="#"><img src="book1.jpg" alt="책 제목 1" /></a>
+        </li>
+          <li>
+            <button type="button" class="delete-item-button" aria-label="삭제">×</button>
+          <a href="#"><img src="book2.jpg" alt="책 제목 2" /></a>
+        </li>
+          <li>
+            <button type="button" class="delete-item-button" aria-label="삭제">×</button>
+          <a href="#"><img src="book3.jpg" alt="책 제목 3" /></a>
+        </li>
+          <li>
+            <button type="button" class="delete-item-button" aria-label="삭제">×</button>
+          <a href="#"><img src="book4.jpg" alt="책 제목 4" /></a>
+        </li>
+          <li>
+            <button type="button" class="delete-item-button" aria-label="삭제">×</button>
+          <a href="#"><img src="book5.jpg" alt="책 제목 5" /></a>
+        </li>
+          <li>
+            <button type="button" class="delete-item-button" aria-label="삭제">×</button>
+          <a href="#"><img src="book6.jpg" alt="책 제목 6" /></a>
+        </li>
+      </ul>
+    </section>
+
+    <form method="dialog">
+      <button class="close-dialog" aria-label="닫기">x</button>
+    </form>
+  </dialog>
+</body>
+</html>
