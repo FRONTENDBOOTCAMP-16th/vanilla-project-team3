@@ -1,17 +1,17 @@
-const dubbleCheckedGroup = document.querySelectorAll(
-  '[data-checked="dubbleChecked"]',
+const doubleCheckedGroup = document.querySelectorAll(
+  '[data-checked="doubleChecked"]',
 )
 
 // 이모지 / 날씨 버튼눌렀을 시 2개이상 체크 안되도록 이벤트
 // 체인지 이벤트 반복문으로 한 함수로 중복 이벤트 걸어줌
-dubbleCheckedGroup.forEach((dubbleChecked) => {
-  dubbleChecked.addEventListener('change', (event) => {
+doubleCheckedGroup.forEach((doubleChecked) => {
+  doubleChecked.addEventListener('change', (event) => {
     const input = event.target.closest('input')
 
     // input이 아닐경우 함수 종료
     if (!input) return
 
-    checkboxNotDubble(event)
+    checkboxNotdouble(event)
   })
 })
 
@@ -21,7 +21,7 @@ let notiTimeout
 // 함수
 // 이모지/날씨 버튼 눌렀을 때 2개이상이면 check가 false가 됨
 // 안내 noti 출력
-function checkboxNotDubble(event) {
+function checkboxNotdouble(event) {
   const checked = event.currentTarget.querySelectorAll(
     'input[type="checkbox"]:checked',
   )
