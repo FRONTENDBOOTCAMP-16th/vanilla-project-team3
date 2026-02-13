@@ -1,173 +1,173 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko-KR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="/public/bookicon.svg" />
-  <title>책 레이아웃</title>
-</head>
-<body>
-  <!-- 책 레이아웃 시작 -->
-  <section class="section-page-layout">
-    <!-- 네비게이션 시작 -->
-    <nav class="navi-layout">
-      <button class="navi-mypage-button">
-        <span class="sr-only">마이페이지</span>
-      </button>
-      <button class="navi-home-button">
-        <span class="sr-only">홈으로 돌아가기</span>
-      </button>
-    </nav>
-    <!-- 네비게이션 끝 -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/public/bookicon.svg" />
+    <title>책 레이아웃</title>
+  </head>
+  <body>
+    <!-- 책 레이아웃 시작 -->
+    <section class="section-page-layout">
+      <!-- 네비게이션 시작 -->
+      <nav class="navi-layout">
+        <button class="navi-mypage-button">
+          <span class="sr-only">마이페이지</span>
+        </button>
+        <button class="navi-home-button">
+          <span class="sr-only">홈으로 돌아가기</span>
+        </button>
+      </nav>
+      <!-- 네비게이션 끝 -->
 
-    <h2 class="page-layout-title">나의 작은 마음 도서관</h2>
-    <p class="page-layout-subtitle">당신에 대해 알려주세요.</p>
+      <h2 class="page-layout-title">나의 작은 마음 도서관</h2>
+      <p class="page-layout-subtitle">당신에 대해 알려주세요.</p>
 
-    <!-- 이모지 영역 시작 -->
-    <article class="section-page-area">
-      <span class="sr-only">날씨를 선택해 주세요</span>
+      <!-- 이모지 영역 시작 -->
+      <article class="section-page-area">
+        <span class="sr-only">날씨를 선택해 주세요</span>
 
-      <ul class="select-weather" role="checkbox" data-checked="dubbleChecked">
-        <li class="checkbox-button-area">
-          <input
-            type="checkbox"
-            class="checkbox-weather-input"
-            name="checkbox-weather"
-            id="checkbox-weather-sunny"
-          />
-          <label class="checkbox-weather-label" for="checkbox-weather-sunny">
-            <img aria-hidden="true" src="/src/image/sunny.svg" alt="" />
-            <span class="sr-only">해</span>
-          </label>
-        </li>
-        <li class="checkbox-button-area">
-          <input
-            type="checkbox"
-            class="checkbox-weather-input"
-            name="checkbox-weather"
-            id="checkbox-weather-cloud"
-          />
-          <label class="checkbox-weather-label" for="checkbox-weather-cloud">
-            <img aria-hidden="true" src="/src/image/cloud.svg" alt="" />
-            <span class="sr-only">구름</span>
-          </label>
-        </li>
-        <li class="checkbox-button-area">
-          <input
-            type="checkbox"
-            class="checkbox-weather-input"
-            name="checkbox-weather"
-            id="checkbox-weather-rainy"
-          />
-          <label class="checkbox-weather-label" for="checkbox-weather-rainy">
-            <img aria-hidden="true" src="/src/image/rainy.svg" alt="" />
-            <span class="sr-only">비</span>
-          </label>
-        </li>
-        <li class="checkbox-button-area">
-          <input
-            type="checkbox"
-            class="checkbox-weather-input"
-            name="checkbox-weather"
-            id="checkbox-weather-snowdrop"
-          />
-          <label
-            class="checkbox-weather-label"
-            for="checkbox-weather-snowdrop"
-          >
-            <img aria-hidden="true" src="/src/image/snowdrop.svg" alt="" />
-            <span class="sr-only">눈</span>
-          </label>
-        </li>
-        <li class="checkbox-button-area">
-          <input
-            type="checkbox"
-            class="checkbox-weather-input"
-            name="checkbox-weather"
-            id="checkbox-weather-dustwind"
-          />
-          <label
-            class="checkbox-weather-label"
-            for="checkbox-weather-dustwind"
-          >
-            <img aria-hidden="true" src="/src/image/dustwind.svg" alt="" />
-            <span class="sr-only">눈</span>
-          </label>
-        </li>
-      </ul>
+        <ul class="select-weather" role="checkbox" data-checked="dubbleChecked">
+          <li class="checkbox-button-area">
+            <input
+              type="checkbox"
+              class="checkbox-weather-input"
+              name="checkbox-weather"
+              id="checkbox-weather-sunny"
+            />
+            <label class="checkbox-weather-label" for="checkbox-weather-sunny">
+              <img aria-hidden="true" src="/src/image/sunny.svg" alt="" />
+              <span class="sr-only">해</span>
+            </label>
+          </li>
+          <li class="checkbox-button-area">
+            <input
+              type="checkbox"
+              class="checkbox-weather-input"
+              name="checkbox-weather"
+              id="checkbox-weather-cloud"
+            />
+            <label class="checkbox-weather-label" for="checkbox-weather-cloud">
+              <img aria-hidden="true" src="/src/image/cloud.svg" alt="" />
+              <span class="sr-only">구름</span>
+            </label>
+          </li>
+          <li class="checkbox-button-area">
+            <input
+              type="checkbox"
+              class="checkbox-weather-input"
+              name="checkbox-weather"
+              id="checkbox-weather-rainy"
+            />
+            <label class="checkbox-weather-label" for="checkbox-weather-rainy">
+              <img aria-hidden="true" src="/src/image/rainy.svg" alt="" />
+              <span class="sr-only">비</span>
+            </label>
+          </li>
+          <li class="checkbox-button-area">
+            <input
+              type="checkbox"
+              class="checkbox-weather-input"
+              name="checkbox-weather"
+              id="checkbox-weather-snowdrop"
+            />
+            <label
+              class="checkbox-weather-label"
+              for="checkbox-weather-snowdrop"
+            >
+              <img aria-hidden="true" src="/src/image/snowdrop.svg" alt="" />
+              <span class="sr-only">눈</span>
+            </label>
+          </li>
+          <li class="checkbox-button-area">
+            <input
+              type="checkbox"
+              class="checkbox-weather-input"
+              name="checkbox-weather"
+              id="checkbox-weather-dustwind"
+            />
+            <label
+              class="checkbox-weather-label"
+              for="checkbox-weather-dustwind"
+            >
+              <img aria-hidden="true" src="/src/image/dustwind.svg" alt="" />
+              <span class="sr-only">눈</span>
+            </label>
+          </li>
+        </ul>
 
-      <!-- 기분 선택 영역 시작 -->
-      <span class="sr-only">기분을 선택해 주세요</span>
-      <ul class="select-mood" role="checkbox" data-checked="dubbleChecked">
-        <li class="checkbox-button-area">
-          <input
-            type="checkbox"
-            class="checkbox-mood-input"
-            name="checkbox-mood"
-            id="checkbox-mood-smile"
-          />
-          <label class="checkbox-mood-label" for="checkbox-mood-smile">
-            <img aria-hidden="true" src="/src/image/smile.png" alt="" />
-            <span class="sr-only">행복</span>
-          </label>
-        </li>
-        <li class="checkbox-button-area">
-          <input
-            type="checkbox"
-            class="checkbox-mood-input"
-            name="checkbox-mood"
-            id="checkbox-mood-sad"
-          />
-          <label class="checkbox-mood-label" for="checkbox-mood-sad">
-            <img aria-hidden="true" src="/src/image/sad.png" alt="" />
-            <span class="sr-only">슬픔</span>
-          </label>
-        </li>
-        <li class="checkbox-button-area">
-          <input
-            type="checkbox"
-            class="checkbox-mood-input"
-            name="checkbox-mood"
-            id="checkbox-mood-impassive"
-          />
-          <label class="checkbox-mood-label" for="checkbox-mood-impassive">
-            <img aria-hidden="true" src="/src/image/impassive.png" alt="" />
-            <span class="sr-only">그저그럼</span>
-          </label>
-        </li>
-        <li class="checkbox-button-area">
-          <input
-            type="checkbox"
-            class="checkbox-mood-input"
-            name="checkbox-mood"
-            id="checkbox-mood-tired"
-          />
-          <label class="checkbox-mood-label" for="checkbox-mood-tired">
-            <img aria-hidden="true" src="/src/image/tired.png" alt="" />
-            <span class="sr-only">피곤함</span>
-          </label>
-        </li>
-      </ul>
-      <!-- 기분 선택 영역 끝 -->
-    </article>
-    <!-- 이모지 영역 꿑 -->
+        <!-- 기분 선택 영역 시작 -->
+        <span class="sr-only">기분을 선택해 주세요</span>
+        <ul class="select-mood" role="checkbox" data-checked="dubbleChecked">
+          <li class="checkbox-button-area">
+            <input
+              type="checkbox"
+              class="checkbox-mood-input"
+              name="checkbox-mood"
+              id="checkbox-mood-smile"
+            />
+            <label class="checkbox-mood-label" for="checkbox-mood-smile">
+              <img aria-hidden="true" src="/src/image/smile.png" alt="" />
+              <span class="sr-only">행복</span>
+            </label>
+          </li>
+          <li class="checkbox-button-area">
+            <input
+              type="checkbox"
+              class="checkbox-mood-input"
+              name="checkbox-mood"
+              id="checkbox-mood-sad"
+            />
+            <label class="checkbox-mood-label" for="checkbox-mood-sad">
+              <img aria-hidden="true" src="/src/image/sad.png" alt="" />
+              <span class="sr-only">슬픔</span>
+            </label>
+          </li>
+          <li class="checkbox-button-area">
+            <input
+              type="checkbox"
+              class="checkbox-mood-input"
+              name="checkbox-mood"
+              id="checkbox-mood-impassive"
+            />
+            <label class="checkbox-mood-label" for="checkbox-mood-impassive">
+              <img aria-hidden="true" src="/src/image/impassive.png" alt="" />
+              <span class="sr-only">그저그럼</span>
+            </label>
+          </li>
+          <li class="checkbox-button-area">
+            <input
+              type="checkbox"
+              class="checkbox-mood-input"
+              name="checkbox-mood"
+              id="checkbox-mood-tired"
+            />
+            <label class="checkbox-mood-label" for="checkbox-mood-tired">
+              <img aria-hidden="true" src="/src/image/tired.png" alt="" />
+              <span class="sr-only">피곤함</span>
+            </label>
+          </li>
+        </ul>
+        <!-- 기분 선택 영역 끝 -->
+      </article>
+      <!-- 이모지 영역 꿑 -->
 
-    <!-- 로그인 영역 시작 -->
-    <article class="user-submit-area">
-      <button class="user-test-check">비회원 확인하기</button>
-      <button class="user-login">로그인</button>
-      <button class="user-join">회원가입</button>
-    </article>
-    <!-- 로그인 영역 끝 -->
+      <!-- 로그인 영역 시작 -->
+      <article class="user-submit-area">
+        <button class="user-test-check">비회원 확인하기</button>
+        <button class="user-login">로그인</button>
+        <button class="user-join">회원가입</button>
+      </article>
+      <!-- 로그인 영역 끝 -->
 
-    <!-- 이모지 노트 시작 -->
-    <div class="emoji-noti" aria-hidden="true">
-      <span class="emoji-noti-text"
-        >감정 / 기분은 최대 두개만 선택 가능해요!</span
-      >
-    </div>
-    <!-- 이모지 노트 끝 -->
-  </section>
-  <!-- 책 레이아웃 끝 -->
-</body>
+      <!-- 이모지 노트 시작 -->
+      <div class="emoji-noti" aria-hidden="true">
+        <span class="emoji-noti-text"
+          >감정 / 기분은 최대 두개만 선택 가능해요!</span
+        >
+      </div>
+      <!-- 이모지 노트 끝 -->
+    </section>
+    <!-- 책 레이아웃 끝 -->
+  </body>
 </html>
