@@ -6,6 +6,7 @@ body {
   max-inline-size: 100vw;
   max-block-size: 100vh;
   background-image: url(../../image/background.jpg);
+  background-size: cover;
   background-repeat: no-repeat;
   overflow: hidden;
 }
@@ -23,6 +24,14 @@ body {
   background-color: rgba(255, 255, 255, 0.2);
   border: 2px solid var(--title-color);
   border-radius: 15px;
+
+  .my-page-box {
+    position: absolute;
+    z-index: 9999;
+    inline-size: 100vw;
+    block-size: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 }
 
 /* 마이페이지 CSS */
