@@ -1,10 +1,49 @@
+/* 메인 환영 화면 */
+.container.main-intro {
+  .result-display {
+    display: none;
+  }
+  .main-page-scroll {
+    overflow-y: visible;
+  }
+}
+
+/* 기분/감정 조회 화면 */
+.container.main-review {
+  .page-layout-title {
+    display: none;
+  }
+  .user-submit-area {
+    display: none;
+  }
+}
+
 /* 책 레이아웃 */
+.main-page-scroll {
+  display: flex;
+  flex-flow: column;
+  overflow-y: scroll;
+  width: 100%;
+  margin-block-start: 64px;
+}
+
+@media (min-width: 1024px) {
+  .main-page-scroll {
+    flex-flow: row;
+    margin-block-start: 0;
+    overflow-y: visible;
+  }
+}
+
 .section-page-layout {
   position: relative;
   display: flex;
   flex-flow: column;
   justify-content: center;
+  min-height: 640px;
+  padding: 15px;
 }
+
 
 /* 책 레이아웃 > 로그인 레이아웃 */
 .user-submit-area {
