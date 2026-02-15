@@ -68,4 +68,3 @@ async function getData(key, value) {
 }
 
 getData('mood').then((res) => console.log(res))
-
