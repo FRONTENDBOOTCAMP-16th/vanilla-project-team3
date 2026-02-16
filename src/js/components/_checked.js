@@ -64,7 +64,7 @@ function checkboxNotdouble(e) {
     // check가 false가 되어 체크가 안됨
     e.target.closest('input').checked = false
     // 안내 노티
-    noti.textContent = '감정 / 기분은 최대 두개만 선택 가능해요!'
+    noti.textContent = '감정 / 기분은 각각 최대 두개씩 선택 가능해요!'
     noti.classList.add('noti-active')
     noti.setAttribute('aria-hidden', 'false')
   }
