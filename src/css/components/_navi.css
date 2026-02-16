@@ -7,6 +7,10 @@
   top: 20px;
   background: url('/src/image/mypage.svg') center / contain;
   background-repeat: no-repeat;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-color);
+  }
 }
 
 /* 네비게이션 - 홈으로 돌아가기 버튼 */
@@ -18,4 +22,8 @@
   right: 20px;
   background: url('/src/image/home.svg') center / contain;
   background-repeat: no-repeat;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-color);
+  }
 }
