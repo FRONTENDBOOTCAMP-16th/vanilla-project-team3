@@ -21,6 +21,12 @@
   .user-submit-area {
     display: none;
   }
+  .checkbox-button-area {
+    input:disabled + label {
+      transform: none;
+      cursor: auto;
+    }
+  }
 }
 
 /* 책 레이아웃 */

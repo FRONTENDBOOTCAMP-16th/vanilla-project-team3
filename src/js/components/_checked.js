@@ -47,3 +47,20 @@ function checkboxNotdouble(event) {
     noti.classList.remove('noti-active')
   }, 1800)
 }
+
+const container = document.querySelector('.container')
+const submitButton = container.querySelector('.user-test-check')
+
+// 테스트 버튼을 눌렀을 때 체크 버튼이 비활성화 됨
+submitButton.addEventListener('click', () => {
+  const buttons = container.querySelectorAll('[data-checked="doubleChecked"]')
+
+  // 셀렉트 버튼 두개다 적용
+  buttons.forEach((gruop) => {
+    const checkImojis = gruop.querySelectorAll('.checkbox-button-area input')
+    
+    checkImojis.forEach((input) => {
+      input.disabled =true
+    })
+  })
+})
