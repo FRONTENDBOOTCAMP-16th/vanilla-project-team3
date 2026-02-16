@@ -78,6 +78,7 @@
     bottom 500ms ease-in-out,
     opacity 500ms ease-in-out;
   opacity: 0;
+  white-space: nowrap;
 
   .emoji-noti-text {
     font-weight: 500;
