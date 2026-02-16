@@ -3,26 +3,17 @@ const submitContainer = container.querySelector('.user-submit-area')
 
 // 메인버튼 이벤트
 submitContainer.addEventListener('click', (e) => {
-  const target = e.target
-  const check = submitContainer.querySelector('.user-test-check')
   const subTitle = container.querySelector('.page-layout-subtitle')
   // a태그 작동 무시
   e.preventDefault()
 
-  // 비회원 확인하기 버튼 작동
-  if (target === check) {
-    // 다음 상세 페이지 이동
-    container.classList.remove('main-intro')
-    container.classList.add('main-review')
-    // 서브 타이틀 문구 변경
-    subTitle.textContent = '당신의 기분을 이해해봐요'
-  }
+  // 다음 상세 페이지 이동
+  container.classList.remove('main-intro')
+  container.classList.add('main-review')
+  // 서브 타이틀 문구 변경
+  subTitle.textContent = '당신의 기분을 이해해봐요'
 })
 
-// 확인하기 누른 후
-// 헤더 생거야함
-// 서브타이틀 변경
-// 없어야함 : 버튼
 
 // 로그인 버튼 누름
 // 안의 컨텐츠 다 삭제
