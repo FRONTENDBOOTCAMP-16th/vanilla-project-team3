@@ -5,6 +5,11 @@
   }
   .main-page-scroll {
     overflow-y: visible;
+    justify-content: center;
+  }
+
+  .navi-layout {
+    display: none;
   }
 }
 
