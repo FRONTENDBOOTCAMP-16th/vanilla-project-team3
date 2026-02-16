@@ -10,6 +10,10 @@
   text-align: center;
   align-content: center;
   height: 40px;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-color);
+  }
 }
 
 /* 회원가입 / 로그인 버튼 */
@@ -24,6 +28,10 @@
   text-align: center;
   align-content: center;
   height: 40px;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-color);
+  }
 }
 /* 회원가입 버튼 */
 .user-join {
