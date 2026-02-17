@@ -1,4 +1,4 @@
-const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL;
+const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
 // 데이터 읽어오기
 async function getData(key, value) {
   try {
@@ -7,15 +7,12 @@ async function getData(key, value) {
       'Content-type': 'application/json',
     }
     // 해당 데이터 URL읽어오기
-    const response = await fetch(
-      `${VITE_API_BASE_URL}`,
-      {
-        // GET방식, 캐시기본값(캐시가 오래되면 새로불러옴)
-        method: 'GET',
-        headers,
-        cache: 'default',
-      },
-    )
+    const response = await fetch(`${VITE_API_BASE_URL}`, {
+      // GET방식, 캐시기본값(캐시가 오래되면 새로불러옴)
+      method: 'GET',
+      headers,
+      cache: 'default',
+    })
 
     // 에러코드 200이 아니면 에러로 간주
     if (!response.ok) {
