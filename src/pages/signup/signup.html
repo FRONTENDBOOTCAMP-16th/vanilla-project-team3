@@ -14,16 +14,13 @@
   <body>
     <main class="container">
       <section class="auth-block signup-block">
-        <!-- 메인(인트로) 리턴 버튼 -->
-        <div class="return-home">
-          <button type="button">
-            <img
-              src="../image/home.svg"
-              alt="메인으로 돌아가기"
-              aria-label="메인으로 돌아가기"
-            />
-          </button>
-        </div>
+        <!-- 네비게이션 시작 -->
+        <nav class="navi-layout">
+          <a href="/index.html" class="navi-home-button">
+            <span class="sr-only">홈으로 돌아가기</span>
+          </a>
+        </nav>
+        <!-- 네비게이션 끝 -->
         <div class="autu-box-form login-form" role="login">
           <!-- 메인(인트로) 리턴 버튼 끝 -->
           <!-- 로그인 폼  -->
@@ -83,15 +80,15 @@
                   >올바른 이메일 양식으로 작성해주세요.</span
                 >
               </div>
-              <button
-                type="submit"
+              <a
+                href="/index.html"
                 class="submit-button"
                 id="submit-signup"
                 aria-label="회원가입버튼"
                 data-role="signup-submit"
               >
                 확인
-              </button>
+              </a>
             </form>
           </div>
         </div>
