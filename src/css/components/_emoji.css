@@ -89,6 +89,10 @@
     white-space: nowrap;
   }
 
+  &.no-transition {
+    transition: none;
+  }
+
   &.noti-active {
     visibility: visible;
     opacity: 1;

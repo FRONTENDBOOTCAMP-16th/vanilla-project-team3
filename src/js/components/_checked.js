@@ -37,6 +37,14 @@ const submitButton = container.querySelector('.user-test-check')
       })
     }
   }
+
+  // 노티에 잠깐 트렌지션 삭제
+  if (noti) {
+    // 아주 잠깐 뒤에 트랜지션 못하게 막기
+    setTimeout(() => {
+      noti.classList.remove('no-transition')
+    }, 500)
+  }
 })()
 
 // 비회원 확인하기 버튼 눌렀을 때 이벤트
