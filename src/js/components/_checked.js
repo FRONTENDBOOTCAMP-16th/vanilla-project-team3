@@ -5,27 +5,39 @@ const container = document.querySelector('.container')
 const noti = document.querySelector('.emoji-noti')
 const submitButton = container.querySelector('.user-test-check')
 
-// 비회원 확인하기 버튼 눌렀을 때 이벤트
-submitButton.addEventListener('click', (e) => {
+// 로컬 스토리지에 값이 true면 감정/날씨를 선택할 수 없음
+;(() => {
+  const isChecked = localStorage.getItem('isChecked')
   const buttons = container.querySelectorAll('[data-checked="doubleChecked"]')
-  const { weather, mood } = emojiCheck()
 
-  //날씨와 기분이 하나라도 없다면 페이지 못넘어가게 막음
-  if (!weather || !mood) {
-    mustSubmitTest()
-    e.stopImmediatePropagation()
-    return
-  }
+  if (isChecked === 'true') {
+    buttons.forEach((gruop) => {
+      const checkImojis = gruop.querySelectorAll('.checkbox-button-area input')
 
-  // 테스트 버튼을 눌렀을 때 체크 버튼이 비활성화 됨
-  buttons.forEach((gruop) => {
-    const checkImojis = gruop.querySelectorAll('.checkbox-button-area input')
-
-    checkImojis.forEach((input) => {
-      input.disabled = true
+      checkImojis.forEach((input) => {
+        input.disabled = true
+      })
     })
+  }
+})()
+
+// 비회원 확인하기 버튼 눌렀을 때 이벤트
+if (submitButton) {
+  submitButton.addEventListener('click', (e) => {
+    const { weather, mood } = emojiCheck()
+
+    //날씨와 기분이 하나라도 없다면 페이지 못넘어가게 막음
+    if (!weather || !mood) {
+      mustSubmitTest()
+      e.stopImmediatePropagation()
+      e.preventDefault()
+      return
+    }
+
+    // 체크 버튼 비활성화 되야한다고 스토리지에 기록 넘겨줌
+    localStorage.setItem('isChecked', 'true')
   })
-})
+}
 
 // 이모지 / 날씨 버튼눌렀을 시 2개이상 체크 안되도록 이벤트
 doubleCheckedGroup.forEach((doubleChecked) => {

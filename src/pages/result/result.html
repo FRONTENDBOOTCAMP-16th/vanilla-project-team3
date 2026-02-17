@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="ko-KR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="오늘의 날씨/기분을 선택해 책 문구를 추천받는 사이트"
+    />
+    <link rel="icon" href="/public/bookicon.svg" />
+    <script type="module" defer src="/src/main.js"></script>
+    <title>바닐라 팀프로젝트 문학소녀팀</title>
+  </head>
+  <body>
+    <!-- 레이아웃 박스 -->
+    <main class="container main-review">
+      <!-- 네비게이션 시작 -->
+      <nav class="navi-layout">
+        <a href="#" class="navi-mypage-button">
+          <span class="sr-only">마이페이지</span>
+        </a>
+        <a href="/index.html" class="navi-home-button">
+          <span class="sr-only">홈으로 돌아가기</span>
+        </a>
+      </nav>
+      <!-- 네비게이션 끝 -->
+
+      <section class="main-page-scroll">
+        <!-- 책 레이아웃 시작 -->
+        <section class="section-page-layout">
+          <p class="page-layout-subtitle">당신의 기분을 이해해봐요</p>
+
+          <!-- 이모지 영역 시작 -->
+          <article class="section-page-area">
+            <span class="sr-only">날씨를 선택해 주세요</span>
+
+            <ul
+              class="select-weather"
+              role="checkbox"
+              data-checked="doubleChecked"
+            >
+              <li class="checkbox-button-area">
+                <input
+                  type="checkbox"
+                  class="checkbox-weather-input"
+                  name="checkbox-weather"
+                  id="checkbox-weather-sunny"
+                  data-value="sunny"
+                />
+                <label
+                  class="checkbox-weather-label"
+                  for="checkbox-weather-sunny"
+                >
+                  <img aria-hidden="true" src="/src/image/sunny.svg" alt="" />
+                  <span class="sr-only">해</span>
+                </label>
+              </li>
+              <li class="checkbox-button-area">
+                <input
+                  type="checkbox"
+                  class="checkbox-weather-input"
+                  name="checkbox-weather"
+                  id="checkbox-weather-cloud"
+                  data-value="cloud"
+                />
+                <label
+                  class="checkbox-weather-label"
+                  for="checkbox-weather-cloud"
+                >
+                  <img aria-hidden="true" src="/src/image/cloud.svg" alt="" />
+                  <span class="sr-only">구름</span>
+                </label>
+              </li>
+              <li class="checkbox-button-area">
+                <input
+                  type="checkbox"
+                  class="checkbox-weather-input"
+                  name="checkbox-weather"
+                  id="checkbox-weather-rainy"
+                  data-value="rainy"
+                />
+                <label
+                  class="checkbox-weather-label"
+                  for="checkbox-weather-rainy"
+                >
+                  <img aria-hidden="true" src="/src/image/rainy.svg" alt="" />
+                  <span class="sr-only">비</span>
+                </label>
+              </li>
+              <li class="checkbox-button-area">
+                <input
+                  type="checkbox"
+                  class="checkbox-weather-input"
+                  name="checkbox-weather"
+                  id="checkbox-weather-snowdrop"
+                  data-value="sonwy"
+                />
+                <label
+                  class="checkbox-weather-label"
+                  for="checkbox-weather-snowdrop"
+                >
+                  <img
+                    aria-hidden="true"
+                    src="/src/image/snowdrop.svg"
+                    alt=""
+                  />
+                  <span class="sr-only">눈</span>
+                </label>
+              </li>
+              <li class="checkbox-button-area">
+                <input
+                  type="checkbox"
+                  class="checkbox-weather-input"
+                  name="checkbox-weather"
+                  id="checkbox-weather-dustwind"
+                  data-value="dusty"
+                />
+                <label
+                  class="checkbox-weather-label"
+                  for="checkbox-weather-dustwind"
+                >
+                  <img
+                    aria-hidden="true"
+                    src="/src/image/dustwind.svg"
+                    alt=""
+                  />
+                  <span class="sr-only">황사</span>
+                </label>
+              </li>
+            </ul>
+
+            <!-- 기분 선택 영역 시작 -->
+            <span class="sr-only">기분을 선택해 주세요</span>
+            <ul
+              class="select-mood"
+              role="checkbox"
+              data-checked="doubleChecked"
+            >
+              <li class="checkbox-button-area">
+                <input
+                  type="checkbox"
+                  class="checkbox-mood-input"
+                  name="checkbox-mood"
+                  id="checkbox-mood-smile"
+                  data-value="happy"
+                />
+                <label class="checkbox-mood-label" for="checkbox-mood-smile">
+                  <img aria-hidden="true" src="/src/image/smile.png" alt="" />
+                  <span class="sr-only">행복</span>
+                </label>
+              </li>
+              <li class="checkbox-button-area">
+                <input
+                  type="checkbox"
+                  class="checkbox-mood-input"
+                  name="checkbox-mood"
+                  id="checkbox-mood-sad"
+                  data-value="sad"
+                />
+                <label class="checkbox-mood-label" for="checkbox-mood-sad">
+                  <img aria-hidden="true" src="/src/image/sad.png" alt="" />
+                  <span class="sr-only">슬픔</span>
+                </label>
+              </li>
+              <li class="checkbox-button-area">
+                <input
+                  type="checkbox"
+                  class="checkbox-mood-input"
+                  name="checkbox-mood"
+                  id="checkbox-mood-impassive"
+                  data-value="soso"
+                />
+                <label
+                  class="checkbox-mood-label"
+                  for="checkbox-mood-impassive"
+                >
+                  <img
+                    aria-hidden="true"
+                    src="/src/image/impassive.png"
+                    alt=""
+                  />
+                  <span class="sr-only">그저그럼</span>
+                </label>
+              </li>
+              <li class="checkbox-button-area">
+                <input
+                  type="checkbox"
+                  class="checkbox-mood-input"
+                  name="checkbox-mood"
+                  id="checkbox-mood-tired"
+                  data-value="bad"
+                />
+                <label class="checkbox-mood-label" for="checkbox-mood-tired">
+                  <img aria-hidden="true" src="/src/image/tired.png" alt="" />
+                  <span class="sr-only">피곤함</span>
+                </label>
+              </li>
+            </ul>
+            <!-- 기분 선택 영역 끝 -->
+          </article>
+          <!-- 이모지 영역 꿑 -->
+
+          <!-- 이모지 노트 시작 -->
+          <div class="emoji-noti" aria-hidden="true" aria-live="polite">
+            <span class="emoji-noti-text"
+              >감정 / 기분은 각각 최대 두개씩 선택 가능해요!</span
+            >
+          </div>
+          <!-- 이모지 노트 끝 -->
+        </section>
+        <!-- 책 레이아웃 끝 -->
+
+        <section class="result-display">
+          <h1 class="sr-only">문구 추천 결과 화면</h1>
+          <article class="loading-display" aria-live="polite">
+            <svg
+              aria-hidden="true"
+              class="loading-icon"
+              width="70"
+              height="80"
+              viewBox="0 0 70 80"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M37.1571 77.9607L37.1169 77.968L36.8577 78.0964L36.7847 78.111L36.7336 78.0964L36.4744 77.968C36.4354 77.9558 36.4062 77.9619 36.3867 77.9863L36.3721 78.023L36.3101 79.5926L36.3283 79.666L36.3648 79.7137L36.7445 79.9851L36.7993 79.9997L36.8431 79.9851L37.2228 79.7137L37.2666 79.655L37.2812 79.5926L37.2192 78.0267C37.2094 77.9876 37.1887 77.9656 37.1571 77.9607ZM38.1246 77.5463L38.0771 77.5536L37.4017 77.8947L37.3652 77.9313L37.3542 77.9717L37.42 79.5486L37.4382 79.5926L37.4674 79.6183L38.2013 79.9594C38.2475 79.9716 38.2828 79.9618 38.3071 79.93L38.3218 79.8787L38.1976 77.6269C38.1854 77.5829 38.1611 77.556 38.1246 77.5463ZM35.5141 77.5536C35.4981 77.5438 35.4788 77.5406 35.4605 77.5447C35.4421 77.5488 35.426 77.5599 35.4156 77.5756L35.3937 77.6269L35.2695 79.8787C35.272 79.9227 35.2927 79.952 35.3316 79.9667L35.3864 79.9594L36.1202 79.6183L36.1567 79.589L36.1713 79.5486L36.2334 77.9717L36.2224 77.9277L36.1859 77.891L35.5141 77.5536Z"
+                fill="#FFFDE5"
+              />
+              <path
+                d="M34.9924 11.0021C34.2733 11.0021 33.5611 10.8598 32.8967 10.5834C32.2322 10.3069 31.6285 9.90171 31.12 9.39089C30.6114 8.88007 30.208 8.27363 29.9328 7.60622C29.6576 6.9388 29.516 6.22346 29.516 5.50105C29.516 4.77865 29.6576 4.06331 29.9328 3.39589C30.208 2.72847 30.6114 2.12204 31.12 1.61122C31.6285 1.1004 32.2322 0.695197 32.8967 0.418743C33.5611 0.142289 34.2733 -1.07647e-08 34.9924 0C36.4449 2.17403e-08 37.8378 0.579574 38.8649 1.61122C39.8919 2.64287 40.4689 4.04208 40.4689 5.50105C40.4689 6.96002 39.8919 8.35924 38.8649 9.39089C37.8378 10.4225 36.4449 11.0021 34.9924 11.0021ZM19.9686 15.9054C19.3875 16.341 18.726 16.6564 18.0226 16.8333C17.3192 17.0101 16.5878 17.0449 15.8708 16.9355C15.1539 16.8261 14.4658 16.5749 13.8463 16.1962C13.2268 15.8176 12.6884 15.3192 12.2622 14.7299C11.836 14.1405 11.5306 13.4721 11.3637 12.7632C11.1968 12.0544 11.1716 11.3194 11.2897 10.6007C11.4079 9.88204 11.6669 9.19409 12.0518 8.57679C12.4367 7.95949 12.9398 7.42511 13.532 7.00468C14.708 6.16964 16.1642 5.83356 17.5852 6.06922C19.0061 6.30487 20.2775 7.09329 21.1239 8.26374C21.9703 9.43419 22.3237 10.8924 22.1075 12.3227C21.8912 13.753 21.1228 15.0401 19.9686 15.9054ZM3.78384 32.2729C4.47011 32.5051 5.19543 32.5984 5.91782 32.5472C6.64021 32.4961 7.34533 32.3015 7.99236 31.9748C8.6394 31.6481 9.21549 31.1957 9.68731 30.6438C10.1591 30.092 10.5173 29.4516 10.7411 28.7597C10.9649 28.0679 11.0498 27.3384 10.991 26.6133C10.9323 25.8883 10.7309 25.1822 10.3986 24.5358C10.0664 23.8895 9.60978 23.3157 9.05529 22.8478C8.5008 22.3799 7.85943 22.0271 7.1683 21.8098C5.79198 21.3772 4.3013 21.5073 3.01992 22.172C1.73853 22.8366 0.76986 23.9822 0.324211 25.3599C-0.121439 26.7376 -0.00809426 28.2363 0.639636 29.5306C1.28737 30.8249 2.4172 31.8103 3.78384 32.2729ZM10.6842 44.6062C10.9154 45.2956 11.0083 46.0241 10.9574 46.7498C10.9064 47.4754 10.7127 48.1837 10.3875 48.8336C10.0622 49.4836 9.61183 50.0623 9.06244 50.5362C8.51304 51.0101 7.87552 51.3699 7.18678 51.5947C6.49804 51.8195 5.77175 51.9048 5.04995 51.8458C4.32816 51.7867 3.62518 51.5845 2.98172 51.2507C2.33826 50.9169 1.76709 50.4583 1.30127 49.9013C0.835453 49.3443 0.484233 48.7001 0.267941 48.0059C-0.180867 46.6179 -0.0623884 45.1077 0.597312 43.8075C1.25701 42.5073 2.4039 41.5235 3.78566 41.0727C5.16743 40.6219 6.67089 40.7409 7.96529 41.4036C9.2597 42.0662 10.2354 43.2182 10.6842 44.6062ZM21.1844 65.1251C21.6181 64.5414 21.9321 63.877 22.1082 63.1704C22.2842 62.4638 22.3188 61.7291 22.2099 61.009C22.1011 60.2888 21.8509 59.5976 21.474 58.9753C21.097 58.3531 20.6008 57.8122 20.0141 57.3841C19.4275 56.9561 18.762 56.6493 18.0563 56.4816C17.3507 56.3139 16.6189 56.2886 15.9034 56.4073C15.188 56.5259 14.5031 56.7861 13.8886 57.1728C13.274 57.5594 12.742 58.0648 12.3235 58.6596C11.4922 59.8409 11.1576 61.3036 11.3922 62.731C11.6268 64.1583 12.4117 65.4354 13.5769 66.2856C14.7421 67.1358 16.1939 67.4908 17.6177 67.2736C19.0416 67.0564 20.323 66.2845 21.1844 65.1251ZM34.9924 62.3453C36.4449 62.3453 37.8378 62.9249 38.8649 63.9565C39.8919 64.9882 40.4689 66.3874 40.4689 67.8463C40.4689 69.3053 39.8919 70.7045 38.8649 71.7362C37.8378 72.7678 36.4449 73.3474 34.9924 73.3474C33.54 73.3474 32.147 72.7678 31.12 71.7362C30.0929 70.7045 29.516 69.3053 29.516 67.8463C29.516 66.3874 30.0929 64.9882 31.12 63.9565C32.147 62.9249 33.54 62.3453 34.9924 62.3453ZM57.665 58.6596C57.2465 58.0648 56.7145 57.5594 56.0999 57.1728C55.4854 56.7861 54.8005 56.5259 54.0851 56.4073C53.3696 56.2886 52.6378 56.3139 51.9322 56.4816C51.2265 56.6493 50.5611 56.9561 49.9744 57.3841C49.3877 57.8122 48.8915 58.3531 48.5145 58.9753C48.1376 59.5976 47.8875 60.2888 47.7786 61.009C47.6697 61.7291 47.7043 62.4638 47.8803 63.1704C48.0564 63.877 48.3704 64.5414 48.8041 65.1251C49.6655 66.2845 50.9469 67.0564 52.3708 67.2736C53.7946 67.4908 55.2464 67.1358 56.4116 66.2856C57.5768 65.4354 58.3617 64.1583 58.5963 62.731C58.8309 61.3036 58.4963 59.8409 57.665 58.6596ZM59.297 44.6062C59.5133 43.912 59.8645 43.2677 60.3303 42.7108C60.7962 42.1538 61.3673 41.6951 62.0108 41.3614C62.6543 41.0276 63.3572 40.8253 64.079 40.7663C64.8008 40.7073 65.5271 40.7926 66.2159 41.0174C66.9046 41.2422 67.5421 41.602 68.0915 42.0759C68.6409 42.5498 69.0913 43.1285 69.4165 43.7784C69.7418 44.4284 69.9355 45.1367 69.9864 45.8623C70.0374 46.5879 69.9445 47.3165 69.7133 48.0059C69.2527 49.3786 68.2717 50.5135 66.9832 51.1642C65.6947 51.8148 64.2028 51.9287 62.8312 51.481C61.4596 51.0334 60.3192 50.0604 59.6575 48.7732C58.9958 47.4861 58.8663 45.9887 59.297 44.6062ZM62.8129 21.8098C62.1218 22.0271 61.4804 22.3799 60.9259 22.8478C60.3714 23.3157 59.9148 23.8895 59.5826 24.5358C59.2503 25.1822 59.0489 25.8883 58.9902 26.6133C58.9314 27.3384 59.0163 28.0679 59.2401 28.7597C59.4639 29.4516 59.8221 30.092 60.2939 30.6438C60.7657 31.1957 61.3418 31.6481 61.9888 31.9748C62.6359 32.3015 63.341 32.4961 64.0634 32.5472C64.7858 32.5984 65.5111 32.5051 66.1974 32.2729C67.564 31.8103 68.6938 30.8249 69.3416 29.5306C69.9893 28.2363 70.1026 26.7376 69.657 25.3599C69.2113 23.9822 68.2427 22.8366 66.9613 22.172C65.6799 21.5073 64.1892 21.3772 62.8129 21.8098ZM50.0126 15.9054C48.8375 15.0475 48.0499 13.7559 47.8229 12.3147C47.7105 11.6011 47.7392 10.8722 47.9072 10.1697C48.0752 9.46721 48.3794 8.80484 48.8023 8.22041C49.2251 7.63598 49.7585 7.14094 50.3718 6.76355C50.9852 6.38617 51.6665 6.13382 52.3769 6.02093C53.8117 5.79294 55.2779 6.1468 56.4529 7.00468C57.6279 7.86255 58.4156 9.15416 58.6426 10.5954C58.8695 12.0366 58.5172 13.5093 57.6632 14.6896C56.8092 15.87 55.5233 16.6611 54.0885 16.8891C52.6538 17.1171 51.1876 16.7633 50.0126 15.9054Z"
+                fill="#FFFDE5"
+              />
+            </svg>
+            <p class="sr-only">결과 화면을 기다리는 중입니다.</p>
+            <p class="greeting-message">오늘 하루도 수고하셨어요 :)</p>
+          </article>
+
+          <!-- JS 로직 짤 때 신경써야할 것 : 추천 문구에 따라 배경 이미지 동적으로 변경하기 -->
+          <article class="result-content-display result-active">
+            <div class="recommend-phrase" aria-label="추천 문구 결과">
+              <p class="book-title">책 제목</p>
+              <p class="author">책 저자</p>
+              <p class="phrase">추천 문구</p>
+            </div>
+            <div class="recommend-books">
+              <h2>추천하는 책</h2>
+              <ul class="recommend-lists">
+                <li class="recommend-book-lists">
+                  <!-- JS 로직 짤 때 신경써야할 것 : img src, alt 값 동적으로 변경하기 -->
+                  <button
+                    type="button"
+                    class="save-button"
+                    aria-label="이 책 찜하기"
+                    aria-pressed="false"
+                  >
+                    <svg
+                      class="save-icon"
+                      aria-hidden="true"
+                      width="19"
+                      height="17"
+                      viewBox="0 0 19 17"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5.675 1C3.09313 1 1 3.15216 1 5.80685C1 10.6137 6.525 14.9836 9.5 16C12.475 14.9836 18 10.6137 18 5.80685C18 3.15216 15.9069 1 13.325 1C11.744 1 10.3458 1.80711 9.5 3.04248C9.06884 2.4112 8.49613 1.896 7.83033 1.54048C7.16453 1.18495 6.42523 0.999565 5.675 1Z"
+                        stroke="white"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <img
+                      class="book-cover-img"
+                      src="https://image.yes24.com/goods/154932318/XL"
+                      alt=""
+                    />
+                  </button>
+                </li>
+                <li class="recommend-book-lists">
+                  <button
+                    type="button"
+                    class="save-button"
+                    aria-label="이 책 찜하기"
+                    aria-pressed="false"
+                  >
+                    <svg
+                      class="save-icon"
+                      aria-hidden="true"
+                      width="19"
+                      height="17"
+                      viewBox="0 0 19 17"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5.675 1C3.09313 1 1 3.15216 1 5.80685C1 10.6137 6.525 14.9836 9.5 16C12.475 14.9836 18 10.6137 18 5.80685C18 3.15216 15.9069 1 13.325 1C11.744 1 10.3458 1.80711 9.5 3.04248C9.06884 2.4112 8.49613 1.896 7.83033 1.54048C7.16453 1.18495 6.42523 0.999565 5.675 1Z"
+                        stroke="white"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <img
+                      class="book-cover-img"
+                      src="https://image.yes24.com/goods/169664844/XL"
+                      alt=""
+                    />
+                  </button>
+                </li>
+                <li class="recommend-book-lists">
+                  <button
+                    type="button"
+                    class="save-button"
+                    aria-label="이 책 찜하기"
+                    aria-pressed="false"
+                  >
+                    <svg
+                      class="save-icon"
+                      aria-hidden="true"
+                      width="19"
+                      height="17"
+                      viewBox="0 0 19 17"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5.675 1C3.09313 1 1 3.15216 1 5.80685C1 10.6137 6.525 14.9836 9.5 16C12.475 14.9836 18 10.6137 18 5.80685C18 3.15216 15.9069 1 13.325 1C11.744 1 10.3458 1.80711 9.5 3.04248C9.06884 2.4112 8.49613 1.896 7.83033 1.54048C7.16453 1.18495 6.42523 0.999565 5.675 1Z"
+                        stroke="white"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <img
+                      class="book-cover-img"
+                      src="https://image.yes24.com/goods/90053583/XL"
+                      alt=""
+                    />
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <button class="share-button">공유하기</button>
+          </article>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>
