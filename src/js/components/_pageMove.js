@@ -1,6 +1,5 @@
 const container = document.querySelector('.container')
 const submitContainer = container.querySelector('.user-submit-area')
-// const subTitle = container.querySelector('.page-layout-subtitle')
 const header = container.querySelector('.navi-layout')
 
 // 네비게이션 이벤트
@@ -24,7 +23,6 @@ if (submitContainer) {
     // blockChecked(target, test)
 
     // 테스트 버튼을 눌렀을 때 체크 버튼이 비활성화 됨
-
     localStorage.setItem('weather', JSON.stringify('ss'))
   })
 }
@@ -48,7 +46,7 @@ if (submitContainer) {
 // 메인페이지로 이동하는 기능
 function pageMain(target, home) {
   if (target === home) {
-    localStorage.clear()
+    localStorage.removeItem('isChecked')
   }
 }
 
@@ -70,12 +68,3 @@ function pageMain(target, home) {
 // 찜눌렀을때 && 로그인이 안됬을 때 : 찜 리스트를 추가할 수 없습니다
 
 // 마이페이지를 눌렀을때 && 로그인이 안됬을 떄 : 로그인이 필요합니다
-
-// 뒤로가기 이벤트
-window.addEventListener('popstate', (e) => {
-  const target = e.target
-  const home = header.querySelector('.navi-home-button')
-  console.log('뒤로가기 버튼 눌림!')
-  // 메인페이지로 이동
-  pageMain(target, home)
-})
