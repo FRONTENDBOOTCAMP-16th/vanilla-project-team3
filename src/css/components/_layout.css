@@ -41,15 +41,17 @@
   flex-flow: column;
   overflow-y: scroll;
   width: 100%;
-  margin-block-start: 0;
+
+  .result-display,
+  .section-page-layout {
+    flex: 1;
+  }
 }
 
 @media (min-width: 1024px) {
   .main-page-scroll {
     flex-flow: row;
-    margin-block-start: 0;
     overflow-y: visible;
-    margin-block-start: 64px;
   }
 }
 
