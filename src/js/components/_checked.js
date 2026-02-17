@@ -19,6 +19,24 @@ const submitButton = container.querySelector('.user-test-check')
       })
     })
   }
+
+  // 스토리지에 저장된 감정/날씨 -> 체크로 변환
+  if (localStorage.getItem('imoji')) {
+    const savedEmojis = JSON.parse(localStorage.getItem('imoji'));
+
+    if (savedEmojis) {
+      buttons.forEach((checkbox) => {
+        const checkImojis = checkbox.querySelectorAll('[data-value]')
+  
+        // 가져온 로컬스토리지의 값이 data-value값과 동일한경우 체크
+        checkImojis.forEach((input) => {
+          if (savedEmojis.includes(input.dataset.value)) {
+            input.checked = true
+          }
+        })
+      })
+    }
+  }
 })()
 
 // 비회원 확인하기 버튼 눌렀을 때 이벤트
@@ -36,6 +54,9 @@ if (submitButton) {
 
     // 체크 버튼 비활성화 되야한다고 스토리지에 기록 넘겨줌
     localStorage.setItem('isChecked', 'true')
+
+    // 체크된 버튼이 어느 감정인지 스토리지에 기록 넘겨줌
+    emojiStorage()
   })
 }
 
@@ -118,6 +139,20 @@ function mustSubmitTest() {
   notiTimeout = setTimeout(() => {
     noti.classList.remove('noti-active')
   }, 1800)
+}
+
+// 체크된것들을 로컬스토리지에 기록 남겨주는 함수
+function emojiStorage() {
+  const checkImojis = container.querySelectorAll(
+    '.checkbox-button-area input:checked',
+  )
+  // 체크 되어있는 유사배열을 진짜 배열로 변환
+  const emojiArray = Array.from(checkImojis).map((input) => {
+    return input.dataset.value
+  })
+
+  // 로컬 스토리지에 해당 체크 리스트를 넘겨줌
+  localStorage.setItem('imoji', JSON.stringify(emojiArray))
 }
 
 // 기분/날씨 체크 함수 (각각 const를 불러오기 위해)
