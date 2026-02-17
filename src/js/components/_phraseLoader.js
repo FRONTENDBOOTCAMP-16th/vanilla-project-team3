@@ -1,6 +1,8 @@
+const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 // 데이터 받아오기
 function loadJsonData() {
-  fetch('https://69898725c04d974bc69f8907.mockapi.io/todayPhrase/todaysPhrase')
+  fetch(`${VITE_API_BASE_URL}/todayPhrase/todaysPhrase`)
     .then((response) => response.json())
     .then((data) => {
       const jsonDataList = data.map((list) => {
