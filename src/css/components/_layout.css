@@ -1,8 +1,5 @@
 /* 메인 환영 화면 */
 .container.main-intro {
-  .result-display {
-    display: none;
-  }
   .main-page-scroll {
     overflow-y: visible;
     justify-content: center;
@@ -44,7 +41,7 @@
   flex-flow: column;
   overflow-y: scroll;
   width: 100%;
-  margin-block-start: 64px;
+  margin-block-start: 0;
 }
 
 @media (min-width: 1024px) {
@@ -52,6 +49,7 @@
     flex-flow: row;
     margin-block-start: 0;
     overflow-y: visible;
+    margin-block-start: 64px;
   }
 }
 
