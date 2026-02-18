@@ -1,4 +1,4 @@
-import { saveStorage, removeStorage } from '/src/js/utils/index.js'
+import { saveStorage } from '/src/js/utils/index.js'
 
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
@@ -19,6 +19,10 @@ const IMOJI = 'imoji'
 let notiTimeoutId = null
 
 // 페이지 초기화
+window.addEventListener('pageshow', () => {
+  init()
+})
+
 init()
 
 function init() {
@@ -52,8 +56,8 @@ function bindEvents() {
 function handleResetAllInput() {
   // 브라우저 뒤로가기로 왔을 때
   // 페이지 초기화 과정에서 로컬 스토리지의 키 제거
-  removeStorage(IS_CHECKED_KEY)
-  removeStorage(IMOJI)
+  // removeStorage(IS_CHECKED_KEY)
+  // removeStorage(IMOJI)
 
   // 감정/날씨 체크된것 다 지우기
   doubleCheckedGroups.forEach((group) => {
