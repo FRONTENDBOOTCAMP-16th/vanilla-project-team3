@@ -1,9 +1,10 @@
+import { loadStorage } from '/src/js/utils/index.js'
+
 const container = document.querySelector('.container')
-const noti = document.querySelector('.emoji-noti')
 
 // 로컬 스토리지에 값이 true면 감정/날씨를 선택할 수 없음
 ;(() => {
-  const isChecked = localStorage.getItem('isChecked')
+  const isChecked = loadStorage('isChecked')
   const buttons = container.querySelectorAll('[data-checked="doubleChecked"]')
 
   if (isChecked === 'true') {
@@ -17,8 +18,8 @@ const noti = document.querySelector('.emoji-noti')
   }
 
   // 스토리지에 저장된 감정/날씨 -> 체크로 변환
-  if (localStorage.getItem('imoji')) {
-    const savedEmojis = JSON.parse(localStorage.getItem('imoji'))
+  if (loadStorage('imoji')) {
+    const savedEmojis = loadStorage('imoji')
 
     if (savedEmojis) {
       buttons.forEach((checkbox) => {
@@ -32,13 +33,5 @@ const noti = document.querySelector('.emoji-noti')
         })
       })
     }
-  }
-
-  // 노티에 잠깐 트렌지션 삭제
-  if (noti) {
-    // 아주 잠깐 뒤에 트랜지션 못하게 막기
-    setTimeout(() => {
-      noti.classList.remove('no-transition')
-    }, 500)
   }
 })()
