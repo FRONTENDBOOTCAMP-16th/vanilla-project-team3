@@ -2,50 +2,8 @@ const doubleCheckedGroup = document.querySelectorAll(
   '[data-checked="doubleChecked"]',
 )
 const container = document.querySelector('.container')
-const noti = document.querySelector('.emoji-noti')
 const submitButton = container.querySelector('.user-test-check')
-
-// 로컬 스토리지에 값이 true면 감정/날씨를 선택할 수 없음
-;(() => {
-  const isChecked = localStorage.getItem('isChecked')
-  const buttons = container.querySelectorAll('[data-checked="doubleChecked"]')
-
-  if (isChecked === 'true') {
-    buttons.forEach((gruop) => {
-      const checkImojis = gruop.querySelectorAll('.checkbox-button-area input')
-
-      checkImojis.forEach((input) => {
-        input.disabled = true
-      })
-    })
-  }
-
-  // 스토리지에 저장된 감정/날씨 -> 체크로 변환
-  if (localStorage.getItem('imoji')) {
-    const savedEmojis = JSON.parse(localStorage.getItem('imoji'))
-
-    if (savedEmojis) {
-      buttons.forEach((checkbox) => {
-        const checkImojis = checkbox.querySelectorAll('[data-value]')
-
-        // 가져온 로컬스토리지의 값이 data-value값과 동일한경우 체크
-        checkImojis.forEach((input) => {
-          if (savedEmojis.includes(input.dataset.value)) {
-            input.checked = true
-          }
-        })
-      })
-    }
-  }
-
-  // 노티에 잠깐 트렌지션 삭제
-  if (noti) {
-    // 아주 잠깐 뒤에 트랜지션 못하게 막기
-    setTimeout(() => {
-      noti.classList.remove('no-transition')
-    }, 500)
-  }
-})()
+const noti = document.querySelector('.emoji-noti')
 
 // 비회원 확인하기 버튼 눌렀을 때 이벤트
 if (submitButton) {
@@ -87,6 +45,27 @@ doubleCheckedGroup.forEach((doubleChecked) => {
 // 공용 타이머 함수
 let notiTimeout
 
+// 이모지를 하나만 선택후 다음 페이지로 넘어가려 할때 막기
+function mustSubmitTest() {
+  const { weather, mood } = emojiCheck()
+
+  // 실행되고 있는 타이머가 있다면 중복 실행 방지
+  if (notiTimeout) {
+    clearTimeout(notiTimeout)
+  }
+
+  // 감정/날씨 선택하라는 안내 문구 출력
+  if (!weather || !mood) {
+    noti.textContent = '기분과 감정을 최소 한개이상 골라주세요'
+    noti.classList.add('noti-active')
+  }
+
+  // 일정시간이 지난뒤 노티 사라짐
+  notiTimeout = setTimeout(() => {
+    noti.classList.remove('noti-active')
+  }, 1800)
+}
+
 // 이모지/날씨 버튼 눌렀을 때 2개이상이면 check가 false가 됨
 // 안내 noti 출력
 function checkboxNotdouble(e) {
@@ -116,38 +95,6 @@ function checkboxNotdouble(e) {
   }, 1800)
 }
 
-// 한개 이상 이모지 변경되었을 시 비회원 확인하기 버튼 활성화
-function mustChangeOne() {
-  const { weather, mood } = emojiCheck()
-
-  // 안내 노티
-  if (!weather || !mood) {
-    submitButton.classList.add('test-check-disabled')
-  } else {
-    submitButton.classList.remove('test-check-disabled')
-  }
-}
-
-// 이모지를 하나만 선택후 다음 페이지로 넘어가려 할때 막기
-function mustSubmitTest() {
-  const { weather, mood } = emojiCheck()
-
-  // 실행되고 있는 타이머가 있다면 중복 실행 방지
-  if (notiTimeout) {
-    clearTimeout(notiTimeout)
-  }
-
-  // 감정/날씨 선택하라는 안내 문구 출력
-  if (!weather || !mood) {
-    noti.textContent = '기분과 감정을 최소 한개이상 골라주세요'
-    noti.classList.add('noti-active')
-  }
-
-  // 일정시간이 지난뒤 노티 사라짐
-  notiTimeout = setTimeout(() => {
-    noti.classList.remove('noti-active')
-  }, 1800)
-}
 
 // 체크된것들을 로컬스토리지에 기록 남겨주는 함수
 function emojiStorage() {
@@ -162,6 +109,20 @@ function emojiStorage() {
   // 로컬 스토리지에 해당 체크 리스트를 넘겨줌
   localStorage.setItem('imoji', JSON.stringify(emojiArray))
 }
+
+// 한개 이상 이모지 변경되었을 시 비회원 확인하기 버튼 활성화
+function mustChangeOne() {
+  const { weather, mood } = emojiCheck()
+
+  // 안내 노티
+  if (!weather || !mood) {
+    submitButton.classList.add('test-check-disabled')
+  } else {
+    submitButton.classList.remove('test-check-disabled')
+  }
+}
+
+
 
 // 기분/날씨 체크 함수 (각각 const를 불러오기 위해)
 function emojiCheck() {
