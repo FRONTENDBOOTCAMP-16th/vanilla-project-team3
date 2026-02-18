@@ -1,9 +1,21 @@
+import { saveStorage } from '/src/js/utils/index.js'
+
 const doubleCheckedGroup = document.querySelectorAll(
   '[data-checked="doubleChecked"]',
 )
 const container = document.querySelector('.container')
 const submitButton = container.querySelector('.user-test-check')
 const noti = document.querySelector('.emoji-noti')
+
+;(() => {
+  // 노티에 잠깐 트렌지션 삭제 ( 페이지 오퍼시티와 트렌지션 강제 삽입 삭제 )
+  if (noti) {
+    // 아주 잠깐 뒤에 트랜지션 못하게 막기
+    setTimeout(() => {
+      noti.classList.remove('no-transition')
+    }, 500)
+  }
+})()
 
 // 비회원 확인하기 버튼 눌렀을 때 이벤트
 if (submitButton) {
@@ -19,7 +31,7 @@ if (submitButton) {
     }
 
     // 체크 버튼 비활성화 되야한다고 스토리지에 기록 넘겨줌
-    localStorage.setItem('isChecked', 'true')
+    saveStorage('isChecked', 'true')
 
     // 체크된 버튼이 어느 감정인지 스토리지에 기록 넘겨줌
     emojiStorage()
@@ -106,7 +118,7 @@ function emojiStorage() {
   })
 
   // 로컬 스토리지에 해당 체크 리스트를 넘겨줌
-  localStorage.setItem('imoji', JSON.stringify(emojiArray))
+  saveStorage('imoji', emojiArray)
 }
 
 // 한개 이상 이모지 변경되었을 시 비회원 확인하기 버튼 활성화
