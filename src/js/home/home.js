@@ -95,7 +95,6 @@ function checkboxNotdouble(e) {
   }, 1800)
 }
 
-
 // 체크된것들을 로컬스토리지에 기록 남겨주는 함수
 function emojiStorage() {
   const checkImojis = container.querySelectorAll(
@@ -121,8 +120,6 @@ function mustChangeOne() {
     submitButton.classList.remove('test-check-disabled')
   }
 }
-
-
 
 // 기분/날씨 체크 함수 (각각 const를 불러오기 위해)
 function emojiCheck() {
