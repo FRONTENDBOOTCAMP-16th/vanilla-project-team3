@@ -1,4 +1,7 @@
-import { removeAllStorage } from './index.js'
+import { removeStorage } from './index.js'
+
+const IS_CHECKED_KEY = 'isChecked'
+const IMOJI = 'imoji'
 
 // 화면이 그려지고 난 다음에 이벤트 실행
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,7 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 홈버튼 누르면 로컬스토리지 전부 삭제
     // 감정/날씨 체크박스 리셋
     if (target === home) {
-      removeAllStorage()
+      removeStorage(IMOJI)
+      removeStorage(IS_CHECKED_KEY)
     }
   })
 })
