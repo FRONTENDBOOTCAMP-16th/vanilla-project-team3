@@ -43,18 +43,18 @@ function bindEvents() {
     group.addEventListener('change', handleGroupChange)
   })
 
-	// 페이지가 표시될 때 모든 체크박스 초기화
-	// 브라우저 뒤로가기 버튼 클릭했을 때도 항상 초기화하고 싶을 때 사용됨
+  // 페이지가 표시될 때 모든 체크박스 초기화
+  // 브라우저 뒤로가기 버튼 클릭했을 때도 항상 초기화하고 싶을 때 사용됨
   globalThis.addEventListener('pageshow', handleResetAllInput)
 }
 
 // 모든 체크박스를 초기화하는 함수
 function handleResetAllInput() {
-	// 브라우저 뒤로가기로 왔을 때
-	// 페이지 초기화 과정에서 로컬 스토리지의 키 제거
+  // 브라우저 뒤로가기로 왔을 때
+  // 페이지 초기화 과정에서 로컬 스토리지의 키 제거
   removeStorage(IS_CHECKED_KEY)
   removeStorage(IMOJI)
-  
+
   // 감정/날씨 체크된것 다 지우기
   doubleCheckedGroups.forEach((group) => {
     const inputs = group.querySelectorAll('input')
@@ -75,7 +75,7 @@ function handleSubmitClick(e) {
     return
   }
 
-	// 비회원 페이지로 이동할 때 로컬 스토리지에 키 설정
+  // 비회원 페이지로 이동할 때 로컬 스토리지에 키 설정
   saveStorage(IS_CHECKED_KEY, 'true')
 
   // 체크된 버튼이 어느 감정인지 스토리지에 기록 넘겨줌
@@ -131,7 +131,7 @@ function emojiStorage() {
   saveStorage(IMOJI, emojiArray)
 }
 
-// 노티 활성화 / 비활성화 
+// 노티 활성화 / 비활성화
 function showNoti(message) {
   if (!noti) return
 

@@ -3,7 +3,9 @@ import { loadStorage } from '/src/js/utils/index.js'
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
 
-const doubleCheckedGroups = container.querySelectorAll('[data-checked="doubleChecked"]')
+const doubleCheckedGroups = container.querySelectorAll(
+  '[data-checked="doubleChecked"]',
+)
 const buttons = container.querySelectorAll('[data-checked="doubleChecked"]')
 
 // 상수파일 분리할때 적용
