@@ -29,7 +29,7 @@
       color: var(--white);
     }
 
-    .autu-input-box{
+    .autu-input-box {
       display: flex;
       flex-flow: nowrap column;
     }
