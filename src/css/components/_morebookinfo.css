@@ -1,6 +1,28 @@
+.recommend-book-lists {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .more-book-info {
-  background: #000;
-  color: #fff;
-  width: 120px;
-  height: 50px;
+  text-decoration: none;
+  display: flex;
+  width: 100%;
+  padding: 8px 0;
+  margin-top: 10px;
+  justify-content: center;
+
+  background-color: #004a99;
+  color: var(--white);
+
+  border: 3px solid #004a99;
+  border-radius: 20px;
+
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.more-book-info:hover {
+  border: 3px solid var(--white);
 }
