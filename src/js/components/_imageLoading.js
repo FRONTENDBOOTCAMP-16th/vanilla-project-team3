@@ -1,5 +1,6 @@
 // API URL
-const API_URL = 'https://69898725c04d974bc69f8907.mockapi.io/todayPhrase/todaysPhrase'
+const API_URL =
+  'https://69898725c04d974bc69f8907.mockapi.io/todayPhrase/todaysPhrase'
 
 // 로딩 시간 설정 (밀리초)
 const LOADING_TIMEOUT = 400
@@ -25,12 +26,12 @@ window.addEventListener('DOMContentLoaded', async () => {
     // API에서 데이터 가져오기
     const response = await fetch(API_URL)
     const data = await response.json()
-    
+
     // 첫 번째 데이터 또는 랜덤 데이터 선택
     selectedJsonData = Array.isArray(data) ? data[0] : data
-    
+
     console.log('API 데이터 로드 완료:', selectedJsonData)
-    
+
     // 이미지 프리로드
     if (selectedJsonData?.bookCover) {
       preloadImage(
@@ -42,7 +43,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         () => {
           console.error('이미지 프리로드 실패')
           isImagePreloaded = false
-        }
+        },
       )
     }
   } catch (error) {
@@ -52,7 +53,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       bookTitle: '데이터를 불러올 수 없습니다',
       author: '',
       phrase: '잠시 후 다시 시도해주세요',
-      bookCover: ''
+      bookCover: '',
     }
   }
 })
@@ -70,12 +71,12 @@ function handleShowResult() {
     console.warn('데이터가 아직 준비되지 않았습니다.')
     return
   }
-  
+
   preloadStartTime = Date.now()
-  
+
   // 로딩 화면 표시
   showLoadingDisplay()
-  
+
   if (isImagePreloaded) {
     // 이미지가 이미 로드된 경우: 최소 로딩 시간만 보장
     setTimeout(() => {
@@ -90,7 +91,7 @@ function handleShowResult() {
         // 이미지 로드 성공
         const elapsedTime = Date.now() - preloadStartTime
         const remainingTime = Math.max(0, LOADING_TIMEOUT - elapsedTime)
-        
+
         setTimeout(() => {
           displayPhraseResult(selectedJsonData)
           hideLoadingDisplay()
@@ -103,7 +104,7 @@ function handleShowResult() {
           displayPhraseResult(selectedJsonData)
           hideLoadingDisplay()
         }, LOADING_TIMEOUT)
-      }
+      },
     )
   }
 }
@@ -128,7 +129,7 @@ function preloadImage(imageUrl, successCallback, errorCallback) {
     errorCallback?.()
     return
   }
-  
+
   const preloader = new Image()
   preloader.addEventListener('load', successCallback, { once: true })
   preloader.addEventListener('error', errorCallback, { once: true })
@@ -140,12 +141,12 @@ function displayPhraseResult({
   bookTitle: title = '',
   author = '',
   phrase = '',
-  bookCover: cover = ''
+  bookCover: cover = '',
 } = {}) {
   bookTitle.textContent = title
   bookAuthor.textContent = author
   recommendPhrase.textContent = phrase
-  
+
   // 배경 이미지 설정 (이미 캐시되어 있어 즉시 표시됨)
   if (cover) {
     resultDisplay.style.setProperty('--bg-image', `url('${cover}')`)
