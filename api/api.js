@@ -75,15 +75,12 @@ export async function getUser(key, value) {
       'Content-type': 'application/json',
     }
     // 해당 데이터 URL읽어오기
-    const response = await fetch(
-      `${VITE_API_BASE_URL}/todayPhrase/user`,
-      {
-        // GET방식, 캐시기본값(캐시가 오래되면 새로불러옴)
-        method: 'GET',
-        headers,
-        cache: 'default',
-      },
-    )
+    const response = await fetch(`${VITE_API_BASE_URL}/todayPhrase/user`, {
+      // GET방식, 캐시기본값(캐시가 오래되면 새로불러옴)
+      method: 'GET',
+      headers,
+      cache: 'default',
+    })
 
     // 에러코드 200이 아니면 에러로 간주
     if (!response.ok) {
@@ -110,8 +107,8 @@ export async function getUser(key, value) {
           password,
           userId,
           heart,
-          mood_counts: [ happy, sad, soso, bad ],
-          weather_counts: [ sunny, rainy, snowy, dusty, cloudy ],
+          mood_counts: [happy, sad, soso, bad],
+          weather_counts: [sunny, rainy, snowy, dusty, cloudy],
           id,
         }
       },
