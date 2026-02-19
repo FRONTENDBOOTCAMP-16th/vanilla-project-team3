@@ -52,6 +52,9 @@
       }
 
       .submit-button {
+        text-decoration: none;
+        align-content: center;
+        text-align: center;
         block-size: 52px;
         padding: 0;
         background-color: var(--button-color);
@@ -72,6 +75,9 @@
     padding-block-start: 40px;
 
     .join-to-button {
+      text-decoration: none;
+      text-align: center;
+      align-content: center;
       inline-size: 210px;
       block-size: 30px;
       padding: 0;
