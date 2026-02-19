@@ -9,6 +9,7 @@
     />
     <link rel="icon" href="/bookicon.svg" />
     <script type="module" defer src="/src/main.js"></script>
+    <script type="module" defer src="/src/pages/signup/signup.js"></script>
     <title>바닐라 팀프로젝트 문학소녀팀</title>
   </head>
   <body>
@@ -76,19 +77,18 @@
                   placeholder="이메일을 입력해 주세요"
                   required
                 />
-                <span class="warning-block new-pw-blank-warning" hidden
-                  >올바른 이메일 양식으로 작성해주세요.</span
+                <span class="warning-block new-email-blank-warning" hidden
+                  ></span
                 >
               </div>
-              <a
-                href="/index.html"
+              <button type="submit"
                 class="submit-button"
                 id="submit-signup"
                 aria-label="회원가입버튼"
                 data-role="signup-submit"
               >
                 확인
-              </a>
+              </button>
             </form>
           </div>
         </div>
