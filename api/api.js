@@ -1,6 +1,6 @@
-const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
+const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 // 데이터 읽어오기
-async function getData(key, value) {
+export async function getData(key, value) {
   try {
     // 헤더 타입
     const headers = {
@@ -25,7 +25,6 @@ async function getData(key, value) {
 
     // 받아온 자료를 JSON으로 변경
     const data = await response.json()
-
     // 데이터리스트
     const massagedData = data.map(
       ({
@@ -48,7 +47,6 @@ async function getData(key, value) {
         }
       },
     )
-
     // 키값, 벨류값이 있을때 반환
     if (key && value) {
       const result = massagedData.find((item) => item[key] === value)
