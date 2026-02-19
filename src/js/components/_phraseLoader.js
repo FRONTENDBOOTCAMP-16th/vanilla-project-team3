@@ -67,4 +67,9 @@ export function displayPhraseResult(selectedJsonData) {
       bookCoverImages[index].alt = data.bookTitle
     }
   })
+
+
+
+  // morebookinfo 파일에서 "데이터 준비완료" 신호 보내기❗
+  window.dispatchEvent(new CustomEvent('renderDone', { detail: selectedJsonData }))
 }
