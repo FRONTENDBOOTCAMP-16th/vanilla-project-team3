@@ -1,3 +1,4 @@
+import { removeStorage } from '../utils'
 import { saveStorage } from '/src/js/utils/index.js'
 
 const container = document.querySelector('.container')
@@ -22,7 +23,6 @@ init()
 
 function init() {
   bindEvents()
-  updateSubmitButtonState()
 }
 
 // 노티에 잠깐 트렌지션 삭제 ( 페이지 오퍼시티와 트렌지션 강제 삽입 삭제 )
@@ -44,26 +44,53 @@ function bindEvents() {
 
   // 페이지가 표시될 때 모든 체크박스 초기화
   // 브라우저 뒤로가기 버튼 클릭했을 때도 항상 초기화하고 싶을 때 사용됨
-  globalThis.addEventListener('pageshow', handleResetAllInput)
+  globalThis.addEventListener('pageshow', handleDetectBrowserLoadOrForward)
 }
 
 // 모든 체크박스를 초기화하는 함수
-function handleResetAllInput() {
-  // 브라우저 뒤로가기로 왔을 때
-  // 페이지 초기화 과정에서 로컬 스토리지의 키 제거
+function handleDetectBrowserLoadOrForward() {
+  // Navigation Timing API를 통해 현재 페이지에 어떻게 진입했는지 정보 가져오기
+  const [navigation] = performance.getEntriesByType('navigation')
+  // 페이지 진입 유형을 구조 분해 할당으로 추출
+  const { type } = navigation
 
-  // 해당 코드를 지워도 브라우저 뒤로가기/앞으로 가기가 잘 작동함 =========================
-  // removeStorage(IS_CHECKED_KEY)
-  // removeStorage(IMOJI)
-  // 해당 코드를 지워도 브라우저 뒤로가기/앞으로 가기가 잘 작동함 =========================
+  // 페이지 진입 유형: 로드(새로고침, 초기 접속)
+  if (type === 'navigate') {
+    // 로컬 스토리지 isChecked, imoji 삭제
+    removeStorage(IS_CHECKED_KEY)
+    removeStorage(IMOJI)
 
-  // 감정/날씨 체크된것 다 지우기
-  doubleCheckedGroups.forEach((group) => {
-    const inputs = group.querySelectorAll('input')
-    inputs.forEach((input) => {
-      input.checked = false
-    })
-  })
+    // 제출 버튼(링크) 상태 비활성화
+    disableSubmitButtonState()
+  }
+  // 페이지 진입 유형: 브라우저 뒤로가기 클릭
+  else if (type === 'back_forward') {
+    // 제출 버튼(링크) 상태 활성화
+    enableSubmitButtonState()
+  }
+}
+
+// 현재 선택된 데이터(날씨, 기분)의 유무를 판단 버튼(링크) 상태 변경
+// 접근성: 실시간으로 버튼의 활성 여부를 업데이트합니다.
+function updateSubmitButtonState() {
+  const { weather, mood } = getSelected()
+  const isDisabled = !weather || !mood
+
+  isDisabled ? disableSubmitButtonState() : enableSubmitButtonState()
+}
+
+// 버튼(링크)을 활성 상태로 변경
+// 접근성: 스크린 리더 등 보조공학기기에 상태 변화를 알림
+function enableSubmitButtonState() {
+  if (!submitButton) return
+  submitButton.setAttribute('aria-disabled', 'false')
+}
+
+// 버튼(링크)을 비활성 상태로 변경
+// 접근성: 스크린 리더 등 보조공학기기에 상태 변화를 알림
+function disableSubmitButtonState() {
+  if (!submitButton) return
+  submitButton.setAttribute('aria-disabled', 'true')
 }
 
 // 결과보기 버튼을 눌렀을 때
@@ -88,13 +115,11 @@ function handleGroupChange(e) {
   const input = e.target.closest('input[type="checkbox"]')
   if (!input) return
 
-  // 1) 선택 개수 제한(최대 2개)
   const ok = limitToTwoChecked(e.currentTarget, input)
   if (!ok) {
     showNoti('감정 / 기분은 각각 최대 두개씩 선택 가능해요!')
   }
 
-  // 2) 버튼 활성/비활성 갱신
   updateSubmitButtonState()
 }
 
@@ -107,16 +132,6 @@ function limitToTwoChecked(groupEl, changedInput) {
   // 초과면 방금 누른 것 되돌림
   changedInput.checked = false
   return false
-}
-
-function updateSubmitButtonState() {
-  if (!submitButton) return
-
-  const { weather, mood } = getSelected()
-  const disabled = !weather || !mood
-
-  // 감정과 기분중 하나만 선택했을 때 버튼 비활성화
-  submitButton.classList.toggle('test-check-disabled', disabled)
 }
 
 // 체크된것들을 로컬스토리지에 기록 남겨주는 함수
