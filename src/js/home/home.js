@@ -6,6 +6,7 @@ import {
   getRandomData,
 } from '../../js/components/_phraseLoader.js'
 import { getData } from '../../../api/api.js'
+import { IS_CHECKED_KEY, IMOJI } from '/src/js/constants/index.js'
 
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
@@ -16,11 +17,8 @@ const doubleCheckedGroups = document.querySelectorAll(
   '[data-checked="doubleChecked"]',
 )
 
-// 상수파일 분리할때 적용
 const NOTI_HIDE_DELAY = 1800
 const MAX_CHECKED = 2
-const IS_CHECKED_KEY = 'isChecked'
-const IMOJI = 'imoji'
 
 // 상태 변수
 let notiTimeoutId = null
