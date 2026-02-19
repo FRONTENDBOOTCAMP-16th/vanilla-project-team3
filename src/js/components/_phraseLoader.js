@@ -1,4 +1,4 @@
-const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
 
 // 데이터 받아오기
 function loadJsonData() {
