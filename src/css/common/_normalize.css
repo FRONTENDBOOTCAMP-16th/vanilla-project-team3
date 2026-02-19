@@ -119,5 +119,5 @@ table {
   border-color: currentcolor;
 }
 [hidden] {
-  display: none !important;
+  display: none;
 }

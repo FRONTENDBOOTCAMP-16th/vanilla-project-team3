@@ -1,3 +1,4 @@
+const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
 // 데이터 읽어오기
 async function getData(key, value) {
   try {
@@ -7,7 +8,7 @@ async function getData(key, value) {
     }
     // 해당 데이터 URL읽어오기
     const response = await fetch(
-      `https://69898725c04d974bc69f8907.mockapi.io/todayPhrase/todaysPhrase`,
+      `${VITE_API_BASE_URL}/todayPhrase/todaysPhrase`,
       {
         // GET방식, 캐시기본값(캐시가 오래되면 새로불러옴)
         method: 'GET',

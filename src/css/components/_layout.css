@@ -1,9 +1,67 @@
+/* 메인 환영 화면 */
+.container.main-intro {
+  .main-page-scroll {
+    overflow-y: visible;
+    justify-content: center;
+  }
+
+  .navi-layout {
+    display: none;
+  }
+
+  .checkbox-button-area {
+    input:disabled + label {
+      transform: none;
+      cursor: auto;
+    }
+  }
+}
+
+/* 기분/감정 조회 화면 */
+.container.main-review {
+  .page-layout-title {
+    display: none;
+  }
+
+  .user-submit-area {
+    display: none;
+  }
+
+  .checkbox-button-area {
+    input:disabled + label {
+      transform: none;
+      cursor: auto;
+    }
+  }
+}
+
 /* 책 레이아웃 */
+.main-page-scroll {
+  display: flex;
+  flex-flow: column;
+  overflow-y: scroll;
+  width: 100%;
+
+  .result-display,
+  .section-page-layout {
+    flex: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .main-page-scroll {
+    flex-flow: row;
+    overflow-y: visible;
+  }
+}
+
 .section-page-layout {
   position: relative;
   display: flex;
   flex-flow: column;
   justify-content: center;
+  min-height: 640px;
+  padding: 15px;
 }
 
 /* 책 레이아웃 > 로그인 레이아웃 */
@@ -32,4 +90,5 @@
   left: 0;
   width: 100%;
   height: 62px;
+  z-index: 1;
 }
