@@ -18,11 +18,6 @@ const IMOJI = 'imoji'
 // 상태 변수
 let notiTimeoutId = null
 
-// 페이지 초기화
-window.addEventListener('pageshow', () => {
-  init()
-})
-
 init()
 
 function init() {
@@ -56,7 +51,7 @@ function bindEvents() {
 function handleResetAllInput() {
   // 브라우저 뒤로가기로 왔을 때
   // 페이지 초기화 과정에서 로컬 스토리지의 키 제거
-  
+
   // 해당 코드를 지워도 브라우저 뒤로가기/앞으로 가기가 잘 작동함 =========================
   // removeStorage(IS_CHECKED_KEY)
   // removeStorage(IMOJI)
