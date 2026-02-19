@@ -1,5 +1,7 @@
 .result-display {
-  background-image: url('https://image.yes24.com/goods/169664844/XL');
+  --bg-image: url('https://image.yes24.com/goods/169664844/XL');
+
+  background-image: var(--bg-image);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -30,7 +32,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: inherit;
+  background-image: var(--bg-image);
   background-size: cover;
   filter: blur(20px);
   z-index: -1;
@@ -39,7 +41,6 @@
   .result-display {
     width: 510px;
     border-radius: 1.5%;
-    min-height: 900px;
   }
 }
 
