@@ -1,29 +1,12 @@
-const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-
 // 사용자가 선택한 값 받아오기(valueName으로 들어올 수 있는 값 : checkbox-mood, checkbox-weather)
-function getSelectedValues(valueName) {
+export function getSelectedValues(valueName) {
   const checkedInputs = document.querySelectorAll(
     `input[name="${valueName}"]:checked`,
   )
   return Array.from(checkedInputs).map((input) => input.dataset.value)
 }
 
-// 데이터 받아오기
-async function loadJsonData() {
-  const response = await fetch(`${VITE_API_BASE_URL}/todayPhrase/todaysPhrase`)
-  const data = await response.json()
-  
-  return data.map((list) => ({
-    bookTitle: list.bookTitle,
-    phrase: list.phrase,
-    author: list.author,
-    bookCover: list.bookCover,
-    mood: list.mood,      
-    weather: list.weather  
-  }))
-}
-
-function filterData(allData, selectedMoods, selectedWeathers) {
+export function filterData(allData, selectedMoods, selectedWeathers) {
   const filteredData = allData.filter((item) => {
     // 기분 필터: 선택된 기분이 없으면 기분 전체 포함, 있으면 해당 기분만 포함
     const matchMood =
@@ -39,7 +22,7 @@ function filterData(allData, selectedMoods, selectedWeathers) {
 }
 
 // 필터링 된 데이터에서 랜덤으로 뽑기
-function getRandomData(filteredData, count) {
+export function getRandomData(filteredData, count) {
   const result = []
   // 원본을 훼손하지 않을 복사본 데이터
   const copyData = [...filteredData]
@@ -58,7 +41,7 @@ function getRandomData(filteredData, count) {
 }
 
 // 화면에 글자와 이미지 변경하기
-function displayPhraseResult(selectedJsonData) {
+export function displayPhraseResult(selectedJsonData) {
   if (selectedJsonData.length === 0) return
 
   const mainRecommendData = selectedJsonData[0]
@@ -85,16 +68,3 @@ function displayPhraseResult(selectedJsonData) {
     }
   })
 }
-
-const testCheckButton = document.querySelector('.user-test-check')
-
-testCheckButton.addEventListener('click', async () => {
-  const allData = await loadJsonData()
-  const moods = getSelectedValues('checkbox-mood')
-  const weathers = getSelectedValues('checkbox-weather')
-
-  const filteredData = filterData(allData, moods, weathers)
-  const selectedData = getRandomData(filteredData, 4)
-
-  displayPhraseResult(selectedData)
-})
