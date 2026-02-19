@@ -1,4 +1,5 @@
 import { loadStorage } from '/src/js/utils/index.js'
+import { displayPhraseResult } from '../../js/components/_phraseLoader.js'
 
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
@@ -48,3 +49,16 @@ if (loadStorage(IMOJI)) {
     })
   }
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+  const savedLocalData = localStorage.getItem('selectedBookList')
+
+  if (savedLocalData) {
+    // JSON 문자열을 다시 원래의 배열 형태로 복구
+    const parseData = JSON.parse(savedLocalData)
+    displayPhraseResult(parseData)
+  } else {
+    alert('저장된 데이터가 존재하지 않습니다.')
+    location.href = '/index.html'
+  }
+})
