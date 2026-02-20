@@ -61,7 +61,7 @@ async function checkeEmailPassword() {
   const isPassword = resultID.password === password.value
 
   // 아이디와 비밀번호와 동일하지않으면 안내문구
-  resultID && isPassword ? (noti.hidden =  true) : (noti.hidden = false)
+  resultID && isPassword ? (noti.hidden = true) : (noti.hidden = false)
 
   // 아이디와 비밀번호가 맞다면 로그인 성공
   isLogin(resultID, isPassword)
