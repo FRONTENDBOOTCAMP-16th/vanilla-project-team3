@@ -29,6 +29,11 @@
       color: var(--white);
     }
 
+    .autu-input-box {
+      display: flex;
+      flex-flow: nowrap column;
+    }
+
     .autu-box-container {
       display: flex;
       flex-flow: nowrap column;
