@@ -1,5 +1,4 @@
 const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
-
 export async function getData(key, value) {
   try {
     // 헤더 타입
