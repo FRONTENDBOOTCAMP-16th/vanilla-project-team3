@@ -54,20 +54,21 @@ function signupLogic() {
     }
 
     // 4. 이메일 검사 (빈값 + 구조적 오류 차단)
-   if (newEmail === '') {
-  emailInputBottomAlert.textContent = '이메일 주소를 입력해 주세요.';
-  emailInputBottomAlert.hidden = false;
-  newAddEmailValue.focus();
-  return;
-} 
+    if (newEmail === '') {
+      emailInputBottomAlert.textContent = '이메일 주소를 입력해 주세요.'
+      emailInputBottomAlert.hidden = false
+      newAddEmailValue.focus()
+      return
+    }
 
     // 이메일 정규식 테스트
     if (!emailRegex.test(newEmail)) {
-  emailInputBottomAlert.textContent = '"아이디@domain.com" 형식으로 작성해주세요.';
-  emailInputBottomAlert.hidden = false;
-  newAddEmailValue.focus();
-  return;
-}
+      emailInputBottomAlert.textContent =
+        '"아이디@domain.com" 형식으로 작성해주세요.'
+      emailInputBottomAlert.hidden = false
+      newAddEmailValue.focus()
+      return
+    }
 
     try {
       // 5. 아이디 중복 검사 (URL에 ? 추가)
@@ -88,7 +89,7 @@ function signupLogic() {
       const responseSignUp = await fetch(USERS_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
+        body: JSON.stringify(userData),
       })
 
       if (responseSignUp.ok) {
