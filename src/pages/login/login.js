@@ -1,5 +1,8 @@
 import { getData, getUser } from '../../../api/api'
 
+const form = document.querySelector('.autu-box-container')
+if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.')
+
 // getData('mood')
 // getUser('id')
 
@@ -27,6 +30,22 @@ getData('mood', 'happy').then((res) => console.log(res))
 // 데이터 조회한것으로 input 아이디/ input password 비교
 
 // 3.
-//
+// 비밀번호/아이디 들중하나 맞지 않는 다면 e.preventEvent()
+// 아이디가 틀린경우 > 아이디 노티
+// 아이디가 맞고 비밀번호가 틀린 경우 > 비빌번호 노티
+
+form.addEventListener('click', (e) => {
+  const target = e.target
+  const id = form.querySelector('.id-box')
+  
+  if(target === !id ) return
+  console.log(target)
+  
+  if(target === id) {
+  console.log('아이디')
+  }
+})
+
+
 
 getUser('email', 'anc1111@naver.com').then((res) => console.log(res))
