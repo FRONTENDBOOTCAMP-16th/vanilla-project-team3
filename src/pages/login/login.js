@@ -25,16 +25,11 @@ function handleFormClick(e) {
   const target = e.target
 
   if (target === login) {
+    e.preventDefault()
     // 아이디와 비밀번호 입력 안되었을 시 로그인안됨
-    if (!id.value || !password.value) {
-      e.preventDefault()
-    } else {
-      // 아이디와 비밀번호 입력 체크
+    if (id.value || password.value) {
       checkeEmailPassword()
-
-      e.preventDefault()
     }
-    return
   }
 
   if (target !== id) return
@@ -42,6 +37,7 @@ function handleFormClick(e) {
   if (target === id) {
     // TODO
     // 영문,숫자,소문자만 입력되도록 수정하기
+    
     console.log('아이디')
   }
 }
