@@ -68,7 +68,6 @@ export async function getData(key, value) {
 }
 
 export async function getUser(key, value) {
-
   if (key === 'password') {
     console.error('비밀번호를 URL에 노출할 수 있음')
     return null
@@ -95,8 +94,8 @@ export async function getUser(key, value) {
       weather_counts: { sunny, rainy, snowy, dusty, cloudy },
     } = user
 
-		// 로그인 사용자 반환 (데이터 마사지)
-		return {
+    // 로그인 사용자 반환 (데이터 마사지)
+    return {
       id,
       email,
       password,

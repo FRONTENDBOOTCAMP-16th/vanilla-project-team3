@@ -30,14 +30,13 @@ function handleFormClick(e) {
 
     // 아이디와 비밀번호 입력 되었을 시 로그인
     checkeEmailPassword()
-  } 
+  }
 }
 
 // 버튼 스타일 적용
 function handleFormChange() {
   if (id.value && password.value) {
     login.setAttribute('aria-disabled', 'false')
-
   } else {
     login.setAttribute('aria-disabled', 'true')
   }
@@ -46,7 +45,7 @@ function handleFormChange() {
 // 이메일과 비밀번호 확인
 async function checkeEmailPassword() {
   const resultID = await getUser(EMAIL, id.value)
-  
+
   // 가입 정보가 없는 이메일
   if (!resultID) {
     noti.hidden = false
@@ -60,7 +59,7 @@ async function checkeEmailPassword() {
     noti.hidden = false
     return
   }
-  
+
   // 전부 통과한 경우
   noti.hidden = true
   isLogin(resultID, isPassword)
@@ -73,4 +72,3 @@ async function isLogin(resultID, resultPassword) {
     window.location.href = `${baseURL}/index.html`
   }
 }
-
