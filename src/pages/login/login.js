@@ -37,15 +37,13 @@ getData('mood', 'happy').then((res) => console.log(res))
 form.addEventListener('click', (e) => {
   const target = e.target
   const id = form.querySelector('.id-box')
-  
-  if(target === !id ) return
+
+  if (target === !id) return
   console.log(target)
-  
-  if(target === id) {
-  console.log('아이디')
+
+  if (target === id) {
+    console.log('아이디')
   }
 })
-
-
 
 getUser('email', 'anc1111@naver.com').then((res) => console.log(res))
