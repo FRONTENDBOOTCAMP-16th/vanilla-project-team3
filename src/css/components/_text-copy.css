@@ -1,0 +1,27 @@
+.text-copy-button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 53%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--white);
+  border: 3px solid var(--white);
+  color: var(--black);
+  border-radius: 30px;
+  width: 110px;
+  height: 45px;
+
+  font-size: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+
+  z-index: 5;
+}
+
+.text-copy-button:hover {
+  border-color: var(--black);
+}
