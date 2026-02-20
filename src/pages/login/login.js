@@ -37,7 +37,6 @@ function handleFormClick(e) {
   if (target === id) {
     // TODO
     // 영문,숫자,소문자만 입력되도록 수정하기
-    
     console.log('아이디')
   }
 }
