@@ -10,6 +10,7 @@
     />
     <link rel="icon" href="/bookicon.svg" />
     <script type="module" defer src="/src/main.js"></script>
+    <script type="module" defer src="/src/pages/login/login.js"></script>
   </head>
   <body>
     <main class="container">
@@ -44,9 +45,6 @@
                   placeholder="아이디를 입력해 주세요"
                   required
                 />
-                <span class="warning-block id-blank-warning" hidden
-                  >입력하신 아이디가 조회되지 않습니다.</span
-                >
               </div>
               <div class="pw-input-box" aria-label="비밀번호입력">
                 <label for="pw-input-area" class="sr-only pw-label"
@@ -59,9 +57,6 @@
                   placeholder="비밀번호를 입력해 주세요"
                   required
                 />
-                <span class="warning-block pw-blank-warning" hidden
-                  >비밀번호가 옳지 않습니다.</span
-                >
               </div>
               <a
                 href="/index.html"
@@ -73,6 +68,10 @@
               >
                 로그인
               </a>
+              <span class="warning-block noti-blank-warning" hidden
+                >아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를
+                정확히 입력해 주세요.</span
+              >
             </form>
           </div>
           <!-- 회원가입 이동 -->
