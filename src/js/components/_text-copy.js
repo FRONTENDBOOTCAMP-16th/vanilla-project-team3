@@ -21,7 +21,7 @@ function handleCopySuccess(button) {
 
   setTimeout(() => {
     button.innerText = originalText
-    button.style.backgroundColor = originalBg
+    button.style.backgroundColor = originalBg || '#fff'
   }, 2000)
 }
 
