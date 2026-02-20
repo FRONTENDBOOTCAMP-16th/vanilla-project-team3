@@ -59,12 +59,18 @@ export function displayPhraseResult(selectedJsonData) {
     `url(${mainRecommendData.bookCover})`,
   )
 
+  // 책 상세 정보 버튼 변수 추가
+  const bookInfoButtons = document.querySelectorAll('.more-book-info')
+
   const bookCoverImages = document.querySelectorAll('.book-cover-img')
   const subBooks = selectedJsonData.slice(1)
   subBooks.forEach((data, index) => {
     if (bookCoverImages[index]) {
       bookCoverImages[index].src = data.bookCover
       bookCoverImages[index].alt = data.bookTitle
+
+      // 상세정보 버튼에 data.url 연결
+      bookInfoButtons[index].href = data.bookstoreUrl
     }
   })
 }
