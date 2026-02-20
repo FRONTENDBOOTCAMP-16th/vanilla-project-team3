@@ -1,4 +1,4 @@
-const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const VITE_API_BASE_URL = import.meta.env.VITE_API_DATA_URL
 // 데이터 읽어오기
 export async function getData(key, value) {
   try {
