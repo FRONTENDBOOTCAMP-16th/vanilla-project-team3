@@ -68,66 +68,45 @@ export async function getData(key, value) {
 }
 
 export async function getUser(key, value) {
+
+  if (key === 'password') {
+    console.error('비밀번호를 URL에 노출할 수 있음')
+    return null
+  }
+
   try {
-    // 헤더 타입
-    const headers = {
-      'Content-type': 'application/json',
-    }
-    // 해당 데이터 URL읽어오기
-    const response = await fetch(`${VITE_API_BASE_URL}/todayPhrase/user`, {
-      // GET방식, 캐시기본값(캐시가 오래되면 새로불러옴)
-      method: 'GET',
-      headers,
-      cache: 'default',
-    })
-
-    // 에러코드 200이 아니면 에러로 간주
-    if (!response.ok) {
-      console.log('데이터 전달 실패')
-      throw new Error('실패')
-    }
-
-    // 받아온 자료를 JSON으로 변경
-    const data = await response.json()
-
-    // 데이터리스트
-    const massagedData = data.map(
-      ({
-        email,
-        password,
-        userId,
-        heart,
-        mood_counts: { happy, sad, soso, bad },
-        weather_counts: { sunny, rainy, snowy, dusty, cloudy },
-        id,
-      }) => {
-        return {
-          email,
-          password,
-          userId,
-          heart,
-          mood_counts: [happy, sad, soso, bad],
-          weather_counts: [sunny, rainy, snowy, dusty, cloudy],
-          id,
-        }
-      },
+    const response = await fetch(
+      `${VITE_API_BASE_URL}/todayPhrase/user?${key}=${value}`,
     )
 
-    // 키값, 벨류값이 있을때 반환
-    if (key && value) {
-      const result = massagedData.find((item) => item[key] === value)
-      return result
+    if (!response.ok) {
+      throw new Error(`${key}, ${value} 데이터 가져오기 실패`)
     }
 
-    // 키값만 있을때 반환
-    if (key && !value) {
-      return massagedData.map((item) => item[key])
-    }
+    const [user] = await response.json()
 
-    // 데이터 전체 반환
-    return massagedData
+    const {
+      id,
+      email,
+      password,
+      userId,
+      heart,
+      mood_counts: { happy, sad, soso, bad },
+      weather_counts: { sunny, rainy, snowy, dusty, cloudy },
+    } = user
+
+		// 로그인 사용자 반환 (데이터 마사지)
+		return {
+      id,
+      email,
+      password,
+      userId,
+      heart,
+      mood_counts: [happy, sad, soso, bad],
+      weather_counts: [sunny, rainy, snowy, dusty, cloudy],
+    }
   } catch (error) {
-    // 에러페이지 추후 추가
-    console.log(error)
+    console.error(error)
+    return null
   }
 }

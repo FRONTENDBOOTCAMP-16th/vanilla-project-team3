@@ -1,4 +1,6 @@
+const baseURL = import.meta.env.VITE_BASE_URL
 import { getUser } from '../../../api/api'
+import { EMAIL } from '../../js/constants'
 
 const form = document.querySelector('.autu-box-container')
 if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.')
@@ -7,7 +9,6 @@ const password = form.querySelector('.pw-box')
 const noti = form.querySelector('.noti-blank-warning')
 const login = form.querySelector('.submit-button')
 
-// 페이지 뒤로가기 / 앞으로가기 했을때 데이터 싹 다 날아가야함
 init()
 
 function init() {
@@ -26,25 +27,17 @@ function handleFormClick(e) {
 
   if (target === login) {
     e.preventDefault()
-    // 아이디와 비밀번호 입력 안되었을 시 로그인안됨
-    if (id.value || password.value) {
-      checkeEmailPassword()
-    }
-  }
 
-  if (target !== id) return
-
-  if (target === id) {
-    // TODO
-    // 영문,숫자,소문자만 입력되도록 수정하기
-    console.log('아이디')
-  }
+    // 아이디와 비밀번호 입력 되었을 시 로그인
+    checkeEmailPassword()
+  } 
 }
 
 // 버튼 스타일 적용
 function handleFormChange() {
   if (id.value && password.value) {
     login.setAttribute('aria-disabled', 'false')
+
   } else {
     login.setAttribute('aria-disabled', 'true')
   }
@@ -52,20 +45,32 @@ function handleFormChange() {
 
 // 이메일과 비밀번호 확인
 async function checkeEmailPassword() {
-  const resultID = await getUser('email', id.value)
+  const resultID = await getUser(EMAIL, id.value)
+  
+  // 가입 정보가 없는 이메일
+  if (!resultID) {
+    noti.hidden = false
+    return
+  }
+
   const isPassword = resultID.password === password.value
 
-  // 아이디와 비밀번호와 동일하지않으면 안내문구
-  resultID && isPassword ? (noti.hidden = true) : (noti.hidden = false)
-
-  // 아이디와 비밀번호가 맞다면 로그인 성공
+  // 비밀번호가 틀린 경우
+  if (!isPassword) {
+    noti.hidden = false
+    return
+  }
+  
+  // 전부 통과한 경우
+  noti.hidden = true
   isLogin(resultID, isPassword)
 }
 
 // 로그인 후 메인페이지로 이동
 async function isLogin(resultID, resultPassword) {
   if (resultID && resultPassword) {
-    alert('로그인이 성공하였습니다.')
-    window.location.href = 'http://localhost:3000/index.html'
+    alert('로그인을 성공하였습니다.')
+    window.location.href = `${baseURL}/index.html`
   }
 }
+
