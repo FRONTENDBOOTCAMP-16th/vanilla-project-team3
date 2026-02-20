@@ -2,6 +2,11 @@ import { getData, getUser } from '../../../api/api'
 
 const form = document.querySelector('.autu-box-container')
 if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.')
+const id = form.querySelector('.id-box')
+const idNoti = form.querySelector('.id-blank-warning')
+const password = form.querySelector('.pw-box')
+// const passwordNoti = form.querySelector('.pw-blank-warning')
+const login = form.querySelector('.submit-button')
 
 // getData('mood')
 // getUser('id')
@@ -33,17 +38,51 @@ getData('mood', 'happy').then((res) => console.log(res))
 // 비밀번호/아이디 들중하나 맞지 않는 다면 e.preventEvent()
 // 아이디가 틀린경우 > 아이디 노티
 // 아이디가 맞고 비밀번호가 틀린 경우 > 비빌번호 노티
+init()
 
-form.addEventListener('click', (e) => {
+function init() {
+  bindEvent()
+}
+
+function bindEvent() {
+  if (form) {
+    form.addEventListener('input', handleFormChange)
+    form.addEventListener('click', handleFormClick)
+  }
+}
+
+function handleFormClick(e) {
   const target = e.target
-  const id = form.querySelector('.id-box')
 
-  if (target === !id) return
-  console.log(target)
+  if (target === login) {
+    if (!id.value || !password.value) {
+      e.preventDefault()
+    } else {
+      getUser('email', id.value) === undefined ? (idNoti.hidden = false) : true
+      getUser('email', id.value).then((res) => console.log(res))
+      e.preventDefault()
+    }
+
+    return
+  }
+
+  if (target !== id && target !== password) return
 
   if (target === id) {
     console.log('아이디')
   }
-})
+  if (target === password) {
+    console.log('비번')
+  }
+}
 
-getUser('email', 'anc1111@naver.com').then((res) => console.log(res))
+// 버튼 스타일 적용
+function handleFormChange() {
+  if (id.value && password.value) {
+    login.setAttribute('aria-disabled', 'false')
+  } else {
+    login.setAttribute('aria-disabled', 'true')
+  }
+}
+
+// getUser('email', 'anc1111@naver.com').then((res) => console.log(res))
