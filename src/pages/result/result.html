@@ -11,6 +11,11 @@
     <link rel="icon" href="/bookicon.svg" />
     <script type="module" defer src="/src/main.js"></script>
     <script type="module" defer src="/src/pages/result/result.js"></script>
+    <script
+      type="module"
+      defer
+      src="/src/js/components/_imageLoading.js"
+    ></script>
   </head>
   <body>
     <!-- 레이아웃 박스 -->
@@ -246,9 +251,11 @@
               <p class="book-title">책 제목</p>
               <p class="author">책 저자</p>
               <p class="phrase">추천 문구</p>
-              
+
               <!-- 텍스트 복사 버튼 추가 -->
-              <button type="button" class="text-copy-button">텍스트 복사</button>
+              <button type="button" class="text-copy-button">
+                텍스트 복사
+              </button>
             </div>
             <div class="recommend-books">
               <h2>추천하는 책</h2>
