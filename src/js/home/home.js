@@ -185,6 +185,8 @@ if (testCheckButton) {
 
     try {
       const allData = await getData()
+      if (!allData) return
+
       const moods = getSelectedValues('checkbox-mood')
       const weathers = getSelectedValues('checkbox-weather')
 

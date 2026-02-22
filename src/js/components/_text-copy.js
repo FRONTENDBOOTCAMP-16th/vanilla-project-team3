@@ -1,14 +1,15 @@
 // 복사 기능을 담당하는 전용 함수
 function copyToClipboard(text, button) {
-  navigator.clipboard.writeText(text)
-  .then(() => {
-    // 성공 시 피드백 로직 실행
-    handleCopySuccess(button) 
-  })
-  .catch(err => {
-    console.error('복사 실패', err)
-    alert('복사에 실패했습니다. 다시 시도해주세요.')
-  })
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      // 성공 시 피드백 로직 실행
+      handleCopySuccess(button)
+    })
+    .catch((err) => {
+      console.error('복사 실패', err)
+      alert('복사에 실패했습니다. 다시 시도해주세요.')
+    })
 }
 
 // 성공 피드백(텍스트/색상 변경)을 담당하는 함수

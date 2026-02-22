@@ -1,6 +1,4 @@
-// API URL
-const API_URL =
-  'https://69898725c04d974bc69f8907.mockapi.io/todayPhrase/todaysPhrase'
+import { getData } from '../../../api/api.js'
 
 // 로딩 시간 설정 (밀리초)
 const LOADING_TIMEOUT = 400
@@ -24,8 +22,10 @@ let preloadStartTime = null
 window.addEventListener('DOMContentLoaded', async () => {
   try {
     // API에서 데이터 가져오기
-    const response = await fetch(API_URL)
-    const data = await response.json()
+    const data = await getData()
+    if (!data) {
+      throw new Error('데이터를 가져오지 못했습니다.')
+    }
 
     // 첫 번째 데이터 또는 랜덤 데이터 선택
     selectedJsonData = Array.isArray(data) ? data[0] : data
@@ -58,11 +58,11 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 })
 
-// 테스트용: 페이지 로드 후 자동으로 결과 표시 (개발 중 확인용)
-// 실제 사용 시에는 아래 코드를 주석 처리하고 버튼 이벤트만 사용
-setTimeout(() => {
-  handleShowResult()
-}, 1500) // API 로드 시간을 고려해 1.5초로 설정
+// // 테스트용: 페이지 로드 후 자동으로 결과 표시 (개발 중 확인용)
+// // 실제 사용 시에는 아래 코드를 주석 처리하고 버튼 이벤트만 사용
+// setTimeout(() => {
+//   handleShowResult()
+// }, 1500) // API 로드 시간을 고려해 1.5초로 설정
 
 // 결과 표시 핸들러 함수
 function handleShowResult() {
@@ -113,6 +113,8 @@ function handleShowResult() {
 
 // 로딩 화면 표시 함수
 function showLoadingDisplay() {
+  if (!loadingDisplay || !resultContentDisplay) return
+
   loadingDisplay.classList.add('result-active')
   resultContentDisplay.classList.remove('result-active')
 }
