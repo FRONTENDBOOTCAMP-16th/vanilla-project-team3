@@ -90,10 +90,40 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 // 작업중
+// 테스트용 추가 코드
+// const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
+
 async function text() {
   // 유저아이디 동적으로 가지고 와야함 <<<<<<< 일단 임시로 불러옴
-  const user = await getUser('userId', 'test')
+  const user = await getUser('email', 'email@email.com')
   const test = await user.heart
   console.log(test)
+
+  // 테스트용 정보 추가 코드
+  /* const rawData = '1, 2, 4, 5, 8'
+  const processedData = rawData.split(',').map((item) => item.trim())
+
+    postData(
+  	`${VITE_API_BASE_URL}/todayPhrase/user`,
+  	{
+  		email: 'email@email.com',  
+  	  password: 'password@123',
+  	  userId: 'userid',
+  		heart: processedData,
+  	  "mood_counts": {
+  	    "happy": 1,
+  	    "sad": 0,
+  	    "soso": 0,
+  	    "bad": 0
+  	  },
+  	  "weather_counts": {
+  	    "sunny": 0,
+  	    "rainy": 0,
+  	    "snowy": 0,
+  	    "dusty": 0,
+  	    "cloudy": 0
+  	  },
+  	}
+  ) */
 }
 text()

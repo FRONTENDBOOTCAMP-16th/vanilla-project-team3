@@ -110,8 +110,8 @@ export async function getUser(key, value) {
   }
 }
 
-// 데이터를 추가하는 함수
-async function postData(url, { dataObjA, dataObjB }) {
+// 유저 데이터를 추가하는 함수
+export async function postData(url, dataObj) {
   try {
     // 헤더 타입
     const headers = {
@@ -119,7 +119,7 @@ async function postData(url, { dataObjA, dataObjB }) {
     }
 
     // 데이터를 JSON 문자열로 변환
-    const payload = JSON.stringify({ dataObjA, dataObjB })
+    const payload = JSON.stringify(dataObj)
 
     // 해당 데이터 URL읽어오기
     const response = await fetch(url, {
@@ -138,13 +138,3 @@ async function postData(url, { dataObjA, dataObjB }) {
     console.log(error)
   }
 }
-
-const rawData = '1, 2, 4, 5, 8'
-
-const processedData = rawData.split(', ')
-
-postData(
-  `${VITE_API_BASE_URL}/todayPhrase/user`,
-  { email: 'emailabc1234' },
-  { heart: processedData },
-)
