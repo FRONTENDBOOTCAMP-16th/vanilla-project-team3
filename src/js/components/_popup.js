@@ -1,8 +1,7 @@
 /**
  * [전역 상태 설정]
  */
-let isLoggedIn = false // 로그인 상태 (테스트 시 true/false로 변경)
-
+let isLoggedIn = true // 로그인 상태 (테스트 시 true/false로 변경)
 
 // 1. 찜 목록이 비었을 때 메시지 표시 함수
 function checkEmptyList() {
@@ -59,12 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   // --- 로그인 팝업 내 [로그인 페이지 이동] 버튼 ---
-  const loginConfirmBtn = document.querySelector('.login-dialog .confirm-button')
+  const loginConfirmBtn = document.querySelector(
+    '.login-dialog .confirm-button',
+  )
 
   loginConfirmBtn?.addEventListener('click', () => {
     window.location.href = '/src/pages/login/login.html'
   })
-
 
   // --- 찜 버튼 클릭 (여러 개 대응) ---
   saveBtns.forEach((btn) => {

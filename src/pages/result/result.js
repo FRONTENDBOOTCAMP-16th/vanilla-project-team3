@@ -61,7 +61,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   let currentData = null
 
   try {
-    // 공유받은 링크로 들어온 경우 
+    // 공유받은 링크로 들어온 경우
     if (sharedTitle) {
       currentData = [
         {
@@ -74,13 +74,13 @@ window.addEventListener('DOMContentLoaded', async () => {
       ]
       displayPhraseResult(currentData)
     } else {
-      showLoadingDisplay() 
+      showLoadingDisplay()
 
       // 홈에서 넘어온 직후인지 확인 (이모지 데이터 존재 여부)
       const savedEmoji = JSON.parse(localStorage.getItem(IMOJI))
 
       if (savedEmoji) {
-        // 홈페이지에서 직접 결과를 확인하는 경우 
+        // 홈페이지에서 직접 결과를 확인하는 경우
         let allData = null
         const cachedData = localStorage.getItem('cachedBookData')
 
@@ -115,7 +115,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         return
       }
 
-      hideLoadingDisplay() 
+      hideLoadingDisplay()
     }
 
     // 공유 버튼

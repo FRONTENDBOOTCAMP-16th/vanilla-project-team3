@@ -1,4 +1,5 @@
-import { getData } from '../../../api/api.js'
+// import { getData } from '../../../api/api.js'
+import { runSmartRecommendation } from './_smartRecommendBridge.js'
 
 // 로딩 시간 설정 (밀리초)
 const LOADING_TIMEOUT = 400
@@ -19,43 +20,48 @@ let isImagePreloaded = false
 let preloadStartTime = null
 
 // 페이지 로드 시 API 데이터 가져오기
-window.addEventListener('DOMContentLoaded', async () => {
-  try {
-    // API에서 데이터 가져오기
-    const data = await getData()
-    if (!data) {
-      throw new Error('데이터를 가져오지 못했습니다.')
-    }
+// window.addEventListener('DOMContentLoaded', async () => {
+//   try {
+//     // API에서 데이터 가져오기
+//     const data = await getData()
+//     if (!data) {
+//       throw new Error('데이터를 가져오지 못했습니다.')
+//     }
 
-    // 첫 번째 데이터 또는 랜덤 데이터 선택
-    selectedJsonData = Array.isArray(data) ? data[0] : data
+//     // 첫 번째 데이터 또는 랜덤 데이터 선택
+//     selectedJsonData = Array.isArray(data) ? data[0] : data
 
-    console.log('API 데이터 로드 완료:', selectedJsonData)
+//     console.log('API 데이터 로드 완료:', selectedJsonData)
 
-    // 이미지 프리로드
-    if (selectedJsonData?.bookCover) {
-      preloadImage(
-        selectedJsonData.bookCover,
-        () => {
-          console.log('이미지 프리로드 완료')
-          isImagePreloaded = true
-        },
-        () => {
-          console.error('이미지 프리로드 실패')
-          isImagePreloaded = false
-        },
-      )
-    }
-  } catch (error) {
-    console.error('API 데이터 로드 실패:', error)
-    // API 실패 시 기본 데이터 사용
-    selectedJsonData = {
-      bookTitle: '데이터를 불러올 수 없습니다',
-      author: '',
-      phrase: '잠시 후 다시 시도해주세요',
-      bookCover: '',
-    }
-  }
+//     // 이미지 프리로드
+//     if (selectedJsonData?.bookCover) {
+//       preloadImage(
+//         selectedJsonData.bookCover,
+//         () => {
+//           console.log('이미지 프리로드 완료')
+//           isImagePreloaded = true
+//         },
+//         () => {
+//           console.error('이미지 프리로드 실패')
+//           isImagePreloaded = false
+//         },
+//       )
+//     }
+//   } catch (error) {
+//     console.error('API 데이터 로드 실패:', error)
+//     // API 실패 시 기본 데이터 사용
+//     selectedJsonData = {
+//       bookTitle: '데이터를 불러올 수 없습니다',
+//       author: '',
+//       phrase: '잠시 후 다시 시도해주세요',
+//       bookCover: '',
+//     }
+//   }
+// })
+
+// 한번 추천한 책은 제외하고 데이터를 보여주는 함수
+window.addEventListener('DOMContentLoaded', () => {
+  runSmartRecommendation() // 브릿지 파일에 있는 함수 실행!
 })
 
 // // 테스트용: 페이지 로드 후 자동으로 결과 표시 (개발 중 확인용)
