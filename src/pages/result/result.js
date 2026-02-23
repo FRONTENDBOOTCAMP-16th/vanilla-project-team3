@@ -91,9 +91,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // 작업중
 async function text() {
-  const text = await getUser('heart', '1')
-
-  console.log('에잉')
-  console.log(text)
+  // 유저아이디 동적으로 가지고 와야함 <<<<<<< 일단 임시로 불러옴
+  const user = await getUser('userId', 'test')
+  const test = await user.heart
+  console.log(test)
 }
 text()
