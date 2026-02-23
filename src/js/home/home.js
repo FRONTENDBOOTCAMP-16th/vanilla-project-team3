@@ -1,12 +1,7 @@
 import { removeStorage } from '../utils'
 import { saveStorage } from '/src/js/utils/index.js'
-import {
-  getSelectedValues,
-  filterData,
-  getRandomData,
-} from '../../js/components/_phraseLoader.js'
-import { getData } from '../../../api/api.js'
 import { IS_CHECKED_KEY, IMOJI } from '/src/js/constants/index.js'
+import { getData } from '../../../api/api.js'
 
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
@@ -177,28 +172,34 @@ function getSelected() {
   return { weather, mood }
 }
 
+async function prefetchData() {
+  try {
+    if (localStorage.getItem('cachedBookData')) return
+
+    const allData = await getData()
+
+    localStorage.setItem('cachedBookData', JSON.stringify(allData))
+    console.log('✅ Data prefetch 성공')
+  } catch (error) {
+    console.error('❌ Data prefetch 실패', error)
+  }
+}
+
+window.addEventListener('load', () => {
+  setTimeout(prefetchData, 500)
+})
+
 const testCheckButton = document.querySelector('.user-test-check')
 
 if (testCheckButton) {
-  testCheckButton.addEventListener('click', async (e) => {
-    e.preventDefault()
+  testCheckButton.addEventListener('click', (e) => {
+    e.preventDefault() // 페이지 이동 전 저장 작업을 위해 잠시 대기
 
-    try {
-      const allData = await getData()
-      if (!allData) return
+    // 선택된 값들 스토리지에 저장
+    emojiStorage()
+    saveStorage(IS_CHECKED_KEY, 'true')
 
-      const moods = getSelectedValues('checkbox-mood')
-      const weathers = getSelectedValues('checkbox-weather')
-
-      const filteredData = filterData(allData, moods, weathers)
-      const selectedData = getRandomData(filteredData, 4)
-
-      console.log('저장할 데이터 : ', selectedData)
-      localStorage.setItem('selectedBookList', JSON.stringify(selectedData))
-
-      location.href = '/src/pages/result/result.html'
-    } catch (error) {
-      console.error('데이터 저장 중 오류 발생 : ', error)
-    }
+    // 서버 데이터 기다리지 않고 바로 이동
+    location.href = '/src/pages/result/result.html'
   })
 }
