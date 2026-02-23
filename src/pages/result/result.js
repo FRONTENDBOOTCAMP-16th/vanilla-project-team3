@@ -2,6 +2,7 @@ import { loadStorage } from '/src/js/utils/index.js'
 import { displayPhraseResult } from '../../js/components/_phraseLoader.js'
 import { shareResult } from '../../js/components/_share.js'
 import { IS_CHECKED_KEY, IMOJI } from '/src/js/constants/index.js'
+import { getUser } from '../../../api/api.js'
 
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
@@ -87,3 +88,12 @@ window.addEventListener('DOMContentLoaded', () => {
     })
   }
 })
+
+// 작업중
+async function text() {
+  const text = await getUser('heart', '1')
+
+  console.log('에잉')
+  console.log(text)
+}
+text()
