@@ -1,6 +1,6 @@
 const baseURL = import.meta.env.VITE_BASE_URL
 import { getUser } from '../../../api/api'
-import { EMAIL } from '../../js/constants'
+import { ID } from '../../js/constants'
 
 const form = document.querySelector('.autu-box-container')
 if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.')
@@ -42,11 +42,11 @@ function handleFormChange() {
   }
 }
 
-// 이메일과 비밀번호 확인
+// 아이디과 비밀번호 확인
 async function checkeEmailPassword() {
-  const resultID = await getUser(EMAIL, id.value)
+  const resultID = await getUser(ID, id.value)
 
-  // 가입 정보가 없는 이메일
+  // 가입 정보가 없는 아이디
   if (!resultID) {
     noti.hidden = false
     return

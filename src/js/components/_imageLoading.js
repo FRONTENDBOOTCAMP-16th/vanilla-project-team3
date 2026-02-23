@@ -160,3 +160,4 @@ function displayPhraseResult({
 const userTestCheckButton = document.querySelector('.user-test-check')
 userTestCheckButton.addEventListener('click', handleShowResult)
 */
+handleShowResult()
