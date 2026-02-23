@@ -109,3 +109,39 @@ export async function getUser(key, value) {
     return null
   }
 }
+
+// 데이터를 추가하는 함수
+async function postData(url, {dataObjA, dataObjB}) {
+  try {
+    // 헤더 타입
+    const headers = {
+      'Content-type': 'application/json',
+    }
+
+    // 데이터를 JSON 문자열로 변환
+    const payload = JSON.stringify({dataObjA, dataObjB})
+
+    // 해당 데이터 URL읽어오기
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: payload,
+    })
+
+    // 에러코드 200이 아니면 에러로 간주
+    if (!response.ok) {
+      console.log('데이터 전달 실패')
+      throw new Error('실패')
+    }
+  } catch (error) {
+    // 에러 콘솔
+    console.log(error)
+  }
+}
+
+const rawData = "1, 2, 4, 5, 8";
+
+const processedData = rawData.split(', ')
+
+
+postData(`${VITE_API_BASE_URL}/todayPhrase/user`,{email: 'emailabc1234'}, {  heart: processedData})
