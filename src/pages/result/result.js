@@ -2,6 +2,12 @@ import { loadStorage } from '/src/js/utils/index.js'
 import { displayPhraseResult } from '../../js/components/_phraseLoader.js'
 import { shareResult } from '../../js/components/_share.js'
 import { IS_CHECKED_KEY, IMOJI } from '/src/js/constants/index.js'
+import { filterData, getRandomData } from '../../js/components/_phraseLoader.js'
+import {
+  showLoadingDisplay,
+  hideLoadingDisplay,
+} from '../../js/components/_imageLoading.js'
+import { getData } from '../../../api/api.js'
 
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
@@ -48,42 +54,79 @@ if (loadStorage(IMOJI)) {
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search)
   const sharedTitle = urlParams.get('title')
 
   let currentData = null
 
-  if (sharedTitle) {
-    currentData = [
-      {
-        bookTitle: sharedTitle,
-        author: urlParams.get('author'),
-        phrase: urlParams.get('phrase'),
-        bookCover: urlParams.get('bookCover'),
-      },
-    ]
-    displayPhraseResult(currentData)
-  } else {
-    const savedLocalData = localStorage.getItem('selectedBookList')
-
-    if (savedLocalData) {
-      currentData = JSON.parse(savedLocalData)
+  try {
+    // 공유받은 링크로 들어온 경우 
+    if (sharedTitle) {
+      currentData = [
+        {
+          bookTitle: sharedTitle,
+          author: urlParams.get('author'),
+          phrase: urlParams.get('phrase'),
+          bookCover: urlParams.get('bookCover'),
+          bookstoreUrl: urlParams.get('url'),
+        },
+      ]
       displayPhraseResult(currentData)
     } else {
-      alert('저장된 데이터가 존재하지않습니다.')
-      location.href = '/index.html'
-      return
-    }
-  }
-  const shareButton = document.querySelector('.share-button')
-  if (shareButton) {
-    shareButton.addEventListener('click', () => {
-      if (shareButton && currentData) {
-        shareResult(currentData[0])
+      showLoadingDisplay() 
+
+      // 홈에서 넘어온 직후인지 확인 (이모지 데이터 존재 여부)
+      const savedEmoji = JSON.parse(localStorage.getItem(IMOJI))
+
+      if (savedEmoji) {
+        // 홈페이지에서 직접 결과를 확인하는 경우 
+        let allData = null
+        const cachedData = localStorage.getItem('cachedBookData')
+
+        if (cachedData) {
+          allData = JSON.parse(cachedData)
+        } else {
+          // 프리패치된 데이터가 로컬스토리지에 없을 경우에는 데이터를 getData() 함수를 사용해 불러옴
+          allData = getData()
+        }
+
+        const filtered = filterData(allData, savedEmoji, savedEmoji)
+        currentData = getRandomData(filtered, 4)
+
+        // 결과 저장 및 사용한 이모지 삭제 (중복 생성 방지)
+        localStorage.setItem('selectedBookList', JSON.stringify(currentData))
+        localStorage.removeItem(IMOJI)
       } else {
-        console.error('공유할 데이터를 준비하지 못했습니다.')
+        // 새로고침한 경우: 이미 뽑아둔 데이터 꺼내기
+        const savedLocalData = localStorage.getItem('selectedBookList')
+        if (savedLocalData) {
+          currentData = JSON.parse(savedLocalData)
+        }
       }
-    })
+
+      // 데이터가 준비되었다면 화면에 뿌리기
+      if (currentData) {
+        displayPhraseResult(currentData)
+      } else {
+        // 아무 데이터도 없다면 홈으로 이동
+        alert('저장된 데이터가 존재하지 않습니다.')
+        location.href = '/index.html'
+        return
+      }
+
+      hideLoadingDisplay() 
+    }
+
+    // 공유 버튼
+    const shareButton = document.querySelector('.share-button')
+    if (shareButton && currentData) {
+      shareButton.addEventListener('click', () => {
+        shareResult(currentData[0])
+      })
+    }
+  } catch (error) {
+    console.error('데이터 로드 중 오류 발생:', error)
+    hideLoadingDisplay()
   }
 })
