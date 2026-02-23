@@ -72,32 +72,25 @@
   padding: 0;
 }
 
-.heart-btn {
-  position: relative;
-  width: 30px;
-  height: 30px;
-  display: inline-flex;
-  align-items: start;
-  justify-content: start;
-}
-
-.heart-btn svg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.heart-btn .icon-heart-on {
+/* 찜 버튼 */
+.save-button .icon-heart-on {
   opacity: 0;
-  transform: translate(-50%, -50%) scale(1);
-}
-.heart-btn.heart-active .icon-heart-on {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
+  transform: scale(1);
 }
 
-.heart-btn.heart-active .icon-heart-off {
+.save-button .icon-heart-off {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 활성화 상태: On 아이콘은 나타남 */
+.save-button.heart-active .icon-heart-on {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 활성화 상태: 아이콘 사라짐 */
+.save-button.heart-active .icon-heart-off {
   opacity: 0;
 }
 
