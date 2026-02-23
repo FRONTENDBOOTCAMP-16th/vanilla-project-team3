@@ -3,9 +3,6 @@
  */
 let isLoggedIn = false // 로그인 상태 (테스트 시 true/false로 변경)
 
-/**
- * [기능별 함수 정의]
- */
 
 // 1. 찜 목록이 비었을 때 메시지 표시 함수
 function checkEmptyList() {
@@ -51,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const delBookListBtn = document.querySelector('.delete-book-list-button')
   const closeBtns = document.querySelectorAll('.close-dialog')
 
-  // --- A. 내비게이션 마이페이지 버튼 ---
+  // --- 내비게이션 마이페이지 버튼 ---
   myPageBtn?.addEventListener('click', (e) => {
     e.preventDefault()
     if (!isLoggedIn) {
@@ -61,7 +58,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
-  // --- B. 찜 버튼 클릭 (여러 개 대응) ---
+  // --- 로그인 팝업 내 [로그인 페이지 이동] 버튼 ---
+  const loginConfirmBtn = document.querySelector('.login-dialog .confirm-button')
+
+  loginConfirmBtn?.addEventListener('click', () => {
+    window.location.href = '/src/pages/login/login.html'
+  })
+
+
+  // --- 찜 버튼 클릭 (여러 개 대응) ---
   saveBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       // 1. 로그인 체크
@@ -82,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
 
-  // --- C. 비밀번호 변경 관련 ---
+  // --- 비밀번호 변경 관련 ---
   changePWBtn?.addEventListener('click', () => {
     resetPWForm()
     changePWDialog?.showModal()
@@ -105,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     changePWDialog?.close()
   })
 
-  // --- D. 공통 닫기 버튼 핸들러 ---
+  // --- 공통 닫기 버튼 핸들러 ---
   closeBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       const dialog = btn.closest('dialog')
@@ -118,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
 
-  // --- E. 찜 제한 팝업 내 [마이페이지 이동] 버튼 ---
+  // --- 찜 제한 팝업 내 [마이페이지 이동] 버튼 ---
   const heartListConfirmBtn = document.querySelector(
     '.heart-list-dialog .confirm-button',
   )
@@ -128,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     myPageDialog?.showModal()
   })
 
-  // --- F. 찜 목록 편집 모드 전환 ---
+  // --- 찜 목록 편집 모드 전환 ---
   delBookListBtn?.addEventListener('click', (e) => {
     e.preventDefault()
     if (myPageDialog) {
@@ -137,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
-  // --- G. 찜 목록 개별 삭제 (이벤트 위임) ---
+  // --- 찜 목록 개별 삭제 (이벤트 위임) ---
   bookList?.addEventListener('click', (e) => {
     const delBtn = e.target.closest('.delete-item-button')
     if (delBtn) {
