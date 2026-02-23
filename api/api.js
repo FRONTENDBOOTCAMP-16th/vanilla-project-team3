@@ -1,4 +1,6 @@
 const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
+// 데이터 읽어오기
+
 export async function getData(key, value) {
   try {
     // 헤더 타입
@@ -65,4 +67,45 @@ export async function getData(key, value) {
   }
 }
 
-getData('mood').then((res) => console.log(res))
+export async function getUser(key, value) {
+  if (key === 'password') {
+    console.error('비밀번호를 URL에 노출할 수 있음')
+    return null
+  }
+
+  try {
+    const response = await fetch(
+      `${VITE_API_BASE_URL}/todayPhrase/user?${key}=${value}`,
+    )
+
+    if (!response.ok) {
+      throw new Error(`${key}, ${value} 데이터 가져오기 실패`)
+    }
+
+    const [user] = await response.json()
+
+    const {
+      id,
+      email,
+      password,
+      userId,
+      heart,
+      mood_counts: { happy, sad, soso, bad },
+      weather_counts: { sunny, rainy, snowy, dusty, cloudy },
+    } = user
+
+    // 로그인 사용자 반환 (데이터 마사지)
+    return {
+      id,
+      email,
+      password,
+      userId,
+      heart,
+      mood_counts: [happy, sad, soso, bad],
+      weather_counts: [sunny, rainy, snowy, dusty, cloudy],
+    }
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
