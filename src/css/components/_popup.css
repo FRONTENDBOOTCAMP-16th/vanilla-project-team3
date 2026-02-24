@@ -184,7 +184,8 @@
   border-radius: 6px;
 }
 
-.book-list li:hover {
+.book-list a:hover {
+  display: block;
   outline: 3px solid var(--primary-color);
 }
 
