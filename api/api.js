@@ -111,3 +111,81 @@ export async function getUser(key, value) {
     return null
   }
 }
+
+// 로그인한 유저의 진짜 고유 번호(MockAPI ID)를 가져오는 헬퍼 함수
+
+const getActiveUserId = () => {
+  // localStorage에서 login.js가 저장한 ID를 가져옴
+  // 만약 값이 없으면 일단 "50"을 기본값으로 반환
+  return localStorage.getItem('loginUserInternalId') || '50'
+}
+
+// 1. 유저의 노출 기록(viewed) 목록 가져오기
+export async function getViewedIds() {
+  const targetId = getActiveUserId() // 동적으로 ID 가져오기
+  try {
+    const res = await fetch(`${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`)
+    if (!res.ok) return []
+    const data = await res.json()
+    return Array.isArray(data.viewed) ? data.viewed : []
+  } catch (error) {
+    console.error('노출 기록 로드 실패:', error)
+    return []
+  }
+}
+
+// 2. 새로운 추천 ID들(4개)을 서버에 누적 저장 (PUT 방식)
+export async function updateViewedIds(newIds) {
+  const targetId = getActiveUserId() // 동적으로 ID 가져오기
+  try {
+    const resGet = await fetch(
+      `${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`,
+    )
+    if (!resGet.ok) throw new Error('유저를 찾을 수 없습니다.')
+    const userData = await resGet.json()
+
+    const currentViewed = Array.isArray(userData.viewed) ? userData.viewed : []
+    const updatedViewed = [...new Set([...currentViewed, ...newIds])].filter(
+      (val) => val !== null && val !== undefined,
+    )
+
+    const resPut = await fetch(
+      `${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...userData,
+          viewed: updatedViewed,
+        }),
+      },
+    )
+    if (resPut.ok) console.log(`유저 ${targetId}번 노출 기록 업데이트 완료`)
+  } catch (error) {
+    console.error('노출 기록 업데이트 실패:', error)
+  }
+}
+
+// 3. 노출 기록 완전 초기화 (PUT 방식)
+export async function resetViewedHistory() {
+  const targetId = getActiveUserId() // 동적으로 ID 가져오기
+  try {
+    const resGet = await fetch(
+      `${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`,
+    )
+    if (!resGet.ok) return
+    const userData = await resGet.json()
+
+    await fetch(`${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...userData,
+        viewed: [],
+      }),
+    })
+    console.log(`유저 ${targetId}번 추천 기록이 초기화되었습니다.`)
+  } catch (error) {
+    console.error('기록 초기화 실패:', error)
+  }
+}
