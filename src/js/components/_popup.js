@@ -1,8 +1,9 @@
+import { getData, getUser } from '../../../api/api'
+
 /**
  * [전역 상태 설정]
  */
 let isLoggedIn = false // 로그인 상태 (테스트 시 true/false로 변경)
-
 
 // 1. 찜 목록이 비었을 때 메시지 표시 함수
 function checkEmptyList() {
@@ -59,12 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   // --- 로그인 팝업 내 [로그인 페이지 이동] 버튼 ---
-  const loginConfirmBtn = document.querySelector('.login-dialog .confirm-button')
+  const loginConfirmBtn = document.querySelector(
+    '.login-dialog .confirm-button',
+  )
 
   loginConfirmBtn?.addEventListener('click', () => {
     window.location.href = '/src/pages/login/login.html'
   })
-
 
   // --- 찜 버튼 클릭 (여러 개 대응) ---
   saveBtns.forEach((btn) => {
@@ -161,3 +163,49 @@ document.addEventListener('DOMContentLoaded', () => {
   // 초기 실행: 목록 상태 확인
   checkEmptyList()
 })
+
+// 찜 리스트 호출
+async function getHeartList() {
+  // TODO
+  // 유저아이디 동적으로 가지고 와야함 <<<<<<< 일단 임시로 불러옴 ( 로그인 하는 아이디에 따라 바뀌어야함 )
+  // 여기에 해당 로그인한 유저 EMAIL값 넣어야함
+  const user = await getUser('email', 'email@email.com')
+  const heart = await user.heart
+  const heartID = heart.map((item) => Number(item.trim()))
+
+  // 하트찍은 책 ID 매칭
+  const bookItems = await Promise.all(heartID.map((id) => getData('id', id)))
+
+  const heartList = document.querySelectorAll('.book-list li')
+  if (!heartList) throw new Error('[data-book]을 찾지 못하였습니다.')
+
+  // 책리스트 동적으로 가져오기
+  heartList.forEach((item, index) => {
+    const currentBook = bookItems[index]
+
+    if (!currentBook) return
+
+    item.innerHTML = `
+      <button type="button" class="delete-item-button" aria-label="삭제">
+        <svg
+          class="delete-item-button"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 0C5.4 0 0 5.4 0 12C0 18.6 5.4 24 12 24C18.6 24 24 18.6 24 12C24 5.4 18.6 0 12 0ZM16.44 14.76C16.92 15.24 16.92 15.96 16.44 16.44C15.96 16.92 15.24 16.92 14.76 16.44L12 13.68L9.24 16.44C8.76 16.92 8.04 16.92 7.56 16.44C7.08 15.96 7.08 15.24 7.56 14.76L10.32 12L7.56 9.24C7.08 8.76 7.08 8.04 7.56 7.56C8.04 7.08 8.76 7.08 9.24 7.56L12 10.32L14.76 7.56C15.24 7.08 15.96 7.08 16.44 7.56C16.92 8.04 16.92 8.76 16.44 9.24L13.68 12L16.44 14.76Z"
+            fill="#FF0000"
+          />
+        </svg>
+      </button>
+      <a data-book="book-item-${index}" href="${currentBook.bookstoreUrl}" rel="noopener noreferrer">
+        <img src="${currentBook.bookCover}" alt="${currentBook.author}" />
+      </a>
+    `
+  })
+}
+
+getHeartList()
