@@ -115,14 +115,21 @@ export async function getUser(key, value) {
 // 로그인한 유저의 진짜 고유 번호(MockAPI ID)를 가져오는 헬퍼 함수
 
 const getActiveUserId = () => {
-  // localStorage에서 login.js가 저장한 ID를 가져옴
-  // 만약 값이 없으면 일단 "50"을 기본값으로 반환
-  return localStorage.getItem('loginUserInternalId') || '50'
+  // sessionStorage에서 login.js가 저장한 ID를 가져오면, 탭을 닫을 때 Id 데이터 자동 삭제
+  // 만약 값이 없으면 null을 반환
+  return sessionStorage.getItem('loginUserInternalId') || null
 }
 
 // 1. 유저의 노출 기록(viewed) 목록 가져오기
 export async function getViewedIds() {
-  const targetId = getActiveUserId() // 동적으로 ID 가져오기
+  const targetId = getActiveUserId() // 동적으로 ID 가져오기, null이 올 수 있음
+
+  // targetId 가 없으면 서버에 요청하지 않고 즉시 빈 배열 반환
+  if (!targetId) {
+    console.log('로그인 데이터가 없어 빈 기록을 반환합니다.')
+    return[]
+  }
+
   try {
     const res = await fetch(`${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`)
     if (!res.ok) return []
@@ -136,7 +143,14 @@ export async function getViewedIds() {
 
 // 2. 새로운 추천 ID들(4개)을 서버에 누적 저장 (PUT 방식)
 export async function updateViewedIds(newIds) {
-  const targetId = getActiveUserId() // 동적으로 ID 가져오기
+  const targetId = getActiveUserId()
+
+  // 로그인 상태가 아니면 (targetId가 null이면) 함수 종료
+  if (!targetId) {
+    console.log('로그인 전이므로 노출 기록을 업데이트하지 않습니다.')
+    return
+  }
+
   try {
     const resGet = await fetch(
       `${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`,
@@ -168,7 +182,11 @@ export async function updateViewedIds(newIds) {
 
 // 3. 노출 기록 완전 초기화 (PUT 방식)
 export async function resetViewedHistory() {
-  const targetId = getActiveUserId() // 동적으로 ID 가져오기
+  const targetId = getActiveUserId()
+  
+  // targetId가 없으면 실행 안함
+  if (!targetId) return
+
   try {
     const resGet = await fetch(
       `${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`,

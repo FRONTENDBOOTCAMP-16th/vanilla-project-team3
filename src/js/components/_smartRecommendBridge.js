@@ -12,12 +12,6 @@ import {
   displayPhraseResult,
 } from './_phraseLoader.js' // 필터 도구들
 
-// URL의 마지막 경로(숫자)를 잘라내는 함수
-const getBookIdFromUrl = (url) => {
-  if (!url) return null
-  const parts = url.split('/')
-  return parts[parts.length - 1] // 마지막 요소 반환
-}
 
 export async function runSmartRecommendation() {
   try {
@@ -39,16 +33,13 @@ export async function runSmartRecommendation() {
       // 5. 서버에 본 것 기록 (94권 다 봤으면 리셋)
       if (shouldReset) await resetViewedHistory()
 
-      // [확인용] 콘솔에서 데이터 생김새를 정확히 확인합니다.
-      console.log('추천된 데이터 전체:', result)
-      console.log('첫 번째 책 데이터:', result[0])
 
-      // ID 추출 (필드명이 id가 맞는지 콘솔 로그를 통해 확인해야 합니다)
+      // ID 추출
       const idsToStore = result
-        .map((book) => getBookIdFromUrl(book.bookstoreUrl)) // URL에서 숫자 추출
-        .filter((id) => id !== null)
+        .map((book) => String(book.id))
+        .filter((id) => id !== 'undefined')
 
-      console.log('서버에 저장할 고유 상품 번호들:', idsToStore)
+      console.log('서버에 저장할 책 Id들:', idsToStore)
 
       if (idsToStore.length > 0) {
         await updateViewedIds(idsToStore)

@@ -1,25 +1,17 @@
-//  URL에서 고유 번호(ID)를 추출하는 헬퍼 함수
+// 추천한 책을 제외하고 4개를 랜덤 추출하는 함수
 
-const getBookIdFromUrl = (url) => {
-  if (!url) return null
-  // URL을 '/'로 나누고 마지막 요소를 가져옴
-  const parts = url.split('/')
-  return parts[parts.length - 1]
-}
-
-// 이미 본 책을 제외하고 4개를 랜덤 추출
 export function getUniqueRandomData(filteredData, count, viewedIds = []) {
-  // 1. [수정된 부분] URL에서 추출한 ID를 기반으로 안 본 책만 골라내기
+  // 1. item.id를 기반으로 안 본 책 골라내기
   let freshData = filteredData.filter((item) => {
-    const itemId = getBookIdFromUrl(item.bookstoreUrl) // URL에서 숫자 ID 추출
-    return !viewedIds.includes(itemId) // 서버 기록(viewedIds)에 있는지 확인
+    // viewedIds가 ["1"] 형태이므로 타입 변환시켜 문자열로 통일한 후 비교
+    return !viewedIds.map(String).includes(String(item.id))
   })
 
   let shouldReset = false
 
-  // 2. [자동 순환 로직] 안 본 책이 뽑을 개수(4개)보다 적으면 전체 데이터에서 다시 뽑기
+  // 2. 안 본 책이 부족하면 리셋
   if (freshData.length < count) {
-    console.log('모든 도서를 확인하여 추천 기록을 초기화하고 다시 시작합니다.')
+    console.log('추천 기록을 초기화합니다.')
     freshData = [...filteredData] // 후보군을 전체로 초기화
     shouldReset = true // 서버 기록을 비우라는 신호
   }
