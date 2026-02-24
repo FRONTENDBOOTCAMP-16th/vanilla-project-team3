@@ -1,5 +1,5 @@
 .result-display {
-  --bg-image: url('https://image.yes24.com/goods/169664844/XL');
+  --bg-image: url('');
 
   background-image: var(--bg-image);
   background-repeat: no-repeat;
@@ -183,4 +183,8 @@
   border: 2px solid var(--white);
   color: var(--black);
   border-radius: 30px;
+
+  &:hover {
+    border: 3px solid var(--black);
+  }
 }

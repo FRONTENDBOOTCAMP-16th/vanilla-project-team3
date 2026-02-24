@@ -112,7 +112,7 @@ function handleShowResult() {
 // 유틸리티 함수 ------------------------------------------
 
 // 로딩 화면 표시 함수
-function showLoadingDisplay() {
+export function showLoadingDisplay() {
   if (!loadingDisplay || !resultContentDisplay) return
 
   loadingDisplay.classList.add('result-active')
@@ -120,13 +120,13 @@ function showLoadingDisplay() {
 }
 
 // 로딩 화면 감춤 함수
-function hideLoadingDisplay() {
+export function hideLoadingDisplay() {
   loadingDisplay.classList.remove('result-active')
   resultContentDisplay.classList.add('result-active')
 }
 
 // 이미지 프리로드(Preload) 함수
-function preloadImage(imageUrl, successCallback, errorCallback) {
+export function preloadImage(imageUrl, successCallback, errorCallback) {
   if (!imageUrl) {
     errorCallback?.()
     return
