@@ -1,14 +1,15 @@
-// 이미 본 책을 제외하고 4개를 랜덤 추출
+// 추천한 책을 제외하고 4개를 랜덤 추출하는 함수
+
 export function getUniqueRandomData(filteredData, count, viewedIds = []) {
   // 1. item.id를 기반으로 안 본 책 골라내기
   let freshData = filteredData.filter((item) => {
-    // viewedIds가 ["1"] 형태가 타입 맞춰 비교
+    // viewedIds가 ["1"] 형태이므로 타입 변환시켜 문자열로 통일한 후 비교
     return !viewedIds.map(String).includes(String(item.id))
   })
 
   let shouldReset = false
 
-  // 2. 안 본 책이 부족하면 리셋 신호
+  // 2. 안 본 책이 부족하면 리셋
   if (freshData.length < count) {
     console.log('추천 기록을 초기화합니다.')
     freshData = [...filteredData] // 후보군을 전체로 초기화

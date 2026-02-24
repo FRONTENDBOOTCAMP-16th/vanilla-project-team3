@@ -59,7 +59,7 @@ let preloadStartTime = null
 //   }
 // })
 
-// 한번 추천한 책은 제외하고 데이터를 보여주는 함수
+// 한번 추천한 책은 제외하고 필터링한 데이터를 보여주는 함수
 window.addEventListener('DOMContentLoaded', () => {
   runSmartRecommendation() // 브릿지 파일에 있는 함수 실행!
 })
