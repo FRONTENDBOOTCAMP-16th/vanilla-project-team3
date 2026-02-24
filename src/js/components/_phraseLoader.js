@@ -1,3 +1,5 @@
+/* global Typed */
+
 // 사용자가 선택한 값 받아오기(valueName으로 들어올 수 있는 값 : checkbox-mood, checkbox-weather)
 export function getSelectedValues(valueName) {
   const checkedInputs = document.querySelectorAll(
@@ -40,6 +42,7 @@ export function getRandomData(filteredData, count) {
   return result
 }
 
+let phraseTypedInstance = null
 // 화면에 글자와 이미지 변경하기
 export function displayPhraseResult(selectedJsonData) {
   if (selectedJsonData.length === 0) return
@@ -47,17 +50,29 @@ export function displayPhraseResult(selectedJsonData) {
   const mainRecommendData = selectedJsonData[0]
   const bookTitle = document.querySelector('.book-title')
   const bookAuthor = document.querySelector('.author')
-  const recommendPhrase = document.querySelector('.phrase')
+  const phraseReader = document.querySelector('.phrase-reader')
   const resultDisplay = document.querySelector('.result-display')
 
   bookTitle.textContent = mainRecommendData.bookTitle
   bookAuthor.textContent = mainRecommendData.author
-  recommendPhrase.textContent = mainRecommendData.phrase
+  phraseReader.textContent = `추천 문구: ${mainRecommendData.phrase}`
 
   resultDisplay.style.setProperty(
     '--bg-image',
     `url(${mainRecommendData.bookCover})`,
   )
+
+  if (phraseTypedInstance) {
+    phraseTypedInstance.destroy()
+  }
+
+  phraseTypedInstance = new Typed('.phrase', {
+    strings: [mainRecommendData.phrase],
+    typeSpeed: 50, // 타이핑 속도
+    backSpeed: 0, // 지우기 기능
+    showCursor: true, // 커서 표시
+    cursorChar: '|', // 커서 모양
+  })
 
   // 책 상세 정보 버튼 변수 추가
   const bookInfoButtons = document.querySelectorAll('.more-book-info')
