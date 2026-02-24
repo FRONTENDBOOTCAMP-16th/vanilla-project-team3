@@ -61,7 +61,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   let currentData = null
 
   try {
-    // 공유받은 링크로 들어온 경우 
+    // 공유받은 링크로 들어온 경우
     if (sharedTitle) {
       currentData = [
         {
@@ -74,34 +74,24 @@ window.addEventListener('DOMContentLoaded', async () => {
       ]
       displayPhraseResult(currentData)
     } else {
-      showLoadingDisplay() 
+      showLoadingDisplay()
 
-      // 홈에서 넘어온 직후인지 확인 (이모지 데이터 존재 여부)
-      const savedEmoji = JSON.parse(localStorage.getItem(IMOJI))
+      const savedLocalData = localStorage.getItem('selectedBookList')
 
-      if (savedEmoji) {
-        // 홈페이지에서 직접 결과를 확인하는 경우 
-        let allData = null
-        const cachedData = localStorage.getItem('cachedBookData')
-
-        if (cachedData) {
-          allData = JSON.parse(cachedData)
-        } else {
-          // 프리패치된 데이터가 로컬스토리지에 없을 경우에는 데이터를 getData() 함수를 사용해 불러옴
-          allData = getData()
-        }
-
-        const filtered = filterData(allData, savedEmoji, savedEmoji)
-        currentData = getRandomData(filtered, 4)
-
-        // 결과 저장 및 사용한 이모지 삭제 (중복 생성 방지)
-        localStorage.setItem('selectedBookList', JSON.stringify(currentData))
-        localStorage.removeItem(IMOJI)
+      if (savedLocalData) {
+        currentData = JSON.parse(savedLocalData)
       } else {
-        // 새로고침한 경우: 이미 뽑아둔 데이터 꺼내기
-        const savedLocalData = localStorage.getItem('selectedBookList')
-        if (savedLocalData) {
-          currentData = JSON.parse(savedLocalData)
+        const savedEmoji = JSON.parse(localStorage.getItem(IMOJI))
+
+        if (savedEmoji) {
+          let allData = null
+          const cachedData = localStorage.getItem('cachedBookData')
+          allData = cachedData ? JSON.parse(cachedData) : await getData()
+
+          const filtered = filterData(allData, savedEmoji, savedEmoji)
+          currentData = getRandomData(filtered, 4)
+
+          localStorage.setItem('selectedBookList', JSON.stringify(currentData))
         }
       }
 
@@ -115,7 +105,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         return
       }
 
-      hideLoadingDisplay() 
+      hideLoadingDisplay()
     }
 
     // 공유 버튼

@@ -9,6 +9,7 @@
       content="오늘의 날씨/기분을 선택해 책 문구를 추천받는 사이트"
     />
     <link rel="icon" href="/bookicon.svg" />
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script type="module" defer src="/src/main.js"></script>
     <script type="module" defer src="/src/pages/result/result.js"></script>
     <script
@@ -245,12 +246,12 @@
             <p class="greeting-message">오늘 하루도 수고하셨어요 :)</p>
           </article>
 
-          <!-- JS 로직 짤 때 신경써야할 것 : 추천 문구에 따라 배경 이미지 동적으로 변경하기 -->
           <article class="result-content-display result-active">
             <div class="recommend-phrase" aria-label="추천 문구 결과">
               <p class="book-title">책 제목</p>
               <p class="author">책 저자</p>
-              <p class="phrase">추천 문구</p>
+              <p class="phrase" aria-hidden="true">추천 문구</p>
+              <span class="sr-only phrase-reader" role="status"></span>
 
               <!-- 텍스트 복사 버튼 추가 -->
               <button type="button" class="text-copy-button">
@@ -261,7 +262,6 @@
               <h2>추천하는 책</h2>
               <ul class="recommend-lists">
                 <li class="recommend-book-lists">
-                  <!-- JS 로직 짤 때 신경써야할 것 : img src, alt 값 동적으로 변경하기 -->
                   <button
                     type="button"
                     class="save-button"
