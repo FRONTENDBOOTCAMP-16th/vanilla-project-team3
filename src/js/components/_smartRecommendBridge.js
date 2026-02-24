@@ -12,7 +12,6 @@ import {
   displayPhraseResult,
 } from './_phraseLoader.js' // 필터 도구들
 
-
 export async function runSmartRecommendation() {
   try {
     // 1. 필요한 모든 재료를 가져옴
@@ -32,7 +31,6 @@ export async function runSmartRecommendation() {
 
       // 5. 서버에 본 것 기록 (94권 다 봤으면 리셋)
       if (shouldReset) await resetViewedHistory()
-
 
       // ID 추출
       const idsToStore = result

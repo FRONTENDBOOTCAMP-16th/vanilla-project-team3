@@ -127,7 +127,7 @@ export async function getViewedIds() {
   // targetId 가 없으면 서버에 요청하지 않고 즉시 빈 배열 반환
   if (!targetId) {
     console.log('로그인 데이터가 없어 빈 기록을 반환합니다.')
-    return[]
+    return []
   }
 
   try {
@@ -183,7 +183,7 @@ export async function updateViewedIds(newIds) {
 // 3. 노출 기록 완전 초기화 (PUT 방식)
 export async function resetViewedHistory() {
   const targetId = getActiveUserId()
-  
+
   // targetId가 없으면 실행 안함
   if (!targetId) return
 
