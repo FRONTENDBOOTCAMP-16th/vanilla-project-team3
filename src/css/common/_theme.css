@@ -12,8 +12,11 @@
   color-scheme: light dark;
   --deep-yellow-color: #ffcb29;
   --deep-purple-color: #5237a4;
-  --primary-color: light-dark(
-    var(--deep-purple-color),
-    var(--deep-yellow-color)
-  );
+  --primary-color: var(--deep-purple-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: var(--deep-yellow-color);
+  }
 }
