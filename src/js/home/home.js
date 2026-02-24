@@ -174,7 +174,10 @@ function getSelected() {
 
 async function prefetchData() {
   try {
-    if (localStorage.getItem('cachedBookData')) return
+    if (localStorage.getItem('cachedBookData')) {
+      console.log('✅ 이미 캐시된 데이터가 있습니다.')
+      return
+    }
 
     const allData = await getData()
 
@@ -186,7 +189,14 @@ async function prefetchData() {
 }
 
 window.addEventListener('load', () => {
-  setTimeout(prefetchData, 500)
+  prefetchData()
+})
+
+window.addEventListener('DOMContentLoaded', () => {
+  // 새로운 테스트를 위해 이전 결과 리스트 삭제
+  localStorage.removeItem('selectedBookList')
+  // 선택했던 이모지 초기화
+  localStorage.removeItem(IMOJI)
 })
 
 const testCheckButton = document.querySelector('.user-test-check')

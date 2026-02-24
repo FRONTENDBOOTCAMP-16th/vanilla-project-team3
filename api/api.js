@@ -29,6 +29,7 @@ export async function getData(key, value) {
     // 데이터리스트
     const massagedData = data.map(
       ({
+        id,
         mood,
         weather,
         phrase,
@@ -38,6 +39,7 @@ export async function getData(key, value) {
         author,
       }) => {
         return {
+          id,
           mood,
           weather,
           phrase,
