@@ -50,12 +50,6 @@ export async function getData(key, value) {
         }
       },
     )
-    // 키값, 벨류값이 있을때 반환
-    if (key && value) {
-      const result = massagedData.find((item) => item[key] === value)
-      return result
-    }
-
     // 키값만 있을때 반환
     if (key && !value) {
       return massagedData.map((item) => item[key])
@@ -103,12 +97,32 @@ export async function getUser(key, value) {
       password,
       userId,
       heart,
-      mood_counts: [happy, sad, soso, bad],
-      weather_counts: [sunny, rainy, snowy, dusty, cloudy],
+      mood_counts: { happy, sad, soso, bad },
+      weather_counts: { sunny, rainy, snowy, dusty, cloudy },
     }
   } catch (error) {
     console.error(error)
     return null
+  }
+}
+
+export async function putUser(url, data) {
+  try {
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+
+    if (!response.ok) {
+      console.log('데이터 전달 실패')
+      throw new Error('실패')
+    }
+    return await response.json()
+  } catch (error) {
+    // 에러 콘솔
+    console.error(error)
+    throw error
   }
 }
 

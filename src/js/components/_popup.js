@@ -1,4 +1,5 @@
-import { getData } from '../../../api/api'
+import { getData, getUser } from '../../../api/api'
+import { EMAIL } from '../constants'
 import { initSession } from '../../pages/login/loginSession'
 
 const { isLoggedIn, currentUser } = initSession()
@@ -187,6 +188,8 @@ async function getHeartList() {
   // TODO
   // 유저아이디 동적으로 가지고 와야함 <<<<<<< 일단 임시로 불러옴 ( 로그인 하는 아이디에 따라 바뀌어야함 )
   // 여기에 해당 로그인한 유저 EMAIL값 넣어야함
+  const user = await getUser(EMAIL, 'email@email.com')
+  const heart = await user.heart
   if (!isLoggedIn || !currentUser) {
     console.log('비회원 상태이므로 찜 목록을 불러올 수 없습니다.')
     return
