@@ -38,8 +38,6 @@ export async function runSmartRecommendation() {
         .map((book) => String(book.id))
         .filter((id) => id !== 'undefined')
 
-      console.log('서버에 저장할 책 Id들:', idsToStore)
-
       if (idsToStore.length > 0) {
         await updateViewedIds(idsToStore)
       }
