@@ -1,8 +1,12 @@
 import { getData, getUser } from '../../../api/api'
 import { EMAIL } from '../constants'
+import { initSession } from '../../pages/login/loginSession'
 
-//  [전역 상태 설정]
-let isLoggedIn = true // 로그인 상태 (테스트 시 true/false로 변경)
+const { isLoggedIn, currentUser } = initSession()
+/**
+//  * [전역 상태 설정]
+//  */
+// let isLoggedIn = false // 로그인 상태 (테스트 시 true/false로 변경)
 
 // 1. 찜 목록이 비었을 때 메시지 표시 함수
 function checkEmptyList() {
@@ -46,19 +50,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const delBookListBtn = document.querySelector('.delete-book-list-button')
   const closeBtns = document.querySelectorAll('.close-dialog')
 
-  // 내비게이션 마이페이지 버튼 클릭 핸들러
-  if (myPageBtn) {
-    myPageBtn.addEventListener('click', (e) => {
-      e.preventDefault()
-
-      // 비로그인 시 로그인 유도 팝업, 로그인 시 마이페이지 팝업 노출
-      if (!isLoggedIn) {
-        if (loginDialog) loginDialog.showModal()
-      } else {
-        if (myPageDialog) myPageDialog.showModal()
-      }
-    })
-  }
+  // --- 내비게이션 마이페이지 버튼 ---
+  myPageBtn?.addEventListener('click', (e) => {
+    e.preventDefault()
+    if (!isLoggedIn) {
+      loginDialog?.showModal()
+    } else {
+      updateUserDiSplay()
+      myPageDialog?.showModal()
+    }
+  })
 
   // 로그인 팝업 내 [로그인 페이지 이동] 버튼
   const loginConfirmBtn = document.querySelector(
@@ -139,13 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const heartListConfirmBtn = document.querySelector(
     '.heart-list-dialog .confirm-button',
   )
-  if (heartListConfirmBtn) {
-    heartListConfirmBtn.addEventListener('click', (e) => {
-      e.preventDefault()
-      if (heartLimitDialog) heartLimitDialog.close()
-      if (myPageDialog) myPageDialog.showModal() // 바로 마이페이지를 열어줌
-    })
-  }
+  heartListConfirmBtn?.addEventListener('click', (e) => {
+    e.preventDefault()
+    heartLimitDialog?.close()
+    updateUserDiSplay()
+    myPageDialog?.showModal()
+  })
 
   // 찜 목록 편집 모드 전환 (삭제 버튼 노출/비노출)
   if (delBookListBtn) {
@@ -190,6 +190,12 @@ async function getHeartList() {
   // 여기에 해당 로그인한 유저 EMAIL값 넣어야함
   const user = await getUser(EMAIL, 'email@email.com')
   const heart = await user.heart
+  if (!isLoggedIn || !currentUser) {
+    console.log('비회원 상태이므로 찜 목록을 불러올 수 없습니다.')
+    return
+  }
+
+  const heart = await currentUser.heart
   const heartID = heart.map((item) => Number(item.trim()))
 
   // 하트찍은 책 ID 매칭
@@ -227,4 +233,17 @@ async function getHeartList() {
   })
 }
 
-getHeartList()
+// 마이페이지 내부 userId 변경하는 함수
+function updateUserDiSplay() {
+  const { isLoggedIn: loginStatus, currentUser: user } = initSession()
+
+  if (loginStatus && user) {
+    const myPageDialog = document.querySelector('.my-page-dialog')
+    let userIdDisplay = myPageDialog.querySelector('.user-id-text')
+
+    if (userIdDisplay) {
+      userIdDisplay.textContent = user.userId
+    }
+    getHeartList()
+  }
+}

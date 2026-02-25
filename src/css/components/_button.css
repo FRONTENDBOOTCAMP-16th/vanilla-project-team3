@@ -43,3 +43,23 @@
 .user-join {
   grid-area: join;
 }
+
+/* 로그아웃 버튼 전용 */
+.user-logout {
+  grid-area: join;
+  border-radius: 25px;
+  outline: none;
+  &:hover {
+    color: #ff6b6b;
+  }
+
+  &:focus-visible,
+  &:hover {
+    color: #ff6b6b;
+    text-decoration: underline;
+  }
+}
+
+.hidden {
+  display: none;
+}

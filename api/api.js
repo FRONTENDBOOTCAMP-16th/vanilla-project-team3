@@ -129,9 +129,19 @@ export async function putUser(url, data) {
 // 로그인한 유저의 고유 번호(MockAPI ID)를 가져오는 헬퍼 함수
 
 const getActiveUserId = () => {
-  // sessionStorage에서 login.js가 저장한 ID를 가져오면, 탭을 닫을 때 로그인 정보(Id) 자동 삭제
-  // 로그인하지 않으면 null을 반환하여 이후 API 요청 원천 차단
-  return sessionStorage.getItem('loginUserInternalId') || null
+  // sessionStorage에서 login.js가 저장한 ID를 가져오면, 탭을 닫을 때 Id 데이터 자동 삭제
+  // 만약 값이 없으면 null을 반환
+  const userData = localStorage.getItem('loginAuthData')
+  if (!userData) return null
+
+  try {
+    const user = JSON.parse(userData)
+    const targetId = user.id
+    return targetId || null
+  } catch (error) {
+    console.error(error, ': 데이터를 가져오지 못했습니다.')
+    return null
+  }
 }
 
 // 1. 유저의 노출 기록(viewed) 목록 가져오기

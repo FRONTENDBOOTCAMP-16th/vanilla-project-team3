@@ -4,6 +4,7 @@ import { saveStorage } from '/src/js/utils/index.js'
 import { IS_CHECKED_KEY, IMOJI } from '/src/js/constants/index.js'
 import { getData, getUser, putUser } from '../../../api/api.js'
 import { EMAIL } from '../constants/index.js'
+import { initSession, logout } from '../../pages/login/loginSession.js'
 
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
@@ -258,3 +259,43 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 globalThis.addEventListener('beforeunload', cleanupTimers)
+
+const testCheckButton = document.querySelector('.user-test-check')
+
+if (testCheckButton) {
+  testCheckButton.addEventListener('click', (e) => {
+    e.preventDefault() // 페이지 이동 전 저장 작업을 위해 잠시 대기
+
+    // 선택된 값들 스토리지에 저장
+    emojiStorage()
+    saveStorage(IS_CHECKED_KEY, 'true')
+
+    // 서버 데이터 기다리지 않고 바로 이동
+    location.href = '/src/pages/result/result.html'
+  })
+}
+const { isLoggedIn, currentUser } = initSession()
+
+export function renderLoggedInDisplay() {
+  const checkButton = document.querySelector('.user-test-check')
+  const loginButton = document.querySelector('.user-login')
+  const joinButton = document.querySelector('.user-join')
+  const logoutButton = document.querySelector('.user-logout')
+
+  if (isLoggedIn) {
+    checkButton.textContent = '확인하기'
+    loginButton?.classList.add('hidden')
+    joinButton?.classList.add('hidden')
+    logoutButton?.classList.remove('hidden')
+
+    console.log(currentUser?.userId, '님 환영합니다!')
+    logoutButton?.addEventListener('click', logout)
+  } else {
+    checkButton.textContent = '비회원 확인하기'
+    loginButton?.classList.remove('hidden')
+    joinButton?.classList.remove('hidden')
+    logoutButton?.classList.add('hidden')
+  }
+}
+
+renderLoggedInDisplay()
