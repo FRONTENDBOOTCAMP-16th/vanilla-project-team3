@@ -117,7 +117,17 @@ export async function getUser(key, value) {
 const getActiveUserId = () => {
   // sessionStorage에서 login.js가 저장한 ID를 가져오면, 탭을 닫을 때 Id 데이터 자동 삭제
   // 만약 값이 없으면 null을 반환
-  return sessionStorage.getItem('loginUserInternalId') || null
+  const userData = localStorage.getItem('loginAuthData')
+  if (!userData) return null
+
+  try {
+    const user = JSON.parse(userData)
+    const targetId = user.loginUserInternalId
+    return targetId || null
+  } catch (error) {
+    console.error(error, ': 데이터를 가져오지 못했습니다.')
+    return null
+  }
 }
 
 // 1. 유저의 노출 기록(viewed) 목록 가져오기

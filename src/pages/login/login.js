@@ -71,7 +71,7 @@ async function isLogin(resultID, resultPassword) {
     // [중요!] 서버에서 받아온 유저의 고유 id(예: "50")를 localStorage에 저장
     // resultID.id가 MockAPI에서 부여한 진짜 번호
     const loginAuthenticationData = {
-      loginUserinternalId: resultID.id,
+      loginUserInternalId: resultID.id,
       userId: resultID.userId,
     }
     console.log('로그인 성공')
