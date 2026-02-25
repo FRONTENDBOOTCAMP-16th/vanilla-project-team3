@@ -23,7 +23,7 @@ export function getUniqueRandomData(filteredData, count, viewedIds = []) {
   for (let i = 0; i < count; i++) {
     if (freshCopy.length === 0) break
     const randomIndex = Math.floor(Math.random() * freshCopy.length)
-    
+
     // 랜덤으로 고른 인덱스 번호의 데이터를 복사본에서 잘라내어 result에 넣기
     // 복사본 배열에서 아예 빼버리고 다시 랜덤으로 돌려서 뽑아내는것이므로 중복이 발생하지않음
     result.push(freshCopy.splice(randomIndex, 1)[0])

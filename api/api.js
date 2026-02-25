@@ -191,7 +191,7 @@ export async function updateViewedIds(newIds) {
 //    모든 책을 다 보았거나 리셋이 필요할 때 viewed 배열을 빈 배열([])로 만듦
 export async function resetViewedHistory() {
   const targetId = getActiveUserId()
-  
+
   // 로그인 안 했으면 (targetId가 없으면) 무시
   if (!targetId) return
 

@@ -25,12 +25,11 @@ function resetPWForm() {
 
 // 3. 하트(찜) 버튼의 활성화 상태를 토글하고 접근성 속성(aria-pressed)을 갱신하는 함수
 function toggleHeart(button) {
-   const isActive = button.classList.toggle('heart-active')
-   button.setAttribute('aria-pressed', isActive ? 'true' : 'false')
- }
+  const isActive = button.classList.toggle('heart-active')
+  button.setAttribute('aria-pressed', isActive ? 'true' : 'false')
+}
 
-
-  // [이벤트 리스너 등록] DOM이 모두 로드된 후 실행
+// [이벤트 리스너 등록] DOM이 모두 로드된 후 실행
 
 document.addEventListener('DOMContentLoaded', () => {
   // 제어할 DOM 요소들 선택
@@ -49,23 +48,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // 내비게이션 마이페이지 버튼 클릭 핸들러
   if (myPageBtn) {
     myPageBtn.addEventListener('click', (e) => {
-     e.preventDefault()
+      e.preventDefault()
 
-     // 비로그인 시 로그인 유도 팝업, 로그인 시 마이페이지 팝업 노출
+      // 비로그인 시 로그인 유도 팝업, 로그인 시 마이페이지 팝업 노출
       if (!isLoggedIn) {
-       if (loginDialog) loginDialog.showModal()
-       } else {
-       if (myPageDialog) myPageDialog.showModal()
+        if (loginDialog) loginDialog.showModal()
+      } else {
+        if (myPageDialog) myPageDialog.showModal()
       }
     })
   }
 
-  // 로그인 팝업 내 [로그인 페이지 이동] 버튼 
-  const loginConfirmBtn = document.querySelector('.login-dialog .confirm-button')
+  // 로그인 팝업 내 [로그인 페이지 이동] 버튼
+  const loginConfirmBtn = document.querySelector(
+    '.login-dialog .confirm-button',
+  )
   if (loginConfirmBtn) {
     loginConfirmBtn.addEventListener('click', () => {
-    window.location.href = '/src/pages/login/login.html'
-   })
+      window.location.href = '/src/pages/login/login.html'
+    })
   }
 
   // 메인 화면 등의 찜 버튼(하트) 클릭 시 (다중 요소 대응)
@@ -83,18 +84,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!isAlreadyActive && currentCount >= 6) {
         if (heartLimitDialog) heartLimitDialog.showModal() // 6개 초과 시 찜 제한 안내 팝업
-       } else {
+      } else {
         toggleHeart(btn)
       }
     })
   })
 
-  // 비밀번호 변경 팝업 열기 
+  // 비밀번호 변경 팝업 열기
   if (changePWBtn) {
-   changePWBtn.addEventListener('click', () => {
-     resetPWForm() // 열 때마다 이전 입력 기록 초기화
-     if (changePWDialog) changePWDialog.showModal()
-   })
+    changePWBtn.addEventListener('click', () => {
+      resetPWForm() // 열 때마다 이전 입력 기록 초기화
+      if (changePWDialog) changePWDialog.showModal()
+    })
   }
 
   // 비밀번호 변경 폼 제출(Submit) 핸들러
@@ -108,19 +109,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const newPw = newPwInput ? newPwInput.value : ''
       const confirmPw = confirmPwInput ? confirmPwInput.value : ''
 
-     // 비밀번호 불일치 검증
-     if (newPw !== confirmPw) {
-      e.preventDefault() // 서버 전송 중단
-      if (errorMsg) errorMsg.style.display = 'block'
-      return
-     }
+      // 비밀번호 불일치 검증
+      if (newPw !== confirmPw) {
+        e.preventDefault() // 서버 전송 중단
+        if (errorMsg) errorMsg.style.display = 'block'
+        return
+      }
 
-     alert('비밀번호가 변경되었습니다.')
-     if (changePWDialog) changePWDialog.close()
+      alert('비밀번호가 변경되었습니다.')
+      if (changePWDialog) changePWDialog.close()
     })
   }
 
-  // 공통 닫기 버튼 핸들러 (모든 dialog의 .close-dialog에 적용) 
+  // 공통 닫기 버튼 핸들러 (모든 dialog의 .close-dialog에 적용)
   closeBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       const dialog = btn.closest('dialog')
@@ -134,23 +135,25 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   // 찜 제한 팝업에서 [마이페이지 이동] 클릭 시
-  const heartListConfirmBtn = document.querySelector('.heart-list-dialog .confirm-button')
+  const heartListConfirmBtn = document.querySelector(
+    '.heart-list-dialog .confirm-button',
+  )
   if (heartListConfirmBtn) {
     heartListConfirmBtn.addEventListener('click', (e) => {
-     e.preventDefault()
-     if (heartLimitDialog) heartLimitDialog.close()
-     if (myPageDialog) myPageDialog.showModal() // 바로 마이페이지를 열어줌
-   })
+      e.preventDefault()
+      if (heartLimitDialog) heartLimitDialog.close()
+      if (myPageDialog) myPageDialog.showModal() // 바로 마이페이지를 열어줌
+    })
   }
 
   // 찜 목록 편집 모드 전환 (삭제 버튼 노출/비노출)
   if (delBookListBtn) {
     delBookListBtn.addEventListener('click', (e) => {
-     e.preventDefault()
+      e.preventDefault()
       if (myPageDialog) {
-       // .edit-mode 클래스를 토글하여 CSS로 삭제 버튼 등을 제어
-       const isEditMode = myPageDialog.classList.toggle('edit-mode')
-       delBookListBtn.textContent = isEditMode ? '편집 완료' : '찜 항목 삭제'
+        // .edit-mode 클래스를 토글하여 CSS로 삭제 버튼 등을 제어
+        const isEditMode = myPageDialog.classList.toggle('edit-mode')
+        delBookListBtn.textContent = isEditMode ? '편집 완료' : '찜 항목 삭제'
       }
     })
   }
@@ -159,20 +162,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // bookList 내부에 동적으로 생성되는 삭제 버튼 클릭 시 대응
   if (bookList) {
     bookList.addEventListener('click', (e) => {
-     const delBtn = e.target.closest('.delete-item-button')
-     if (delBtn) {
-       const targetLi = delBtn.closest('li')
-       if (targetLi) {
-        // 투명도 애니메이션 후 요소 제거
-        targetLi.style.opacity = '0'
-        targetLi.style.transition = '0.3s'
-        setTimeout(() => {
-          targetLi.remove()
-          checkEmptyList() // 삭제 후 목록이 비었는지 확인
-         }, 300)
-       }
-     }
-   })
+      const delBtn = e.target.closest('.delete-item-button')
+      if (delBtn) {
+        const targetLi = delBtn.closest('li')
+        if (targetLi) {
+          // 투명도 애니메이션 후 요소 제거
+          targetLi.style.opacity = '0'
+          targetLi.style.transition = '0.3s'
+          setTimeout(() => {
+            targetLi.remove()
+            checkEmptyList() // 삭제 후 목록이 비었는지 확인
+          }, 300)
+        }
+      }
+    })
   }
 
   // 초기 로드 시 목록이 비어있는지 확인

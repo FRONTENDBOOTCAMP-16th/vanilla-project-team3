@@ -11,8 +11,7 @@ import {
   displayPhraseResult,
 } from './_phraseLoader.js' // 필터 도구들
 
-
-// 사용자의 기분/날씨 선택값과 과거 시청 기록을 분석하여 
+// 사용자의 기분/날씨 선택값과 과거 시청 기록을 분석하여
 // 중복되지 않은 새로운 명언(책) 4개를 화면에 출력하고 서버에 기록
 export async function runSmartRecommendation() {
   try {
