@@ -225,7 +225,7 @@ async function getHeartList() {
           />
         </svg>
       </button>
-      <a data-book="book-item-${index}" href="${currentBook.bookstoreUrl}" rel="noopener noreferrer">
+      <a data-book="book-item-${index}" href="${currentBook.bookstoreUrl}" rel="noopener noreferrer" target="_blank">
         <img src="${currentBook.bookCover}" alt="${currentBook.author}" />
       </a>
     `
