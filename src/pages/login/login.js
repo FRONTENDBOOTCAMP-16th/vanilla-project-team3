@@ -68,9 +68,9 @@ async function checkeEmailPassword() {
 // 로그인 후 메인페이지로 이동
 async function isLogin(resultID, resultPassword) {
   if (resultID && resultPassword) {
-    // [중요!] 서버에서 받아온 유저의 고유 id(예: "50")를 localStorage에 저장
+    // [중요!] 서버에서 받아온 유저의 고유 id(예: "1")를 sessionStorage 저장
     // resultID.id가 MockAPI에서 부여한 진짜 번호
-    localStorage.setItem('loginUserInternalId', resultID.id)
+    sessionStorage.setItem('loginUserInternalId', resultID.id)
 
     alert('로그인을 성공하였습니다.')
     window.location.href = `${baseURL}/index.html`

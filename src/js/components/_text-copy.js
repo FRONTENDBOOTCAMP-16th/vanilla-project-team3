@@ -13,6 +13,7 @@ function copyToClipboard(text, button) {
 }
 
 // 성공 피드백(텍스트/색상 변경)을 담당하는 함수
+// 사용자에게 복사가 되었음을 시각적으로 알리기 위해 2초간 상태를 유지
 function handleCopySuccess(button) {
   const originalText = button.innerText
   const originalBg = button.style.backgroundColor
