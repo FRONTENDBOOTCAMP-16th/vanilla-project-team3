@@ -50,12 +50,6 @@ export async function getData(key, value) {
         }
       },
     )
-    // 키값, 벨류값이 있을때 반환
-    if (key && value) {
-      const result = massagedData.find((item) => item[key] === value)
-      return result
-    }
-
     // 키값만 있을때 반환
     if (key && !value) {
       return massagedData.map((item) => item[key])
