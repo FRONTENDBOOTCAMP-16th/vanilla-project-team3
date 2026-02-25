@@ -1,4 +1,4 @@
-import { getData, getUser } from '../../../api/api'
+import { getData } from '../../../api/api'
 import { initSession } from '../../pages/login/loginSession'
 
 const { isLoggedIn, currentUser } = initSession()
@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isLoggedIn) {
       loginDialog?.showModal()
     } else {
+
+      updateUserDiSplay()
       myPageDialog?.showModal()
     }
   })
@@ -134,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
   heartListConfirmBtn?.addEventListener('click', (e) => {
     e.preventDefault()
     heartLimitDialog?.close()
+    updateUserDiSplay()
     myPageDialog?.showModal()
   })
 
@@ -175,11 +178,8 @@ async function getHeartList() {
     console.log('비회원 상태이므로 찜 목록을 불러올 수 없습니다.')
     return
   }
-  const user = await getUser('userId', currentUser.userId)
 
-  if (!user || !user.heart) return
-
-  const heart = await user.heart
+  const heart = await currentUser.heart
   const heartID = heart.map((item) => Number(item.trim()))
 
   // 하트찍은 책 ID 매칭
@@ -217,4 +217,17 @@ async function getHeartList() {
   })
 }
 
-getHeartList()
+// 마이페이지 내부 userId 변경하는 함수 
+function updateUserDiSplay() {
+  const { isLoggedIn: loginStatus, currentUser: user } = initSession()
+  
+  if (loginStatus && user) {
+    const myPageDialog = document.querySelector('.my-page-dialog')
+    let userIdDisplay = myPageDialog.querySelector('.user-id-text')
+    
+    if (userIdDisplay) {
+      userIdDisplay.textContent = user.userId
+    }
+    getHeartList();
+  }
+}

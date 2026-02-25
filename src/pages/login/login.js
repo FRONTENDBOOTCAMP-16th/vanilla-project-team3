@@ -68,8 +68,8 @@ async function checkeEmailPassword() {
 // 로그인 후 메인페이지로 이동
 async function isLogin(resultID, resultPassword) {
   if (resultID && resultPassword) {
-    // 비밀번호를 제외한 user 전체 데이터 객체를 저장 
-    const safeUserData = {...resultID}
+    // 비밀번호를 제외한 user 전체 데이터 객체를 저장
+    const safeUserData = { ...resultID }
     delete safeUserData.password
 
     localStorage.setItem('loginAuthData', JSON.stringify(safeUserData))
