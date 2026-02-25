@@ -2,6 +2,7 @@ import { removeStorage } from '../utils'
 import { saveStorage } from '/src/js/utils/index.js'
 import { IS_CHECKED_KEY, IMOJI } from '/src/js/constants/index.js'
 import { getData } from '../../../api/api.js'
+import { initSession, logout } from '../../pages/login/loginSession.js'
 
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
@@ -213,3 +214,28 @@ if (testCheckButton) {
     location.href = '/src/pages/result/result.html'
   })
 }
+const { isLoggedIn, currentUser } = initSession()
+
+export function renderLoggedInDisplay() {
+  const checkButton = document.querySelector('.user-test-check')
+  const loginButton = document.querySelector('.user-login')
+  const joinButton = document.querySelector('.user-join')
+  const logoutButton = document.querySelector('.user-logout')
+
+  if (isLoggedIn) {
+    checkButton.textContent = '확인하기'
+    loginButton?.classList.add('hidden')
+    joinButton?.classList.add('hidden')
+    logoutButton?.classList.remove('hidden')
+
+    console.log(currentUser?.userId, '님 환영합니다!')
+    logoutButton?.addEventListener('click', logout)
+  } else {
+    checkButton.textContent = '비회원 확인하기'
+    loginButton?.classList.remove('hidden')
+    joinButton?.classList.remove('hidden')
+    logoutButton?.classList.add('hidden')
+  }
+}
+
+renderLoggedInDisplay()
