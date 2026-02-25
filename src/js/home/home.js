@@ -214,6 +214,15 @@ function showNoti(message) {
   }, NOTI_HIDE_DELAY)
 }
 
+// 개선 예시: 페이지 언로드 시 타이머 정리
+function cleanupTimers() {
+  if (notiTimeoutId) {
+    clearTimeout(notiTimeoutId)
+    notiTimeoutId = null
+  }
+  // 다른 타이머도 정리
+}
+
 // 날씨와 감정 선택
 function getSelected() {
   const weather = container.querySelector('.select-weather input:checked')
@@ -247,3 +256,5 @@ window.addEventListener('DOMContentLoaded', () => {
   // 선택했던 이모지 초기화
   localStorage.removeItem(IMOJI)
 })
+
+globalThis.addEventListener('beforeunload', cleanupTimers)
