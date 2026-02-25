@@ -195,7 +195,6 @@ async function getHeartList() {
     return
   }
 
-  const heart = await currentUser.heart
   const heartID = heart.map((item) => Number(item.trim()))
 
   // 하트찍은 책 ID 매칭
