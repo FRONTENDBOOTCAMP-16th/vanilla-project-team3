@@ -128,7 +128,7 @@ export async function getViewedIds() {
   // [방어 코드] ID(targetId)가 없으면 서버에 물어볼 필요도 없이 빈 목록 반환 (404 에러 방지)
   if (!targetId) {
     console.log('로그인 데이터가 없어 빈 기록을 반환합니다.')
-    return[]
+    return []
   }
 
   try {
