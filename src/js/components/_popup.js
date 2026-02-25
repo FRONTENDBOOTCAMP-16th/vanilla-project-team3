@@ -1,4 +1,5 @@
 import { getData, getUser } from '../../../api/api'
+import { EMAIL } from '../constants'
 
 //  [전역 상태 설정]
 let isLoggedIn = true // 로그인 상태 (테스트 시 true/false로 변경)
@@ -187,7 +188,7 @@ async function getHeartList() {
   // TODO
   // 유저아이디 동적으로 가지고 와야함 <<<<<<< 일단 임시로 불러옴 ( 로그인 하는 아이디에 따라 바뀌어야함 )
   // 여기에 해당 로그인한 유저 EMAIL값 넣어야함
-  const user = await getUser('email', 'email@email.com')
+  const user = await getUser(EMAIL, 'email@email.com')
   const heart = await user.heart
   const heartID = heart.map((item) => Number(item.trim()))
 
