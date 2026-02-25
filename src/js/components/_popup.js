@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isLoggedIn) {
       loginDialog?.showModal()
     } else {
-
       updateUserDiSplay()
       myPageDialog?.showModal()
     }
@@ -217,17 +216,17 @@ async function getHeartList() {
   })
 }
 
-// 마이페이지 내부 userId 변경하는 함수 
+// 마이페이지 내부 userId 변경하는 함수
 function updateUserDiSplay() {
   const { isLoggedIn: loginStatus, currentUser: user } = initSession()
-  
+
   if (loginStatus && user) {
     const myPageDialog = document.querySelector('.my-page-dialog')
     let userIdDisplay = myPageDialog.querySelector('.user-id-text')
-    
+
     if (userIdDisplay) {
       userIdDisplay.textContent = user.userId
     }
-    getHeartList();
+    getHeartList()
   }
 }
