@@ -125,119 +125,112 @@ export async function putUser(url, data) {
     throw error
   }
 }
+  
+  // API 통신 (서버(MockAPI)와의 직접적인 HTTP 통신을 전담하는 객체)
+const UserAPI = {
+  // 함수명 앞의 '_'는 내부에서만 사용하는 함수라는 관례적 표시
+  _getEndpoint(userId) {
+    return `${VITE_API_BASE_URL}/todayPhrase/user/${userId}`
+  },
 
-// 로그인한 유저의 고유 번호(MockAPI ID)를 가져오는 헬퍼 함수
+  // 서버에서 유저 한 명의 전체 데이터를 가져오기
+  async fetchUserData(userId) {
+    const res = await fetch(this._getEndpoint(userId))
+    if (!res.ok) throw new Error(`유저(${userId}) 데이터를 불러오는 데 실패했습니다.`)
+    return res.json()
+  },
 
+  //  유저의 데이터를 서버에 업데이트(덮어쓰기)
+  async updateUserData(userId, fullData) {
+    const res = await fetch(this._getEndpoint(userId), {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fullData),
+    })
+    if (!res.ok) throw new Error(`유저(${userId}) 데이터 업데이트에 실패했습니다.`)
+    return res.json()
+  }
+}
+
+// 비즈니스 로직 (API 통신 없이 순수하게 데이터 가공 및 계산만 수행)
+const UserLogic = {
+  // 기존에 본 책 ID 리스트와 새로 본 책 ID 리스트를 합치고 중복을 제거
+  mergeViewedIds(currentIds, newIds) {
+    const current = Array.isArray(currentIds) ? currentIds : []
+    const combined = [...new Set([...current, ...newIds])] // Set을 활용하여 중복된 ID를 자동으로 제거
+    return combined.filter(id => id != null) // 유효하지 않은 값(null, undefined) 필터링
+  },
+
+  // 기존 유저 데이터에서 노출 기록(viewed)만 초기화한 객체를 생성
+  createResetData(userData) {
+    return { ...userData, viewed: [] }
+  }
+}
+
+// 서비스 조율 및 내보내기(Export) 
+// 로컬 스토리지에서 현재 로그인한 유저의 고유 ID를 가져오기
 const getActiveUserId = () => {
-  // sessionStorage에서 login.js가 저장한 ID를 가져오면, 탭을 닫을 때 Id 데이터 자동 삭제
-  // 만약 값이 없으면 null을 반환
   const userData = localStorage.getItem('loginAuthData')
   if (!userData) return null
-
   try {
     const user = JSON.parse(userData)
-    const targetId = user.id
-    return targetId || null
-  } catch (error) {
-    console.error(error, ': 데이터를 가져오지 못했습니다.')
+    return user.id || null
+  } catch {
+    // JSON 파싱 에러 발생 시(로그인 데이터 오염 등) 안전하게 null 반환
     return null
   }
 }
 
-// 1. 유저의 노출 기록(viewed) 목록 가져오기
-//    서버(MockAPI)에서 해당 유저의 데이터를 조회하여 이미 본 책 ID 배열을 반환
+// 현재 유저가 지금까지 본 책들의 ID 목록을 서버에서 가져오기
 export async function getViewedIds() {
-  const targetId = getActiveUserId() // 현재 로그인 유저 ID 확인, null이 올 수 있음
-
-  // [방어 코드] ID(targetId)가 없으면 서버에 물어볼 필요도 없이 빈 목록 반환 (404 에러 방지)
-  if (!targetId) {
-    console.log('로그인 데이터가 없어 빈 기록을 반환합니다.')
-    return []
-  }
+  const targetId = getActiveUserId()
+  if (!targetId) return [] // 비로그인 시 빈 배열 반환
 
   try {
-    const res = await fetch(`${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`)
-    if (!res.ok) return []
-    const data = await res.json()
-    // 서버 데이터에 viewed 필드가 배열 형태인지 확인 후 반환
+    const data = await UserAPI.fetchUserData(targetId)
     return Array.isArray(data.viewed) ? data.viewed : []
   } catch (error) {
-    console.error('노출 기록 로드 실패:', error)
+    console.warn('노출 기록 로드 실패:', error.message)
     return []
   }
 }
 
-// 2. 새로운 추천 ID들(4개)을 서버에 누적 저장 (PUT 방식)
-//    기존에 본 ID 리스트와 방금 본 ID 리스트를 합쳐서 서버에 업데이트
+// 새로 본 책 ID들을 기존 기록에 누적하여 서버에 저장
 export async function updateViewedIds(newIds) {
   const targetId = getActiveUserId()
-
-  // [방어 코드] 로그인 상태가 아니면 (targetId가 null이면) 기록을 남기지 않음
-  if (!targetId) {
-    console.log('로그인 전이므로 노출 기록을 업데이트하지 않습니다.')
-    return
-  }
+  // 로그인 상태가 아니거나 업데이트할 ID가 없으면 중단
+  if (!targetId || !newIds.length) return
 
   try {
-    // A. 먼저 현재 서버에 저장된 유저 정보를 가져옴 (기존 viewed 목록을 알기 위해)
-    const resGet = await fetch(
-      `${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`,
-    )
-    if (!resGet.ok) throw new Error('유저를 찾을 수 없습니다.')
-    const userData = await resGet.json()
-
-    // B. 데이터 병합: [기존 목록 + 새 목록] 합친 뒤 중복 제거(Set 사용) 및 유효성 검사
-    const currentViewed = Array.isArray(userData.viewed) ? userData.viewed : []
-    const updatedViewed = [...new Set([...currentViewed, ...newIds])].filter(
-      (val) => val !== null && val !== undefined,
-    )
-
-    // C. 서버 업데이트: 누적된 전체 목록을 다시 서버에 저장(PUT)
-    const resPut = await fetch(
-      `${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`,
-      {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...userData, // 기존 유저 정보(이름, 이메일 등) 유지
-          viewed: updatedViewed, // 업데이트된 목록만 교체
-        }),
-      },
-    )
-
-    if (resPut.ok) console.log(`유저 ${targetId}번 노출 기록 업데이트 완료`)
+    // 서버에서 최신 유저 데이터를 먼저 가져옴
+    const userData = await UserAPI.fetchUserData(targetId)
+    // 로직 레이어를 통해 기록 병합
+    const updatedViewed = UserLogic.mergeViewedIds(userData.viewed, newIds)
+    // 최종 결과 서버에 전송
+    await UserAPI.updateUserData(targetId, {
+      ...userData,
+      viewed: updatedViewed
+    })
+    console.log(`[Success] 유저 ${targetId}번 노출 기록 업데이트 완료`)
   } catch (error) {
-    console.error('노출 기록 업데이트 실패:', error)
+    console.error('[Error] 기록 업데이트 중 오류 발생:', error.message)
   }
 }
 
-// 3. 노출 기록 완전 초기화 (PUT 방식)
-//    모든 책을 다 보았거나 리셋이 필요할 때 viewed 배열을 빈 배열([])로 만듦
+// 유저의 모든 노출 기록을 삭제하여 처음부터 다시 추천받을 수 있게 함
 export async function resetViewedHistory() {
   const targetId = getActiveUserId()
-
-  // 로그인 안 했으면 (targetId가 없으면) 무시
   if (!targetId) return
 
   try {
-    // A. 현재 유저 정보를 가져옴
-    const resGet = await fetch(
-      `${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`,
-    )
-    if (!resGet.ok) return
-    const userData = await resGet.json()
-
-    // B. viewed 필드만 빈 배열로 덮어씌워 서버에 저장
-    await fetch(`${VITE_API_BASE_URL}/todayPhrase/user/${targetId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...userData,
-        viewed: [], // 기록 삭제
-      }),
-    })
-    console.log(`유저 ${targetId}번 추천 기록이 초기화되었습니다.`)
+    const userData = await UserAPI.fetchUserData(targetId)
+    // 로직 레이어를 통해 초기화 데이터 생성
+    const resetData = UserLogic.createResetData(userData)
+    
+    // 서버 데이터 덮어쓰기
+    await UserAPI.updateUserData(targetId, resetData)
+    console.log(`[Success] 유저 ${targetId}번 추천 기록 초기화 완료`)
   } catch (error) {
-    console.error('기록 초기화 실패:', error)
+    console.error('[Error] 기록 초기화 중 오류 발생:', error.message)
   }
 }
