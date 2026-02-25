@@ -122,7 +122,7 @@ const getActiveUserId = () => {
 
   try {
     const user = JSON.parse(userData)
-    const targetId = user.loginUserInternalId
+    const targetId = user.id
     return targetId || null
   } catch (error) {
     console.error(error, ': 데이터를 가져오지 못했습니다.')

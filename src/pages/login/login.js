@@ -68,18 +68,11 @@ async function checkeEmailPassword() {
 // 로그인 후 메인페이지로 이동
 async function isLogin(resultID, resultPassword) {
   if (resultID && resultPassword) {
-    // [중요!] 서버에서 받아온 유저의 고유 id(예: "50")를 localStorage에 저장
-    // resultID.id가 MockAPI에서 부여한 진짜 번호
-    const loginAuthenticationData = {
-      loginUserInternalId: resultID.id,
-      userId: resultID.userId,
-    }
-    console.log('로그인 성공')
-    localStorage.setItem(
-      'loginAuthData',
-      JSON.stringify(loginAuthenticationData),
-    )
+    // 비밀번호를 제외한 user 전체 데이터 객체를 저장 
+    const safeUserData = {...resultID}
+    delete safeUserData.password
 
+    localStorage.setItem('loginAuthData', JSON.stringify(safeUserData))
     alert('로그인을 성공하였습니다.')
     window.location.href = `${baseURL}/index.html`
   }
