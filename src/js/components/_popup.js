@@ -195,7 +195,6 @@ async function getHeartList() {
     return
   }
 
-  const heart = await currentUser.heart
   const heartID = heart.map((item) => Number(item.trim()))
 
   // 하트찍은 책 ID 매칭
@@ -226,7 +225,7 @@ async function getHeartList() {
           />
         </svg>
       </button>
-      <a data-book="book-item-${index}" href="${currentBook.bookstoreUrl}" rel="noopener noreferrer">
+      <a data-book="book-item-${index}" href="${currentBook.bookstoreUrl}" rel="noopener noreferrer" target="_blank">
         <img src="${currentBook.bookCover}" alt="${currentBook.author}" />
       </a>
     `
