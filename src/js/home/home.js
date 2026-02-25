@@ -118,7 +118,7 @@ async function handleSubmitClick(e) {
 
     // 서버 데이터 기다리지 않고 바로 이동
     location.href = '/src/pages/result/result.html'
-  } catch(error) {
+  } catch (error) {
     console.error('데이터 업로드 실패:', error)
     throw error
   }
