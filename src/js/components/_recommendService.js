@@ -11,7 +11,6 @@ export function getUniqueRandomData(filteredData, count, viewedIds = []) {
 
   // 2. 안 본 책이 부족하면 리셋
   if (freshData.length < count) {
-    console.log('추천 기록을 초기화합니다.')
     freshData = [...filteredData] // 후보군을 전체로 초기화
     shouldReset = true // 서버 기록을 비우라는 신호
   }
