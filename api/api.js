@@ -103,8 +103,8 @@ export async function getUser(key, value) {
       password,
       userId,
       heart,
-      mood_counts: {happy, sad, soso, bad},
-      weather_counts: {sunny, rainy, snowy, dusty, cloudy},
+      mood_counts: { happy, sad, soso, bad },
+      weather_counts: { sunny, rainy, snowy, dusty, cloudy },
     }
   } catch (error) {
     console.error(error)
