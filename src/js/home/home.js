@@ -118,7 +118,7 @@ async function handleSubmitClick(e) {
 
     // 서버 데이터 기다리지 않고 바로 이동
     location.href = '/src/pages/result/result.html'
-  } catch (error) {
+  } catch(error) {
     console.error('데이터 업로드 실패:', error)
     throw error
   }
@@ -247,18 +247,3 @@ window.addEventListener('DOMContentLoaded', () => {
   // 선택했던 이모지 초기화
   localStorage.removeItem(IMOJI)
 })
-
-const testCheckButton = document.querySelector('.user-test-check')
-
-if (testCheckButton) {
-  testCheckButton.addEventListener('click', (e) => {
-    e.preventDefault() // 페이지 이동 전 저장 작업을 위해 잠시 대기
-
-    // 선택된 값들 스토리지에 저장
-    emojiStorage()
-    saveStorage(IS_CHECKED_KEY, 'true')
-
-    // 서버 데이터 기다리지 않고 바로 이동
-    location.href = '/src/pages/result/result.html'
-  })
-}
