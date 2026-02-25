@@ -155,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
   
-
   // 찜 목록 개별 삭제 (이벤트 위임 활용)
   // bookList 내부에 동적으로 생성되는 삭제 버튼 클릭 시 대응
   bookList?.addEventListener('click', (e) => {
@@ -173,7 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   })
-
 
   // 초기 로드 시 목록이 비어있는지 확인
   checkEmptyList()
