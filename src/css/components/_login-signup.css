@@ -76,6 +76,10 @@
         }
       }
     }
+
+    .autu-login-box {
+      max-width: 340px;
+    }
   }
 
   .join-button {
