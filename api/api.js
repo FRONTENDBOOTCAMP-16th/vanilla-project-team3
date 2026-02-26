@@ -37,6 +37,7 @@ export async function getData(key, value) {
         bookTitle,
         bookCover,
         author,
+        tags,
       }) => {
         return {
           id,
@@ -47,6 +48,7 @@ export async function getData(key, value) {
           bookTitle,
           bookCover,
           author,
+          tags
         }
       },
     )
