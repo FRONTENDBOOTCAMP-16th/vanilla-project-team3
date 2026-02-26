@@ -178,10 +178,10 @@ const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
 
 async function updateHeartToServer(bookId, isAdding) {
   // 1. 로그인 유저 확인
-  const loginData = localStorage.getItem('loginAuthData')
+  const loginData = loadStorage(LOGIN_AUTH_DATA)
   if (!loginData) return
 
-  const userId = JSON.parse(loginData).id
+  const userId = loginData.id
   if (!userId) return
 
   try {
@@ -225,7 +225,7 @@ setTimeout(() => {
 
   saveBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
-      const loginData = localStorage.getItem('loginAuthData')
+      const loginData = loadStorage(LOGIN_AUTH_DATA)
       if (!loginData) return
 
       const imgSrc = btn.querySelector('.book-cover-img').src
