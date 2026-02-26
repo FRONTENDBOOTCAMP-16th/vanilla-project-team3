@@ -1,6 +1,6 @@
 const baseURL = import.meta.env.VITE_BASE_URL
 import { getUser } from '../../../api/api'
-import { ID } from '../../js/constants'
+import { ID, LOGINAUTHDATA } from '../../js/constants'
 
 const form = document.querySelector('.autu-box-container')
 if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.')
@@ -72,7 +72,7 @@ async function isLogin(resultID, resultPassword) {
     const safeUserData = { ...resultID }
     delete safeUserData.password
 
-    localStorage.setItem('loginAuthData', JSON.stringify(safeUserData))
+    localStorage.setItem(LOGINAUTHDATA, JSON.stringify(safeUserData))
     alert('로그인을 성공하였습니다.')
     window.location.href = `${baseURL}/index.html`
   }

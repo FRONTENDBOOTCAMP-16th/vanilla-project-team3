@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
       delBookListBtn.textContent = isEditMode ? '편집 완료' : '찜 항목 삭제'
     }
   })
-  
+
   // 찜 목록 개별 삭제 (이벤트 위임 활용)
   // bookList 내부에 동적으로 생성되는 삭제 버튼 클릭 시 대응
   bookList?.addEventListener('click', (e) => {

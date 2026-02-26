@@ -1,3 +1,5 @@
+import { LOGINAUTHDATA } from '../src/js/constants'
+
 const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
 // 데이터 읽어오기
 
@@ -174,7 +176,7 @@ const UserLogic = {
 // 서비스 조율 및 내보내기(Export)
 // 로컬 스토리지에서 현재 로그인한 유저의 고유 ID를 가져오기
 const getActiveUserId = () => {
-  const userData = localStorage.getItem('loginAuthData')
+  const userData = localStorage.getItem(LOGINAUTHDATA)
   if (!userData) return null
   try {
     const user = JSON.parse(userData)
