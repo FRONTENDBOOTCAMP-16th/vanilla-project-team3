@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 2. 갯수 제한 체크 (최대 6개까지만 허용)
       const isAlreadyActive = btn.classList.contains('heart-active')
-      // const currentCount = bookList ? bookList.querySelectorAll('li').length : 0
+      //const currentCount = bookList ? bookList.querySelectorAll('li').length : 0
 
       const currentCount = bookList
         ? bookList.querySelectorAll('li:not(:empty)').length
