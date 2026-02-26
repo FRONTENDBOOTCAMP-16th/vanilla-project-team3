@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => {
       // 1. 로그인 확인
       if (!isLoggedIn) {
-        if (loginDialog) loginDialog.showModal()
+        loginDialog?.showModal()
         return
       }
 
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentCount = bookList ? bookList.querySelectorAll('li').length : 0
 
       if (!isAlreadyActive && currentCount >= 6) {
-        if (heartLimitDialog) heartLimitDialog.showModal() // 6개 초과 시 찜 제한 안내 팝업
+        heartLimitDialog?.showModal() // 6개 초과 시 찜 제한 안내 팝업
       } else {
         toggleHeart(btn)
       }
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (changePWBtn) {
     changePWBtn.addEventListener('click', () => {
       resetPWForm() // 열 때마다 이전 입력 기록 초기화
-      if (changePWDialog) changePWDialog.showModal()
+      changePWDialog?.showModal()
     })
   }
 
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       alert('비밀번호가 변경되었습니다.')
-      if (changePWDialog) changePWDialog.close()
+      changePWDialog?.close()
     })
   }
 
@@ -148,36 +148,31 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   // 찜 목록 편집 모드 전환 (삭제 버튼 노출/비노출)
-  if (delBookListBtn) {
-    delBookListBtn.addEventListener('click', (e) => {
-      e.preventDefault()
-      if (myPageDialog) {
-        // .edit-mode 클래스를 토글하여 CSS로 삭제 버튼 등을 제어
-        const isEditMode = myPageDialog.classList.toggle('edit-mode')
-        delBookListBtn.textContent = isEditMode ? '편집 완료' : '찜 항목 삭제'
-      }
-    })
-  }
-
+  delBookListBtn?.addEventListener('click', (e) => {
+    e.preventDefault()
+    if (myPageDialog) {
+      const isEditMode = myPageDialog.classList.toggle('edit-mode')
+      delBookListBtn.textContent = isEditMode ? '편집 완료' : '찜 항목 삭제'
+    }
+  })
+  
   // 찜 목록 개별 삭제 (이벤트 위임 활용)
   // bookList 내부에 동적으로 생성되는 삭제 버튼 클릭 시 대응
-  if (bookList) {
-    bookList.addEventListener('click', (e) => {
-      const delBtn = e.target.closest('.delete-item-button')
-      if (delBtn) {
-        const targetLi = delBtn.closest('li')
-        if (targetLi) {
-          // 투명도 애니메이션 후 요소 제거
-          targetLi.style.opacity = '0'
-          targetLi.style.transition = '0.3s'
-          setTimeout(() => {
-            targetLi.remove()
-            checkEmptyList() // 삭제 후 목록이 비었는지 확인
-          }, 300)
-        }
+  bookList?.addEventListener('click', (e) => {
+    const delBtn = e.target.closest('.delete-item-button')
+    if (delBtn) {
+      const targetLi = delBtn.closest('li')
+      if (targetLi) {
+        // 투명도 애니메이션 후 요소 제거
+        targetLi.style.opacity = '0'
+        targetLi.style.transition = '0.3s'
+        setTimeout(() => {
+          targetLi.remove()
+          checkEmptyList() // 삭제 후 목록이 비었는지 확인
+        }, 300)
       }
-    })
-  }
+    }
+  })
 
   // 초기 로드 시 목록이 비어있는지 확인
   checkEmptyList()
