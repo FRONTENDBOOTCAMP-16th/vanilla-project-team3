@@ -46,8 +46,6 @@ function applyDisableIfChecked() {
 
 // 날씨,기분 점수 계산
 // TODO =====================================================
-//  희연님 여기 scoreBook안에 명세서35번 기능 추가해주시면 되요
-//  다하신뒤에 혹시 제 기능이랑 희연님 기능 둘다 작동되는지도 확인해주세요 :)
 function scoreBook(book, mood, weather) {
   let score = 0
   // 현재 기분 점수
@@ -55,7 +53,27 @@ function scoreBook(book, mood, weather) {
   // 현재 날씨 점수
   score += scoreCalculate(book, 'weather', weather)
 
+  // 좋아요 기반 장르 선호도 점수
+  const preference = JSON.parse(localStorage.getItem('genrePreference') || '{}')
+  const tags = book.tags || []
+  tags.forEach((tag) => {
+    if (preference[tag]) {
+      score += preference[tag] * SCORE_POINT
+    }
+  })
+
   return score
+}
+
+// ===== 좋아요 저장 =====
+export function updateGenrePreference(tags, change) {
+  const preference = JSON.parse(localStorage.getItem('genrePreference') || '{}')
+  tags.forEach((tag) => {
+    preference[tag] = (preference[tag] || 0) + change
+    if (preference[tag] <= 0) delete preference[tag]
+  })
+  localStorage.setItem('genrePreference', JSON.stringify(preference))
+  console.log('장르 선호도 업데이트:', preference)
 }
 
 function scoreCalculate(book, key, value) {

@@ -1,6 +1,7 @@
 import { getData, getUser } from '../../../api/api'
 import { EMAIL } from '../constants'
 import { initSession } from '../../pages/login/loginSession'
+import { updateGenrePreference } from '../../pages/result/result'
 
 const { isLoggedIn, currentUser } = initSession()
 /**
@@ -82,12 +83,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 2. 갯수 제한 체크 (최대 6개까지만 허용)
       const isAlreadyActive = btn.classList.contains('heart-active')
-      const currentCount = bookList ? bookList.querySelectorAll('li').length : 0
+      // const currentCount = bookList ? bookList.querySelectorAll('li').length : 0
+
+      const currentCount = bookList
+        ? bookList.querySelectorAll('li:not(:empty)').length
+        : 0
 
       if (!isAlreadyActive && currentCount >= 6) {
         heartLimitDialog?.showModal() // 6개 초과 시 찜 제한 안내 팝업
       } else {
         toggleHeart(btn)
+
+        const imgSrc = btn.querySelector('.book-cover-img').src
+        const currentData = JSON.parse(
+          localStorage.getItem('selectedBookList') || '[]',
+        )
+        const book = currentData.find((b) => b.bookCover === imgSrc)
+
+        if (book && book.tags) {
+          const nowActive = btn.classList.contains('heart-active')
+          updateGenrePreference(book.tags, nowActive ? 1 : -1)
+        }
       }
     })
   })
@@ -155,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
       delBookListBtn.textContent = isEditMode ? '편집 완료' : '찜 항목 삭제'
     }
   })
-  
+
   // 찜 목록 개별 삭제 (이벤트 위임 활용)
   // bookList 내부에 동적으로 생성되는 삭제 버튼 클릭 시 대응
   bookList?.addEventListener('click', (e) => {
@@ -241,3 +257,26 @@ function updateUserDiSplay() {
     getHeartList()
   }
 }
+
+setTimeout(() => {
+  const saveBtns = document.querySelectorAll('.save-button')
+
+  saveBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!isLoggedIn) return
+
+      toggleHeart(btn)
+
+      const imgSrc = btn.querySelector('.book-cover-img').src
+      const cachedData = JSON.parse(
+        localStorage.getItem('cachedBookData') || '[]',
+      )
+      const book = cachedData.find((b) => b.bookCover === imgSrc)
+
+      if (book && book.tags) {
+        const isActive = btn.classList.contains('heart-active')
+        updateGenrePreference(book.tags, isActive ? 1 : -1)
+      }
+    })
+  })
+}, 1500)
