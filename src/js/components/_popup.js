@@ -82,7 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 2. 갯수 제한 체크 (최대 6개까지만 허용)
       const isAlreadyActive = btn.classList.contains('heart-active')
-      const currentCount = bookList ? bookList.querySelectorAll('li').length : 0
+      //const currentCount = bookList ? bookList.querySelectorAll('li').length : 0
+
+      const currentCount = bookList ? bookList.querySelectorAll('li:not(:empty)').length : 0
 
       if (!isAlreadyActive && currentCount >= 6) {
         heartLimitDialog?.showModal() // 6개 초과 시 찜 제한 안내 팝업

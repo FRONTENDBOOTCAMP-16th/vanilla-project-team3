@@ -10,6 +10,7 @@ import {
 import { getData, getUser } from '../../../api/api.js'
 import { EMAIL } from '../../js/constants/index.js'
 
+
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
 
@@ -46,8 +47,6 @@ function applyDisableIfChecked() {
 
 // 날씨,기분 점수 계산
 // TODO =====================================================
-//  희연님 여기 scoreBook안에 명세서35번 기능 추가해주시면 되요
-//  다하신뒤에 혹시 제 기능이랑 희연님 기능 둘다 작동되는지도 확인해주세요 :)
 function scoreBook(book, mood, weather) {
   let score = 0
   // 현재 기분 점수
@@ -172,3 +171,72 @@ window.addEventListener('DOMContentLoaded', async () => {
     hideLoadingDisplay()
   }
 })
+
+
+// ---------------------- 찜 목록 userAPI 서버에 보내기 ---------------------- 
+
+const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
+
+async function updateHeartToServer(bookId, isAdding) {
+  // 1. 로그인 유저 확인
+  const loginData = localStorage.getItem('loginAuthData')
+  if (!loginData) return
+
+  const userId = JSON.parse(loginData).id
+  if (!userId) return
+
+  try {
+    // 2. 서버에서 현재 유저 데이터 가져오기
+    const response = await fetch(`${VITE_API_BASE_URL}/todayPhrase/user/${userId}`)
+    if (!response.ok) return
+    const userData = await response.json()
+
+    // 3. heart 배열 업데이트
+    let heart = Array.isArray(userData.heart) ? [...userData.heart] : []
+
+    if (isAdding) {
+      if (!heart.includes(String(bookId))) {
+        heart.push(String(bookId))
+      }
+    } else {
+      heart = heart.filter((id) => id !== String(bookId))
+    }
+
+    // 4. 서버에 PUT 요청
+    await fetch(`${VITE_API_BASE_URL}/todayPhrase/user/${userId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...userData,
+        heart: heart,
+      }),
+    })
+
+    console.log('찜 목록 업데이트:', heart)
+  } catch (error) {
+    console.error('찜 서버 업데이트 실패:', error)
+  }
+}
+
+// 하트 버튼 클릭 이벤트
+setTimeout(() => {
+  const saveBtns = document.querySelectorAll('.save-button')
+
+  saveBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const loginData = localStorage.getItem('loginAuthData')
+      if (!loginData) return
+
+      const imgSrc = btn.querySelector('.book-cover-img').src
+      const cachedData = JSON.parse(
+        localStorage.getItem('cachedBookData') || '[]'
+      )
+      const book = cachedData.find((b) => b.bookCover === imgSrc)
+
+      if (book) {
+        const isActive = btn.classList.contains('heart-active')
+        updateHeartToServer(book.id, isActive)
+      }
+    })
+  })
+}, 1500)
