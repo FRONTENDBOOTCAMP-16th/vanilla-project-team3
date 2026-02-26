@@ -19,18 +19,31 @@ const doubleCheckedGroups = container.querySelectorAll(
 const loadEmail = loadStorage(LOGIN_AUTH_DATA)
 const buttons = container.querySelectorAll('[data-checked="doubleChecked"]')
 const allBooks = await getData()
-const user = await getUser(EMAIL, loadEmail.email)
-const mood = user.mood_counts
-const weather = user.weather_counts
 
 const SCORE_POINT = 1
 
 // 페이지 초기화
 init()
 
-function init() {
+async function init() {
   applyDisableIfChecked()
-  getRecommendations(allBooks, mood, weather)
+
+  if (!loadStorage(LOGIN_AUTH_DATA)) {
+    return
+  }
+
+  try {
+    const email = loadEmail.email
+    if (!email) throw new Error('이메일 정보가 없습니다.')
+
+    const user = await getUser(EMAIL, email)
+    const mood = user.mood_counts || {}
+    const weather = user.weather_counts || {}
+
+    getRecommendations(allBooks, mood, weather)
+  } catch (error) {
+    console.error('유저 정보를 불러오는데 실패했습니다:', error)
+  }
 }
 
 function applyDisableIfChecked() {
@@ -46,7 +59,6 @@ function applyDisableIfChecked() {
 }
 
 // 날씨,기분 점수 계산
-// TODO =====================================================
 function scoreBook(book, mood, weather) {
   let score = 0
   // 현재 기분 점수
