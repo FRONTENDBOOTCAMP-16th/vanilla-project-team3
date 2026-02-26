@@ -8,7 +8,7 @@ import {
   hideLoadingDisplay,
 } from '../../js/components/_imageLoading.js'
 import { getData, getUser } from '../../../api/api.js'
-import { EMAIL, LOGINAUTHDATA } from '../../js/constants/index.js'
+import { EMAIL, LOGIN_AUTH_DATA } from '../../js/constants/index.js'
 
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
@@ -16,7 +16,7 @@ if (!container) throw new Error('문서에서 .container 요소를 찾을 수 �
 const doubleCheckedGroups = container.querySelectorAll(
   '[data-checked="doubleChecked"]',
 )
-const loadEmail = loadStorage(LOGINAUTHDATA)
+const loadEmail = loadStorage(LOGIN_AUTH_DATA)
 const buttons = container.querySelectorAll('[data-checked="doubleChecked"]')
 const allBooks = await getData()
 const user = await getUser(EMAIL, loadEmail.email)

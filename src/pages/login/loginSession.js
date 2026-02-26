@@ -1,10 +1,10 @@
-import { LOGINAUTHDATA } from '../../js/constants'
+import { LOGIN_AUTH_DATA } from '../../js/constants'
 
 export let isLoggedIn = false
 export let currentUser = null
 
 export function initSession() {
-  const userData = localStorage.getItem(LOGINAUTHDATA)
+  const userData = localStorage.getItem(LOGIN_AUTH_DATA)
 
   if (userData) {
     isLoggedIn = true
@@ -17,7 +17,7 @@ export function initSession() {
 }
 
 export function logout() {
-  localStorage.removeItem(LOGINAUTHDATA)
+  localStorage.removeItem(LOGIN_AUTH_DATA)
   isLoggedIn = false
   currentUser = null
 

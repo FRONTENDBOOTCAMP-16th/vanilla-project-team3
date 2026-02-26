@@ -1,10 +1,10 @@
 import { getData, getUser } from '../../../api/api'
-import { EMAIL } from '../constants'
+import { EMAIL, LOGIN_AUTH_DATA } from '../constants'
 import { initSession } from '../../pages/login/loginSession'
 import { loadStorage } from '../utils/storage'
 
 const { isLoggedIn, currentUser } = initSession()
-const loadEmail = loadStorage('loginAuthData')
+const loadEmail = loadStorage(LOGIN_AUTH_DATA)
 
 /**
 //  * [전역 상태 설정]
