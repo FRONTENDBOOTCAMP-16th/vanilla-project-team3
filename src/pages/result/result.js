@@ -10,7 +10,6 @@ import {
 import { getData, getUser } from '../../../api/api.js'
 import { EMAIL } from '../../js/constants/index.js'
 
-
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
 
@@ -172,8 +171,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 })
 
-
-// ---------------------- 찜 목록 userAPI 서버에 보내기 ---------------------- 
+// ---------------------- 찜 목록 userAPI 서버에 보내기 ----------------------
 
 const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
 
@@ -187,7 +185,9 @@ async function updateHeartToServer(bookId, isAdding) {
 
   try {
     // 2. 서버에서 현재 유저 데이터 가져오기
-    const response = await fetch(`${VITE_API_BASE_URL}/todayPhrase/user/${userId}`)
+    const response = await fetch(
+      `${VITE_API_BASE_URL}/todayPhrase/user/${userId}`,
+    )
     if (!response.ok) return
     const userData = await response.json()
 
@@ -229,7 +229,7 @@ setTimeout(() => {
 
       const imgSrc = btn.querySelector('.book-cover-img').src
       const cachedData = JSON.parse(
-        localStorage.getItem('cachedBookData') || '[]'
+        localStorage.getItem('cachedBookData') || '[]',
       )
       const book = cachedData.find((b) => b.bookCover === imgSrc)
 

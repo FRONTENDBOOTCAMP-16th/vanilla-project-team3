@@ -84,7 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const isAlreadyActive = btn.classList.contains('heart-active')
       //const currentCount = bookList ? bookList.querySelectorAll('li').length : 0
 
-      const currentCount = bookList ? bookList.querySelectorAll('li:not(:empty)').length : 0
+      const currentCount = bookList
+        ? bookList.querySelectorAll('li:not(:empty)').length
+        : 0
 
       if (!isAlreadyActive && currentCount >= 6) {
         heartLimitDialog?.showModal() // 6개 초과 시 찜 제한 안내 팝업
@@ -157,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
       delBookListBtn.textContent = isEditMode ? '편집 완료' : '찜 항목 삭제'
     }
   })
-  
+
   // 찜 목록 개별 삭제 (이벤트 위임 활용)
   // bookList 내부에 동적으로 생성되는 삭제 버튼 클릭 시 대응
   bookList?.addEventListener('click', (e) => {
