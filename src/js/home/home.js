@@ -1,14 +1,14 @@
 const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
-import { removeStorage } from '../utils'
+import { loadStorage, removeStorage } from '../utils'
 import { saveStorage } from '/src/js/utils/index.js'
 import { IS_CHECKED_KEY, IMOJI } from '/src/js/constants/index.js'
 import { getData, getUser, putUser } from '../../../api/api.js'
-import { EMAIL } from '../constants/index.js'
+import { EMAIL, LOGIN_AUTH_DATA } from '../constants/index.js'
 import { initSession, logout } from '../../pages/login/loginSession.js'
 
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
-
+const loadEmail = loadStorage(LOGIN_AUTH_DATA)
 const submitButton = container.querySelector('.user-test-check')
 const noti = document.querySelector('.emoji-noti')
 const doubleCheckedGroups = document.querySelectorAll(
@@ -159,8 +159,7 @@ async function emojiTotalList() {
   })
 
   // getUser로 날씨/감정 가져오기
-  // 현재 유저 로그인 기능이 없어서 일단 임시로 아무 이메일로 호출하여 테스트함
-  const user = await getUser(EMAIL, 'user2@example.com')
+  const user = await getUser(EMAIL, loadEmail.email)
   const updateUrl = `${VITE_API_BASE_URL}/todayPhrase/user/${user.id}`
   const weather = user.weather_counts
   const mood = user.mood_counts
