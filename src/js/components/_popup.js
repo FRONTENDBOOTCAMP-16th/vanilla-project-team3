@@ -1,6 +1,7 @@
 import { getData, getUser } from '../../../api/api'
 import { EMAIL, LOGIN_AUTH_DATA } from '../constants'
 import { initSession } from '../../pages/login/loginSession'
+import { updateGenrePreference } from '../../pages/result/result'
 import { loadStorage } from '../utils/storage'
 
 const { isLoggedIn, currentUser } = initSession()
@@ -95,6 +96,17 @@ document.addEventListener('DOMContentLoaded', () => {
         heartLimitDialog?.showModal() // 6개 초과 시 찜 제한 안내 팝업
       } else {
         toggleHeart(btn)
+
+        const imgSrc = btn.querySelector('.book-cover-img').src
+        const currentData = JSON.parse(
+          localStorage.getItem('selectedBookList') || '[]',
+        )
+        const book = currentData.find((b) => b.bookCover === imgSrc)
+
+        if (book && book.tags) {
+          const nowActive = btn.classList.contains('heart-active')
+          updateGenrePreference(book.tags, nowActive ? 1 : -1)
+        }
       }
     })
   })
@@ -245,3 +257,26 @@ function updateUserDiSplay() {
     getHeartList()
   }
 }
+
+setTimeout(() => {
+  const saveBtns = document.querySelectorAll('.save-button')
+
+  saveBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!isLoggedIn) return
+
+      toggleHeart(btn)
+
+      const imgSrc = btn.querySelector('.book-cover-img').src
+      const cachedData = JSON.parse(
+        localStorage.getItem('cachedBookData') || '[]',
+      )
+      const book = cachedData.find((b) => b.bookCover === imgSrc)
+
+      if (book && book.tags) {
+        const isActive = btn.classList.contains('heart-active')
+        updateGenrePreference(book.tags, isActive ? 1 : -1)
+      }
+    })
+  })
+}, 1500)

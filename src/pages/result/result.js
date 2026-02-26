@@ -54,7 +54,27 @@ function scoreBook(book, mood, weather) {
   // 현재 날씨 점수
   score += scoreCalculate(book, 'weather', weather)
 
+  // 좋아요 기반 장르 선호도 점수
+  const preference = JSON.parse(localStorage.getItem('genrePreference') || '{}')
+  const tags = book.tags || []
+  tags.forEach((tag) => {
+    if (preference[tag]) {
+      score += preference[tag] * SCORE_POINT
+    }
+  })
+
   return score
+}
+
+// ===== 좋아요 저장 =====
+export function updateGenrePreference(tags, change) {
+  const preference = JSON.parse(localStorage.getItem('genrePreference') || '{}')
+  tags.forEach((tag) => {
+    preference[tag] = (preference[tag] || 0) + change
+    if (preference[tag] <= 0) delete preference[tag]
+  })
+  localStorage.setItem('genrePreference', JSON.stringify(preference))
+  console.log('장르 선호도 업데이트:', preference)
 }
 
 function scoreCalculate(book, key, value) {
