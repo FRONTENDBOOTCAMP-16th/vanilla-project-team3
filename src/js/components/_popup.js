@@ -1,7 +1,12 @@
-import { getData } from '../../../api/api'
+import { getData, getUser } from '../../../api/api'
+import { EMAIL, LOGIN_AUTH_DATA } from '../constants'
 import { initSession } from '../../pages/login/loginSession'
+import { updateGenrePreference } from '../../pages/result/result'
+import { loadStorage } from '../utils/storage'
 
 const { isLoggedIn, currentUser } = initSession()
+const loadEmail = loadStorage(LOGIN_AUTH_DATA)
+
 /**
 //  * [전역 상태 설정]
 //  */
@@ -75,18 +80,33 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => {
       // 1. 로그인 확인
       if (!isLoggedIn) {
-        if (loginDialog) loginDialog.showModal()
+        loginDialog?.showModal()
         return
       }
 
       // 2. 갯수 제한 체크 (최대 6개까지만 허용)
       const isAlreadyActive = btn.classList.contains('heart-active')
-      const currentCount = bookList ? bookList.querySelectorAll('li').length : 0
+      //const currentCount = bookList ? bookList.querySelectorAll('li').length : 0
+
+      const currentCount = bookList
+        ? bookList.querySelectorAll('li:not(:empty)').length
+        : 0
 
       if (!isAlreadyActive && currentCount >= 6) {
-        if (heartLimitDialog) heartLimitDialog.showModal() // 6개 초과 시 찜 제한 안내 팝업
+        heartLimitDialog?.showModal() // 6개 초과 시 찜 제한 안내 팝업
       } else {
         toggleHeart(btn)
+
+        const imgSrc = btn.querySelector('.book-cover-img').src
+        const currentData = JSON.parse(
+          localStorage.getItem('selectedBookList') || '[]',
+        )
+        const book = currentData.find((b) => b.bookCover === imgSrc)
+
+        if (book && book.tags) {
+          const nowActive = btn.classList.contains('heart-active')
+          updateGenrePreference(book.tags, nowActive ? 1 : -1)
+        }
       }
     })
   })
@@ -95,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (changePWBtn) {
     changePWBtn.addEventListener('click', () => {
       resetPWForm() // 열 때마다 이전 입력 기록 초기화
-      if (changePWDialog) changePWDialog.showModal()
+      changePWDialog?.showModal()
     })
   }
 
@@ -118,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       alert('비밀번호가 변경되었습니다.')
-      if (changePWDialog) changePWDialog.close()
+      changePWDialog?.close()
     })
   }
 
@@ -147,36 +167,31 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   // 찜 목록 편집 모드 전환 (삭제 버튼 노출/비노출)
-  if (delBookListBtn) {
-    delBookListBtn.addEventListener('click', (e) => {
-      e.preventDefault()
-      if (myPageDialog) {
-        // .edit-mode 클래스를 토글하여 CSS로 삭제 버튼 등을 제어
-        const isEditMode = myPageDialog.classList.toggle('edit-mode')
-        delBookListBtn.textContent = isEditMode ? '편집 완료' : '찜 항목 삭제'
-      }
-    })
-  }
+  delBookListBtn?.addEventListener('click', (e) => {
+    e.preventDefault()
+    if (myPageDialog) {
+      const isEditMode = myPageDialog.classList.toggle('edit-mode')
+      delBookListBtn.textContent = isEditMode ? '편집 완료' : '찜 항목 삭제'
+    }
+  })
 
   // 찜 목록 개별 삭제 (이벤트 위임 활용)
   // bookList 내부에 동적으로 생성되는 삭제 버튼 클릭 시 대응
-  if (bookList) {
-    bookList.addEventListener('click', (e) => {
-      const delBtn = e.target.closest('.delete-item-button')
-      if (delBtn) {
-        const targetLi = delBtn.closest('li')
-        if (targetLi) {
-          // 투명도 애니메이션 후 요소 제거
-          targetLi.style.opacity = '0'
-          targetLi.style.transition = '0.3s'
-          setTimeout(() => {
-            targetLi.remove()
-            checkEmptyList() // 삭제 후 목록이 비었는지 확인
-          }, 300)
-        }
+  bookList?.addEventListener('click', (e) => {
+    const delBtn = e.target.closest('.delete-item-button')
+    if (delBtn) {
+      const targetLi = delBtn.closest('li')
+      if (targetLi) {
+        // 투명도 애니메이션 후 요소 제거
+        targetLi.style.opacity = '0'
+        targetLi.style.transition = '0.3s'
+        setTimeout(() => {
+          targetLi.remove()
+          checkEmptyList() // 삭제 후 목록이 비었는지 확인
+        }, 300)
       }
-    })
-  }
+    }
+  })
 
   // 초기 로드 시 목록이 비어있는지 확인
   checkEmptyList()
@@ -184,15 +199,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 찜 리스트 호출
 async function getHeartList() {
-  // TODO
-  // 유저아이디 동적으로 가지고 와야함 <<<<<<< 일단 임시로 불러옴 ( 로그인 하는 아이디에 따라 바뀌어야함 )
-  // 여기에 해당 로그인한 유저 EMAIL값 넣어야함
+  const user = await getUser(EMAIL, loadEmail.email)
+  const heart = await user.heart
   if (!isLoggedIn || !currentUser) {
     console.log('비회원 상태이므로 찜 목록을 불러올 수 없습니다.')
     return
   }
 
-  const heart = await currentUser.heart
   const heartID = heart.map((item) => Number(item.trim()))
 
   // 하트찍은 책 ID 매칭
@@ -223,7 +236,7 @@ async function getHeartList() {
           />
         </svg>
       </button>
-      <a data-book="book-item-${index}" href="${currentBook.bookstoreUrl}" rel="noopener noreferrer">
+      <a data-book="book-item-${index}" href="${currentBook.bookstoreUrl}" rel="noopener noreferrer" target="_blank">
         <img src="${currentBook.bookCover}" alt="${currentBook.author}" />
       </a>
     `
@@ -244,3 +257,26 @@ function updateUserDiSplay() {
     getHeartList()
   }
 }
+
+setTimeout(() => {
+  const saveBtns = document.querySelectorAll('.save-button')
+
+  saveBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!isLoggedIn) return
+
+      toggleHeart(btn)
+
+      const imgSrc = btn.querySelector('.book-cover-img').src
+      const cachedData = JSON.parse(
+        localStorage.getItem('cachedBookData') || '[]',
+      )
+      const book = cachedData.find((b) => b.bookCover === imgSrc)
+
+      if (book && book.tags) {
+        const isActive = btn.classList.contains('heart-active')
+        updateGenrePreference(book.tags, isActive ? 1 : -1)
+      }
+    })
+  })
+}, 1500)

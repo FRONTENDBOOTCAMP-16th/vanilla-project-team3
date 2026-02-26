@@ -1,7 +1,9 @@
+const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
 import { removeStorage } from '../utils'
 import { saveStorage } from '/src/js/utils/index.js'
 import { IS_CHECKED_KEY, IMOJI } from '/src/js/constants/index.js'
-import { getData } from '../../../api/api.js'
+import { getData, getUser, putUser } from '../../../api/api.js'
+import { EMAIL } from '../constants/index.js'
 import { initSession, logout } from '../../pages/login/loginSession.js'
 
 const container = document.querySelector('.container')
@@ -94,21 +96,33 @@ function disableSubmitButtonState() {
 }
 
 // 결과보기 버튼을 눌렀을 때
-function handleSubmitClick(e) {
+async function handleSubmitClick(e) {
+  e.preventDefault()
+  e.stopImmediatePropagation()
   const { weather, mood } = getSelected()
 
   if (!weather || !mood) {
-    e.preventDefault()
-    e.stopImmediatePropagation()
     showNoti('기분과 감정을 최소 한개이상 골라주세요')
     return
   }
 
-  // 비회원 페이지로 이동할 때 로컬 스토리지에 키 설정
-  saveStorage(IS_CHECKED_KEY, 'true')
+  try {
+    await emojiTotalList()
 
-  // 체크된 버튼이 어느 감정인지 스토리지에 기록 넘겨줌
-  emojiStorage()
+    // 비회원 페이지로 이동할 때 로컬 스토리지에 키 설정
+    saveStorage(IS_CHECKED_KEY, 'true')
+
+    // 체크된 버튼이 어느 감정인지 스토리지에 기록 넘겨줌
+    emojiStorage()
+
+    console.log('서버에 데이터 업로드 성공!')
+
+    // 서버 데이터 기다리지 않고 바로 이동
+    location.href = '/src/pages/result/result.html'
+  } catch (error) {
+    console.error('데이터 업로드 실패:', error)
+    throw error
+  }
 }
 
 function handleGroupChange(e) {
@@ -132,6 +146,41 @@ function limitToTwoChecked(groupEl, changedInput) {
   // 초과면 방금 누른 것 되돌림
   changedInput.checked = false
   return false
+}
+
+// 이때까지 선택한 감정들 JSON 데이터로 추가
+async function emojiTotalList() {
+  // 체크박스에 뭘 체크했는지 가져오기
+  const checkImojis = container.querySelectorAll(
+    '.checkbox-button-area input:checked',
+  )
+  const imojis = [...checkImojis].map((item) => {
+    return item.dataset.value
+  })
+
+  // getUser로 날씨/감정 가져오기
+  // 현재 유저 로그인 기능이 없어서 일단 임시로 아무 이메일로 호출하여 테스트함
+  const user = await getUser(EMAIL, 'user2@example.com')
+  const updateUrl = `${VITE_API_BASE_URL}/todayPhrase/user/${user.id}`
+  const weather = user.weather_counts
+  const mood = user.mood_counts
+  const updateData = {
+    weather_counts: { ...weather },
+    mood_counts: { ...mood },
+  }
+
+  // 체크한 감정에 담긴 각각의 data-value를 꺼내 감정 선택한것에 +1 카운트 해줌
+  imojis.forEach((item) => {
+    if (item in updateData.weather_counts) {
+      updateData.weather_counts[item] += 1
+    }
+    if (item in updateData.mood_counts) {
+      updateData.mood_counts[item] += 1
+    }
+  })
+
+  // 위에서 감정 선택한 데이터들을 JSON으로 업데이트
+  await putUser(updateUrl, updateData)
 }
 
 // 체크된것들을 로컬스토리지에 기록 남겨주는 함수
@@ -164,6 +213,15 @@ function showNoti(message) {
     noti.classList.remove('noti-active')
     noti.setAttribute('aria-hidden', 'true')
   }, NOTI_HIDE_DELAY)
+}
+
+// 개선 예시: 페이지 언로드 시 타이머 정리
+function cleanupTimers() {
+  if (notiTimeoutId) {
+    clearTimeout(notiTimeoutId)
+    notiTimeoutId = null
+  }
+  // 다른 타이머도 정리
 }
 
 // 날씨와 감정 선택
@@ -199,6 +257,8 @@ window.addEventListener('DOMContentLoaded', () => {
   // 선택했던 이모지 초기화
   localStorage.removeItem(IMOJI)
 })
+
+globalThis.addEventListener('beforeunload', cleanupTimers)
 
 const testCheckButton = document.querySelector('.user-test-check')
 
