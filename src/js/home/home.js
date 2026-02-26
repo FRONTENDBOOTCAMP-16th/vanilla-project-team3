@@ -107,7 +107,8 @@ async function handleSubmitClick(e) {
   }
 
   try {
-    await emojiTotalList()
+    // 회원일때만 감정/날씨 저장
+    loadStorage(LOGIN_AUTH_DATA) ? await emojiTotalList() : ''
 
     // 비회원 페이지로 이동할 때 로컬 스토리지에 키 설정
     saveStorage(IS_CHECKED_KEY, 'true')
