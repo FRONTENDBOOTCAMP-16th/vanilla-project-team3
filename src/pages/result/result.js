@@ -57,66 +57,94 @@ if (loadStorage(IMOJI)) {
 window.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search)
   const sharedTitle = urlParams.get('title')
+  const sharedIds = urlParams.get('ids')
 
   let currentData = null
 
   try {
-    // 공유받은 링크로 들어온 경우
+    // 1. 공유받은 링크로 접속했을 때
     if (sharedTitle) {
-      currentData = [
-        {
-          bookTitle: sharedTitle,
-          author: urlParams.get('author'),
-          phrase: urlParams.get('phrase'),
-          bookCover: urlParams.get('bookCover'),
-          bookstoreUrl: urlParams.get('url'),
-        },
-      ]
+      // 로컬스토리지에 데이터가 없으면(공유링크를 타고 들어온 브라우저) 서버에서 새로 가져옴
+      let allData = JSON.parse(localStorage.getItem('cachedBookData'))
+      if (!allData) {
+        allData = await getData()
+        if (allData)
+          localStorage.setItem('cachedBookData', JSON.stringify(allData))
+      }
+
+      if (sharedIds && allData) {
+        const idArray = sharedIds.split(',')
+        // ID를 비교할 때 타입 에러 방지를 위해 둘 다 String으로 변환
+        currentData = idArray
+          .map((id) => allData.find((book) => String(book.id) === String(id)))
+          .filter(Boolean)
+      }
+
+      // 만약 데이터를 못 찾았다면(비상시) URL 정보로 1권이라도 생성
+      if (!currentData || currentData.length === 0) {
+        currentData = [
+          {
+            bookTitle: sharedTitle,
+            author: urlParams.get('author'),
+            phrase: urlParams.get('phrase'),
+            bookCover: urlParams.get('bookCover'),
+            bookstoreUrl: urlParams.get('bookstoreUrl'),
+          },
+        ]
+      }
+
       displayPhraseResult(currentData)
-    } else {
-      showLoadingDisplay()
+      resultShareEvent(currentData)
+      return
+    }
 
-      const savedLocalData = localStorage.getItem('selectedBookList')
-
-      if (savedLocalData) {
-        currentData = JSON.parse(savedLocalData)
-      } else {
-        const savedEmoji = JSON.parse(localStorage.getItem(IMOJI))
-
-        if (savedEmoji) {
-          let allData = null
-          const cachedData = localStorage.getItem('cachedBookData')
-          allData = cachedData ? JSON.parse(cachedData) : await getData()
-
-          const filtered = filterData(allData, savedEmoji, savedEmoji)
-          currentData = getRandomData(filtered, 4)
-
-          localStorage.setItem('selectedBookList', JSON.stringify(currentData))
-        }
-      }
-
-      // 데이터가 준비되었다면 화면에 뿌리기
-      if (currentData) {
-        displayPhraseResult(currentData)
-      } else {
-        // 아무 데이터도 없다면 홈으로 이동
-        alert('저장된 데이터가 존재하지 않습니다.')
-        location.href = '/index.html'
-        return
-      }
-
+    // 2. 공유가 아닐 때 (직접 확인 또는 새로고침)
+    showLoadingDisplay()
+    const savedLocalData = localStorage.getItem('selectedBookList')
+    if (savedLocalData) {
+      // 새로고침 한 경우 (로컬 데이터 존재)
+      currentData = JSON.parse(savedLocalData)
+      displayPhraseResult(currentData)
+      resultShareEvent(currentData)
       hideLoadingDisplay()
+      return
+    } else {
+      // 처음 결과를 보는 경우
+      const savedEmoji = JSON.parse(localStorage.getItem(IMOJI))
+      if (savedEmoji) {
+        let allData = null
+        const cachedData = localStorage.getItem('cachedBookData')
+        allData = cachedData ? JSON.parse(cachedData) : await getData()
+
+        const filtered = filterData(allData, savedEmoji, savedEmoji)
+        currentData = getRandomData(filtered, 4)
+
+        localStorage.setItem('selectedBookList', JSON.stringify(currentData))
+        displayPhraseResult(currentData)
+        resultShareEvent(currentData)
+      }
     }
 
-    // 공유 버튼
-    const shareButton = document.querySelector('.share-button')
-    if (shareButton && currentData) {
-      shareButton.addEventListener('click', () => {
-        shareResult(currentData[0])
-      })
+    if (!currentData) {
+      alert('저장된 데이터가 존재하지 않습니다.')
+      location.href = '/index.html'
+      return
     }
+
+    hideLoadingDisplay()
   } catch (error) {
     console.error('데이터 로드 중 오류 발생:', error)
     hideLoadingDisplay()
   }
 })
+
+function resultShareEvent(currentData) {
+  const shareButton = document.querySelector('.share-button')
+
+  if (shareButton && currentData) {
+    shareButton.onclick = (e) => {
+      e.preventDefault()
+      shareResult(currentData)
+    }
+  }
+}
