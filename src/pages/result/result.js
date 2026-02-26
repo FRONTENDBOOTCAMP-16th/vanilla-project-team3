@@ -8,7 +8,7 @@ import {
   hideLoadingDisplay,
 } from '../../js/components/_imageLoading.js'
 import { getData, getUser } from '../../../api/api.js'
-import { EMAIL } from '../../js/constants/index.js'
+import { EMAIL, LOGINAUTHDATA } from '../../js/constants/index.js'
 
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
@@ -16,9 +16,10 @@ if (!container) throw new Error('문서에서 .container 요소를 찾을 수 �
 const doubleCheckedGroups = container.querySelectorAll(
   '[data-checked="doubleChecked"]',
 )
+const loadEmail = loadStorage(LOGINAUTHDATA)
 const buttons = container.querySelectorAll('[data-checked="doubleChecked"]')
 const allBooks = await getData()
-const user = await getUser(EMAIL, 'user2@example.com')
+const user = await getUser(EMAIL, loadEmail.email)
 const mood = user.mood_counts
 const weather = user.weather_counts
 
@@ -48,6 +49,7 @@ function applyDisableIfChecked() {
 // TODO =====================================================
 //  희연님 여기 scoreBook안에 명세서35번 기능 추가해주시면 되요
 //  다하신뒤에 혹시 제 기능이랑 희연님 기능 둘다 작동되는지도 확인해주세요 :)
+
 function scoreBook(book, mood, weather) {
   let score = 0
   // 현재 기분 점수
