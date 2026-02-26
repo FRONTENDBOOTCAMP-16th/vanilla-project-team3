@@ -48,7 +48,7 @@ export async function getData(key, value) {
           bookTitle,
           bookCover,
           author,
-          tags
+          tags,
         }
       },
     )
@@ -127,8 +127,8 @@ export async function putUser(url, data) {
     throw error
   }
 }
-  
-  // API 통신 (서버(MockAPI)와의 직접적인 HTTP 통신을 전담하는 객체)
+
+// API 통신 (서버(MockAPI)와의 직접적인 HTTP 통신을 전담하는 객체)
 const UserAPI = {
   // 함수명 앞의 '_'는 내부에서만 사용하는 함수라는 관례적 표시
   _getEndpoint(userId) {
@@ -138,7 +138,8 @@ const UserAPI = {
   // 서버에서 유저 한 명의 전체 데이터를 가져오기
   async fetchUserData(userId) {
     const res = await fetch(this._getEndpoint(userId))
-    if (!res.ok) throw new Error(`유저(${userId}) 데이터를 불러오는 데 실패했습니다.`)
+    if (!res.ok)
+      throw new Error(`유저(${userId}) 데이터를 불러오는 데 실패했습니다.`)
     return res.json()
   },
 
@@ -149,9 +150,10 @@ const UserAPI = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(fullData),
     })
-    if (!res.ok) throw new Error(`유저(${userId}) 데이터 업데이트에 실패했습니다.`)
+    if (!res.ok)
+      throw new Error(`유저(${userId}) 데이터 업데이트에 실패했습니다.`)
     return res.json()
-  }
+  },
 }
 
 // 비즈니스 로직 (API 통신 없이 순수하게 데이터 가공 및 계산만 수행)
@@ -160,16 +162,16 @@ const UserLogic = {
   mergeViewedIds(currentIds, newIds) {
     const current = Array.isArray(currentIds) ? currentIds : []
     const combined = [...new Set([...current, ...newIds])] // Set을 활용하여 중복된 ID를 자동으로 제거
-    return combined.filter(id => id != null) // 유효하지 않은 값(null, undefined) 필터링
+    return combined.filter((id) => id != null) // 유효하지 않은 값(null, undefined) 필터링
   },
 
   // 기존 유저 데이터에서 노출 기록(viewed)만 초기화한 객체를 생성
   createResetData(userData) {
     return { ...userData, viewed: [] }
-  }
+  },
 }
 
-// 서비스 조율 및 내보내기(Export) 
+// 서비스 조율 및 내보내기(Export)
 // 로컬 스토리지에서 현재 로그인한 유저의 고유 ID를 가져오기
 const getActiveUserId = () => {
   const userData = localStorage.getItem('loginAuthData')
@@ -211,7 +213,7 @@ export async function updateViewedIds(newIds) {
     // 최종 결과 서버에 전송
     await UserAPI.updateUserData(targetId, {
       ...userData,
-      viewed: updatedViewed
+      viewed: updatedViewed,
     })
     console.log(`[Success] 유저 ${targetId}번 노출 기록 업데이트 완료`)
   } catch (error) {
@@ -228,7 +230,7 @@ export async function resetViewedHistory() {
     const userData = await UserAPI.fetchUserData(targetId)
     // 로직 레이어를 통해 초기화 데이터 생성
     const resetData = UserLogic.createResetData(userData)
-    
+
     // 서버 데이터 덮어쓰기
     await UserAPI.updateUserData(targetId, resetData)
     console.log(`[Success] 유저 ${targetId}번 추천 기록 초기화 완료`)
