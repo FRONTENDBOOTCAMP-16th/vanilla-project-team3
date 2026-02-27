@@ -24,7 +24,7 @@
     .autu-title {
       padding-block-end: 20px;
       text-align: center;
-      font-size: 32px;
+      font-size: 26px;
       font-weight: 700;
       color: var(--white);
     }
@@ -40,13 +40,13 @@
       gap: 40px;
 
       .add-box {
-        inline-size: 340px;
+        inline-size: 240px;
         block-size: 52px;
         padding: 20px;
         background-color: rgba(255, 255, 255, 0.5);
         border-radius: 10px;
         color: var(--button-text);
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 400;
       }
 
@@ -83,14 +83,14 @@
     flex-flow: nowrap row;
     justify-content: space-between;
     align-items: center;
-    inline-size: 340px;
+    inline-size: 240px;
     padding-block-start: 40px;
 
     .join-to-button {
       text-decoration: none;
       text-align: center;
       align-content: center;
-      inline-size: 210px;
+      inline-size: 160px;
       block-size: 30px;
       padding: 0;
       background-color: var(--button-color);
@@ -103,6 +103,30 @@
     .join-caption {
       font-size: 12px;
       color: var(--white);
+    }
+  }
+
+  /* 기존 원본 코드에서 모바일 크기로 수정하고, 데스크탑용 사이즈는 따로 작성 */
+  @media (min-width: 1024px) {
+    .autu-box-form {
+      .autu-title {
+        font-size: 32px;
+      }
+  
+      .autu-box-container {
+        .add-box {
+          inline-size: 340px;
+          font-size: 16px;
+        }
+      }
+    }
+  
+    .join-button {
+      inline-size: 340px;
+  
+      .join-to-button {
+        inline-size: 210px;
+      }
     }
   }
 }
