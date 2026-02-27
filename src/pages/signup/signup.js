@@ -73,6 +73,8 @@ function signupLogic() {
     try {
       // 5. 아이디 중복 검사 (URL에 ? 추가)
       // MockAPI에서 특정 필드를 찾으려면 ?필드명=값 형태여야 합니다
+      // MockAPI에서 ?userId=값으로 조회했을 때 
+      // 해당 유저가 없으면 404를 반환 (서버 동작, 콘솔에 나옴)
       const checkResponse = await fetch(`${USERS_API}?userId=${newId}`)
       const members = await checkResponse.json()
 
@@ -83,6 +85,17 @@ function signupLogic() {
         newAddIdValue.focus()
         return // 중복이면 여기서 가입 중단!
       }
+      
+      // 5-1. 이메일 중복 검사 (추가)
+      const emailCheckResponse = await fetch(`${USERS_API}?email=${newEmail}`)
+      const emailMembers = await emailCheckResponse.json()
+      
+      if (Array.isArray(emailMembers) && emailMembers.length > 0) {
+        emailInputBottomAlert.textContent = '이미 사용 중인 이메일입니다.'
+        emailInputBottomAlert.hidden = false
+        newAddEmailValue.focus()
+        return
+       }
 
       // 6. 모든 검사 통과 시 최종 전송
       const userData = { userId: newId, password: newPw, email: newEmail }
@@ -101,5 +114,31 @@ function signupLogic() {
     }
   })
 }
+
+// 마크업으로 추가한 list 속성에 대한 작동 코드
+// 자주 사용하는 이메일 도메인 목록
+const emailDomains = [
+  '@naver.com', '@gmail.com', '@daum.net',
+  '@kakao.com', '@hanmail.net', '@nate.com', '@icloud.com'
+]
+
+newAddEmailValue.addEventListener('input', () => {
+  const value = newAddEmailValue.value
+  const datalist = document.getElementById('email-domains')
+  // 이전에 생성된 option 목록 초기화 (중복 방지)
+  datalist.innerHTML = ''
+  
+  // @가 포함되어 있을 때만 추천 목록 표시
+  if (value.includes('@')) {
+    const localPart = value.split('@')[0] // @ 앞부분 추출
+    
+    // 도메인 목록만큼 option 요소를 생성해서 datalist에 추가
+    emailDomains.forEach(domain => {
+      const option = document.createElement('option')
+      option.value = localPart + domain // ex) hong@naver.com
+      datalist.appendChild(option) // datalist에 option 추가
+    })
+  }
+})
 
 signupLogic()
