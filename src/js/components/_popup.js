@@ -4,7 +4,10 @@ import { getData, getUser, putUser } from '../../../api/api'
 import { EMAIL, LOGIN_AUTH_DATA } from '../constants'
 import { initSession } from '../../pages/login/loginSession'
 // [수정] updateHeartToServer 추가
-import { updateGenrePreference, updateHeartToServer } from '../service/bookService'
+import {
+  updateGenrePreference,
+  updateHeartToServer,
+} from '../service/bookService'
 import { loadStorage } from '../utils/storage'
 
 const { isLoggedIn, currentUser } = initSession()
@@ -109,19 +112,23 @@ document.addEventListener('DOMContentLoaded', () => {
           const nowActive = btn.classList.contains('heart-active')
 
           // [추가] localStorage heart 배열도 업데이트 (6개 제한 체크에 사용)
-          const latestData = JSON.parse(localStorage.getItem(LOGIN_AUTH_DATA) || '{}')
+          const latestData = JSON.parse(
+            localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
+          )
           if (nowActive) {
             latestData.heart = [...(latestData.heart || []), String(book.id)]
           } else {
-            latestData.heart = (latestData.heart || []).filter((id) => id !== String(book.id))
+            latestData.heart = (latestData.heart || []).filter(
+              (id) => id !== String(book.id),
+            )
           }
           localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(latestData))
 
           // [추가] 서버에 찜 추가/삭제 반영
           await updateHeartToServer(book.id, nowActive)
-          
+
           if (book.tags) {
-          updateGenrePreference(book.tags, nowActive ? 1 : -1)
+            updateGenrePreference(book.tags, nowActive ? 1 : -1)
           }
         }
       }
@@ -288,22 +295,22 @@ function heartLists(heartList, bookItems) {
 // 하트 지우기
 // [수정] latestUser.heart 사용 (bookItems 불필요)
 // async function removeHeart(bookItems, bookList) {
- async function removeHeart(bookList) {
-   // 책 리스트가 없을경우 코드 종료
-   if (!bookList) return
+async function removeHeart(bookList) {
+  // 책 리스트가 없을경우 코드 종료
+  if (!bookList) return
 
-   // [추가] cloneNode로 기존 이벤트 제거 후 새로 등록 (중복 방지)
-   // getHeartList가 마이페이지를 열 때마다 호출되는데, 
-   // removeHeart 안의 addEventListener도 매번 새로 등록 됨. 
-   // 그러면 마이페이지를 3번 열면 삭제 이벤트가 3번 실행되고 서버에 요청도 3번 감.
-   // cloneNode로 기존 이벤트를 전부 제거하고 새로 등록하면 항상 1번만 실행되는 걸 보장
-   const newBookList = bookList.cloneNode(true)
-   bookList.replaceWith(newBookList)
+  // [추가] cloneNode로 기존 이벤트 제거 후 새로 등록 (중복 방지)
+  // getHeartList가 마이페이지를 열 때마다 호출되는데,
+  // removeHeart 안의 addEventListener도 매번 새로 등록 됨.
+  // 그러면 마이페이지를 3번 열면 삭제 이벤트가 3번 실행되고 서버에 요청도 3번 감.
+  // cloneNode로 기존 이벤트를 전부 제거하고 새로 등록하면 항상 1번만 실행되는 걸 보장
+  const newBookList = bookList.cloneNode(true)
+  bookList.replaceWith(newBookList)
 
-   //  const user = await getUser(EMAIL, loadEmail.email)
-   //  const updateUrl = `${VITE_API_BASE_URL}/todayPhrase/user/${user.id}`
+  //  const user = await getUser(EMAIL, loadEmail.email)
+  //  const updateUrl = `${VITE_API_BASE_URL}/todayPhrase/user/${user.id}`
 
-   newBookList.addEventListener('click', async (e) => {
+  newBookList.addEventListener('click', async (e) => {
     const target = e.target
     const deleteButton = target.closest('[data-delete="button"]')
 
@@ -338,44 +345,48 @@ function heartLists(heartList, bookItems) {
     //     heart: updateHeart.map((num) => String(num)),
     //   }
 
-      // 매번 서버에서 최신 유저 데이터 가져오기
-      const latestUser = await getUser(EMAIL, loadEmail.email)
-      const latestUpdateUrl = `${VITE_API_BASE_URL}/todayPhrase/user/${latestUser.id}`
-    
-      // 최신 heart 배열 기준으로 필터링
-      const updateHeart = latestUser.heart.filter((id) => id !== String(deleteBookValue))
-    
-      const updateData = {
-        ...latestUser,
-        heart: updateHeart,
+    // 매번 서버에서 최신 유저 데이터 가져오기
+    const latestUser = await getUser(EMAIL, loadEmail.email)
+    const latestUpdateUrl = `${VITE_API_BASE_URL}/todayPhrase/user/${latestUser.id}`
+
+    // 최신 heart 배열 기준으로 필터링
+    const updateHeart = latestUser.heart.filter(
+      (id) => id !== String(deleteBookValue),
+    )
+
+    const updateData = {
+      ...latestUser,
+      heart: updateHeart,
+    }
+
+    try {
+      // 바뀐 데이터 PUT
+      // await putUser(updateUrl, updateData)
+      await putUser(latestUpdateUrl, updateData)
+
+      // [추가] localStorage heart 배열도 업데이트 (6개 제한 체크에 사용)
+      const savedData = JSON.parse(
+        localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
+      )
+      savedData.heart = updateHeart
+      localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(savedData))
+
+      // [추가] 화면에서도 제거 (기존 removeHeart에는 없었음)
+      const targetLi = deleteButton.closest('li')
+      if (targetLi) {
+        targetLi.style.opacity = '0'
+        targetLi.style.transition = '0.3s'
+        setTimeout(() => {
+          targetLi.remove()
+          checkEmptyList()
+        }, 300)
       }
-
-      try {
-        // 바뀐 데이터 PUT
-        // await putUser(updateUrl, updateData)
-        await putUser(latestUpdateUrl, updateData)
-
-        // [추가] localStorage heart 배열도 업데이트 (6개 제한 체크에 사용)
-        const savedData = JSON.parse(localStorage.getItem(LOGIN_AUTH_DATA) || '{}')
-        savedData.heart = updateHeart
-        localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(savedData))
-
-        // [추가] 화면에서도 제거 (기존 removeHeart에는 없었음)
-        const targetLi = deleteButton.closest('li')
-        if (targetLi) {
-          targetLi.style.opacity = '0'
-          targetLi.style.transition = '0.3s'
-          setTimeout(() => {
-            targetLi.remove()
-            checkEmptyList()
-          }, 300)
-        }
-      } catch (error) {
-        console.error('삭제 중 오류발생', error)
-        alert('좋아요 삭제에 실패했습니다. 다시 시도해주세요.')
-      }
-    })
-  }
+    } catch (error) {
+      console.error('삭제 중 오류발생', error)
+      alert('좋아요 삭제에 실패했습니다. 다시 시도해주세요.')
+    }
+  })
+}
 
 // 마이페이지 내부 userId 변경하는 함수
 function updateUserDiSplay() {
