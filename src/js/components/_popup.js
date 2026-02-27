@@ -1,4 +1,6 @@
-import { getData, getUser } from '../../../api/api'
+const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
+
+import { getData, getUser, putUser } from '../../../api/api'
 import { EMAIL, LOGIN_AUTH_DATA } from '../constants'
 import { initSession } from '../../pages/login/loginSession'
 import { updateGenrePreference } from '../service/bookService'
@@ -219,10 +221,16 @@ async function getHeartList() {
 
   console.log('bookItems:', bookItems)  // 확인용
 
+  const bookList = document.querySelector('.book-list')
   const heartList = document.querySelectorAll('.book-list li')
   if (!heartList) throw new Error('[data-book]을 찾지 못하였습니다.')
 
-  // 책리스트 동적으로 가져오기
+  heartLists(heartList, bookItems, bookList)
+  removeHeart(bookItems, bookList)
+}
+
+// 책리스트 동적으로 가져오기
+function heartLists(heartList, bookItems) {
   heartList.forEach((item, index) => {
     const currentBook = bookItems[index]
 
@@ -231,6 +239,8 @@ async function getHeartList() {
     item.innerHTML = `
       <button type="button" class="delete-item-button" aria-label="삭제">
         <svg
+          data-delete="button"
+          data-id="${currentBook.id}"
           class="delete-item-button"
           width="24"
           height="24"
@@ -248,6 +258,47 @@ async function getHeartList() {
         <img src="${currentBook.bookCover}" alt="${currentBook.author}" />
       </a>
     `
+  })
+}
+
+// 하트 지우기
+async function removeHeart(bookItems, bookList) {
+  // 책 리스트가 없을경우 코드 종료
+  if (!bookList) return
+
+  const user = await getUser(EMAIL, loadEmail.email)
+  const updateUrl = `${VITE_API_BASE_URL}/todayPhrase/user/${user.id}`
+
+  bookList.addEventListener('click', async (e) => {
+    const target = e.target
+    const deleteButton = target.closest('[data-delete="button"]')
+    const deleteBook = target.closest('[data-id]')
+    const deleteBookValue = deleteBook.dataset.id
+    const idNumber = bookItems.map((item) => item['id'])
+
+    // 책 삭제 버튼이 없을 경우 코드 종료
+    if (!deleteButton) return
+
+    if (deleteButton) {
+      // 선택한 책 id값을 제외한 다른 책들을 담아 업데이트할 준비
+      const updateHeart = idNumber.filter((id) => {
+        return id !== Number(deleteBookValue)
+      })
+
+      // 기존 데이터 추가 및 바뀐 찜목록만 추가 (숫자 -> 문자 변경)
+      const updateData = {
+        ...user,
+        heart: updateHeart.map((num) => String(num)),
+      }
+
+      try {
+        // 바뀐 데이터 PUT
+        await putUser(updateUrl, updateData)
+      } catch (error) {
+        console.error('삭제 중 오류발생', error)
+        alert('좋아요 삭제에 실패했습니다. 다시 시도해주세요.')
+      }
+    }
   })
 }
 

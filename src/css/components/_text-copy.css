@@ -1,9 +1,6 @@
 .text-copy-button {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 53%;
-
+  position: relative;
+  margin: 0 auto 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,8 +15,6 @@
   font-size: 16px;
   cursor: pointer;
   white-space: nowrap;
-
-  z-index: 5;
 }
 
 .text-copy-button:hover {
