@@ -174,10 +174,10 @@ async function emojiTotalList() {
   // 체크한 감정에 담긴 각각의 data-value를 꺼내 감정 선택한것에 +1 카운트 해줌
   imojis.forEach((item) => {
     if (item in updateData.weather_counts) {
-      updateData.weather_counts[item] += 1
+      updateData.weather_counts[item] = (updateData.weather_counts[item] || 0) + 1;
     }
     if (item in updateData.mood_counts) {
-      updateData.mood_counts[item] += 1
+      updateData.mood_counts[item] = (updateData.mood_counts[item] || 0) + 1;
     }
   })
 
