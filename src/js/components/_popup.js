@@ -271,7 +271,7 @@ async function removeHeart(bookItems, bookList) {
     // 책 삭제 버튼이 없을 경우 코드 종료
     if (!deleteButton) return
 
-    if(deleteButton) {
+    if (deleteButton) {
       // 선택한 책 id값을 제외한 다른 책들을 담아 업데이트할 준비
       const updateHeart = idNumber.filter((id) => {
         return id !== Number(deleteBookValue)
@@ -280,20 +280,18 @@ async function removeHeart(bookItems, bookList) {
       // 기존 데이터 추가 및 바뀐 찜목록만 추가 (숫자 -> 문자 변경)
       const updateData = {
         ...user,
-        heart: updateHeart.map((num) => String(num))
+        heart: updateHeart.map((num) => String(num)),
       }
-      
+
       try {
         // 바뀐 데이터 PUT
         await putUser(updateUrl, updateData)
-
       } catch (error) {
-        console.error("삭제 중 오류발생", error)
+        console.error('삭제 중 오류발생', error)
         alert('좋아요 삭제에 실패했습니다. 다시 시도해주세요.')
       }
     }
   })
-  
 }
 
 // 마이페이지 내부 userId 변경하는 함수
