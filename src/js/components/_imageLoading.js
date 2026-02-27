@@ -1,5 +1,5 @@
 // import { getData } from '../../../api/api.js'
-import { runSmartRecommendation } from './_smartRecommendBridge.js'
+// import { runSmartRecommendation } from './_smartRecommendBridge.js'
 
 // 로딩 시간 설정 (밀리초)
 const LOADING_TIMEOUT = 400
@@ -61,7 +61,7 @@ let preloadStartTime = null
 
 // 한번 추천한 책은 제외하고 필터링한 데이터를 보여주는 함수
 window.addEventListener('DOMContentLoaded', () => {
-  runSmartRecommendation() // 브릿지 파일에 있는 함수 실행!
+  // runSmartRecommendation() // 브릿지 파일에 있는 함수 실행!
 })
 
 // // 테스트용: 페이지 로드 후 자동으로 결과 표시 (개발 중 확인용)

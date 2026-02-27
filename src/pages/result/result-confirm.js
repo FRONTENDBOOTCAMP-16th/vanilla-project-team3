@@ -8,7 +8,7 @@ import {
 import {
   getRecommendations,
   updateHeartToServer,
-} from '../../js/service/bookService.js'
+} from '../../js/services/booService.js'
 import {
   displayPhraseResult,
   filterData,
