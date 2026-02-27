@@ -1,7 +1,7 @@
 import { getData, getUser } from '../../../api/api'
 import { EMAIL, LOGIN_AUTH_DATA } from '../constants'
 import { initSession } from '../../pages/login/loginSession'
-import { updateGenrePreference } from '../../pages/result/result'
+import { updateGenrePreference } from '../service/bookService'
 import { loadStorage } from '../utils/storage'
 
 const { isLoggedIn, currentUser } = initSession()
