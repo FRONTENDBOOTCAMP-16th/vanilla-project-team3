@@ -115,4 +115,30 @@ function signupLogic() {
   })
 }
 
+// 마크업으로 추가한 list 속성에 대한 작동 코드
+// 자주 사용하는 이메일 도메인 목록
+const emailDomains = [
+  '@naver.com', '@gmail.com', '@daum.net',
+  '@kakao.com', '@hanmail.net', '@nate.com', '@icloud.com'
+]
+
+newAddEmailValue.addEventListener('input', () => {
+  const value = newAddEmailValue.value
+  const datalist = document.getElementById('email-domains')
+  // 이전에 생성된 option 목록 초기화 (중복 방지)
+  datalist.innerHTML = ''
+  
+  // @가 포함되어 있을 때만 추천 목록 표시
+  if (value.includes('@')) {
+    const localPart = value.split('@')[0] // @ 앞부분 추출
+    
+    // 도메인 목록만큼 option 요소를 생성해서 datalist에 추가
+    emailDomains.forEach(domain => {
+      const option = document.createElement('option')
+      option.value = localPart + domain // ex) hong@naver.com
+      datalist.appendChild(option) // datalist에 option 추가
+    })
+  }
+})
+
 signupLogic()

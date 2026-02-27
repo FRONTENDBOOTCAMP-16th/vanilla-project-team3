@@ -79,13 +79,16 @@
                   class="sr-only new-email-label"
                   >이메일</label
                 >
+                <!-- list 속성: @ 입력시 목록이 자동으로 뜨는 방식 -->
                 <input
                   type="email"
                   class="add-box new-email-box"
                   id="new-email-input-area"
                   placeholder="이메일을 입력해 주세요"
+                  list="email-domains"
                   required
                 />
+                <datalist id="email-domains"></datalist>
                 <span
                   class="warning-block new-email-blank-warning"
                   hidden
