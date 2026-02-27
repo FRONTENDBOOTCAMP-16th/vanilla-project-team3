@@ -88,16 +88,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 2. 갯수 제한 체크 (최대 6개까지만 허용)
       const isAlreadyActive = btn.classList.contains('heart-active')
-      
+
       // 기존 코드 (li 개수로 체크 - 항상 0 나옴)
       // const currentCount = bookList
       //   ? bookList.querySelectorAll('li:not(:empty)').length
       //   : 0
 
       // 수정 (heart 배열 길이로 체크)
-      const savedData = JSON.parse(localStorage.getItem(LOGIN_AUTH_DATA) || '{}')
+      const savedData = JSON.parse(
+        localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
+      )
       const currentCount = savedData?.heart?.length ?? 0
-      
+
       if (!isAlreadyActive && currentCount >= 6) {
         heartLimitDialog?.showModal() // 6개 초과 시 찜 제한 안내 팝업
       } else {
@@ -217,9 +219,11 @@ async function getHeartList() {
   // 하트찍은 책 find로 ID 매칭
   // const bookItems = await Promise.all(heartID.map((id) => getData('id', id)))
   const allBooks = await getData()
-  const bookItems = heartID.map((id) => allBooks.find((book) => book.id === id)).filter(Boolean)
+  const bookItems = heartID
+    .map((id) => allBooks.find((book) => book.id === id))
+    .filter(Boolean)
 
-  console.log('bookItems:', bookItems)  // 확인용
+  console.log('bookItems:', bookItems) // 확인용
 
   const bookList = document.querySelector('.book-list')
   const heartList = document.querySelectorAll('.book-list li')
