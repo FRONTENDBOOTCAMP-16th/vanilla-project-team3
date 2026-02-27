@@ -48,7 +48,9 @@ async function checkeEmailPassword() {
 
   // 가입 정보가 없는 아이디
   if (!resultID) {
-    noti.hidden = false
+    // 마크업의 hidden을 css의 style.visibility로 수정
+    // noti.hidden = false
+    noti.style.visibility = 'visible'
     return
   }
 
@@ -56,7 +58,9 @@ async function checkeEmailPassword() {
 
   // 비밀번호가 틀린 경우
   if (!isPassword) {
-    noti.hidden = false
+    // 마크업의 hidden을 css의 style.visibility로 수정
+    // noti.hidden = false
+    noti.style.visibility = 'visible'
     return
   }
 
