@@ -70,7 +70,7 @@ export function displayPhraseResult(selectedJsonData) {
     strings: [mainRecommendData.phrase],
     typeSpeed: 50, // 타이핑 속도
     backSpeed: 0, // 지우기 기능
-    showCursor: true, // 커서 표시
+    showCursor: false, // 커서 표시
     cursorChar: '|', // 커서 모양
   })
 
