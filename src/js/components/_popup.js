@@ -1,4 +1,6 @@
-import { getData, getUser } from '../../../api/api'
+const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
+
+import { getData, getUser, putUser } from '../../../api/api'
 import { EMAIL, LOGIN_AUTH_DATA } from '../constants'
 import { initSession } from '../../pages/login/loginSession'
 import { updateGenrePreference } from '../service/bookService'
@@ -230,6 +232,7 @@ function heartLists(heartList, bookItems) {
       <button type="button" class="delete-item-button" aria-label="삭제">
         <svg
           data-delete="button"
+          data-id="${currentBook.id}"
           class="delete-item-button"
           width="24"
           height="24"
@@ -250,50 +253,47 @@ function heartLists(heartList, bookItems) {
   })
 }
 
+// 하트 지우기
 async function removeHeart(bookItems, bookList) {
-  // 테스트 코드
-  console.log(bookItems)
-
+  // 책 리스트가 없을경우 코드 종료
   if (!bookList) return
 
-  // 따로 분리하기 일단 작성
-  // const user = await getUser(EMAIL, loadEmail.email)
-  // const updateUrl = `${VITE_API_BASE_URL}/todayPhrase/user/${user.id}`
+  const user = await getUser(EMAIL, loadEmail.email)
+  const updateUrl = `${VITE_API_BASE_URL}/todayPhrase/user/${user.id}`
 
-  bookList.addEventListener('click', (e) => {
-    e.preventDefault()
+  bookList.addEventListener('click', async (e) => {
     const target = e.target
     const deleteButton = target.closest('[data-delete="button"]')
+    const deleteBook = target.closest('[data-id]')
+    const deleteBookValue = deleteBook.dataset.id
     const idNumber = bookItems.map((item) => item['id'])
 
-    // 테스트 코드
-    console.log(idNumber)
-
+    // 책 삭제 버튼이 없을 경우 코드 종료
     if (!deleteButton) return
 
-    // 찜 항목 삭제
-    // 해당 찜 항목 불러오기
-    // 유저 아이디 불러오기 (이메일기준 호출)
-    // 삭제버튼 눌렀을때 해당 id가지고 오기
-
-    // 3번째것을 눌렀을때 삭제
-    // index를 활용
-    // idNumber[index]랑 index랑 같은것을 삭제
-    //  === 남은 배열들을 걸러서 넣어줘야함 << 이 생각이 안들어 ㅠㅠㅠㅠㅠㅠㅠㅠㅠ
-    /* const targetId = (targetId) => {
+    if(deleteButton) {
+      // 선택한 책 id값을 제외한 다른 책들을 담아 업데이트할 준비
       const updateHeart = idNumber.filter((id) => {
-        return id !== targetId
+        return id !== Number(deleteBookValue)
       })
-      console.log("음 되나요? :", updateHeart)
-    } */
 
-    // 삭제라기보단
-    // 남은 배열들을 updateData에 넣어줘야함
+      // 기존 데이터 추가 및 바뀐 찜목록만 추가 (숫자 -> 문자 변경)
+      const updateData = {
+        ...user,
+        heart: updateHeart.map((num) => String(num))
+      }
+      
+      try {
+        // 바뀐 데이터 PUT
+        await putUser(updateUrl, updateData)
 
-    // 해당 id JSON에서 가지고온것 지우기
-    // 지워서 보내야하나? 자동으로 보내지나?
-    // await putUser(updateUrl, updateData)
+      } catch (error) {
+        console.error("삭제 중 오류발생", error)
+        alert('좋아요 삭제에 실패했습니다. 다시 시도해주세요.')
+      }
+    }
   })
+  
 }
 
 // 마이페이지 내부 userId 변경하는 함수
