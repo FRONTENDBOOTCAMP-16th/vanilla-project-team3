@@ -37,7 +37,7 @@
     .autu-box-container {
       display: flex;
       flex-flow: nowrap column;
-      
+
       /* 에러 메시지 공간을 위해 전체 gap을 40->20px 으로 줄임 */
       gap: 20px;
 
@@ -118,7 +118,7 @@
       .autu-title {
         font-size: 32px;
       }
-  
+
       .autu-box-container {
         .add-box {
           inline-size: 340px;
@@ -126,10 +126,10 @@
         }
       }
     }
-  
+
     .join-button {
       inline-size: 340px;
-  
+
       .join-to-button {
         inline-size: 210px;
       }

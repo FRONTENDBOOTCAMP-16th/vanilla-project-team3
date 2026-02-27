@@ -21,7 +21,8 @@ const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
 // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 // 위에 수정된 정규식은 .. 두번이 여전히 작성됨
 // 연속 마침표(..), 도메인 시작/끝 마침표 차단 이메일 정규식
-const emailRegex = /^[a-zA-Z0-9_%+-]+(\.[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/
+const emailRegex =
+  /^[a-zA-Z0-9_%+-]+(\.[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/
 
 const USERS_API = 'https://69898725c04d974bc69f8907.mockapi.io/todayPhrase/user'
 
@@ -93,7 +94,7 @@ function signupLogic() {
       emailInputBottomAlert.textContent =
         '"아이디@domain.com" 형식으로 작성해주세요.'
 
-        // 마크업의 hidden을 css의 style.visibility로 수정
+      // 마크업의 hidden을 css의 style.visibility로 수정
       // emailInputBottomAlert.hidden = false
       emailInputBottomAlert.style.visibility = 'visible'
       newAddEmailValue.focus()
