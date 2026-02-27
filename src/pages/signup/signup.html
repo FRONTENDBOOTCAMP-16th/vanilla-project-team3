@@ -48,9 +48,12 @@
                   placeholder="아이디를 입력해 주세요"
                   required
                 />
-                <span class="warning-block new-id-blank-warning" hidden
+                <!-- hidden속성은 css의 visibility로 대신하여 input이 안밀리도록 설정하고,
+                텍스트는 JS의 idInputBottomAlert.textContent와 겹쳐서 삭제(주석처리)  -->
+                <!-- <span class="warning-block new-id-blank-warning" hidden
                   >이 아이디는 사용하실 수 없습니다.</span
-                >
+                > -->
+                <span class="warning-block new-id-blank-warning"></span>
               </div>
               <div
                 class="autu-input-box new-pw-input-box"
@@ -66,9 +69,10 @@
                   placeholder="비밀번호를 입력해 주세요"
                   required
                 />
-                <span class="warning-block new-pw-blank-warning" hidden
+                <!-- <span class="warning-block new-pw-blank-warning" hidden
                   >영어, 숫자, 특수문자 혼합 8자리 이상</span
-                >
+                > -->
+                <span class="warning-block new-pw-blank-warning"></span>
               </div>
               <div
                 class="autu-input-box new-email-input-box"
@@ -89,10 +93,11 @@
                   required
                 />
                 <datalist id="email-domains"></datalist>
-                <span
+                <!-- <span
                   class="warning-block new-email-blank-warning"
                   hidden
-                ></span>
+                ></span> -->
+                <span class="warning-block new-email-blank-warning"></span>
               </div>
               <button
                 type="submit"

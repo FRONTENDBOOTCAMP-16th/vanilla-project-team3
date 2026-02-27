@@ -11,11 +11,18 @@ const emailInputBottomAlert = document.querySelector('.new-email-blank-warning')
 // 송신(submit) 버튼 요소 가져오기
 const sendingSignup = document.querySelector('.submit-button')
 
+// 아이디 정규식 (영문, 숫자 조합 4~20자)
+const idRegex = /^[a-zA-Z0-9]{4,20}$/
+
 // 비밀번호 정규식 (영문, 숫자, 특수문자 조합 8자 이상)
 const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
 
 // [수정] doro@naver..naver.com 같은 연속 마침표를 막는 이메일 정규식
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+// const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+// 위에 수정된 정규식은 .. 두번이 여전히 작성됨
+// 연속 마침표(..), 도메인 시작/끝 마침표 차단 이메일 정규식
+const emailRegex =
+  /^[a-zA-Z0-9_%+-]+(\.[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/
 
 const USERS_API = 'https://69898725c04d974bc69f8907.mockapi.io/todayPhrase/user'
 
@@ -28,14 +35,26 @@ function signupLogic() {
     const newEmail = newAddEmailValue.value.trim()
 
     // 1. 초기화
-    idInputBottomAlert.hidden = true
-    pwInputBottomAlert.hidden = true
-    emailInputBottomAlert.hidden = true
+    // 마크업의 hidden을 css의 style.visibility로 수정
+    // idInputBottomAlert.hidden = true
+    // pwInputBottomAlert.hidden = true
+    // emailInputBottomAlert.hidden = true
+    idInputBottomAlert.style.visibility = 'hidden'
+    pwInputBottomAlert.style.visibility = 'hidden'
+    emailInputBottomAlert.style.visibility = 'hidden'
 
     // 2. 아이디 빈값 검사
     if (newId === '') {
       idInputBottomAlert.textContent = '아이디 입력은 필수입니다.'
-      idInputBottomAlert.hidden = false
+
+      // 마크업의 hidden을 css의 style.visibility로 수정
+      // idInputBottomAlert.hidden = false
+      idInputBottomAlert.style.visibility = 'visible'
+      newAddIdValue.focus()
+      return
+    } else if (!idRegex.test(newId)) {
+      idInputBottomAlert.textContent = '영문, 숫자 4~20자로 입력해주세요.'
+      idInputBottomAlert.style.visibility = 'visible'
       newAddIdValue.focus()
       return
     }
@@ -43,12 +62,18 @@ function signupLogic() {
     // 3. 비밀번호 검사
     if (newPw === '') {
       pwInputBottomAlert.textContent = '비밀번호 입력은 필수입니다.'
-      pwInputBottomAlert.hidden = false
+
+      // 마크업의 hidden을 css의 style.visibility로 수정
+      // pwInputBottomAlert.hidden = false
+      pwInputBottomAlert.style.visibility = 'visible'
       newAddPwValue.focus()
       return
     } else if (!pwRegex.test(newPw)) {
       pwInputBottomAlert.textContent = '영어, 숫자, 특수문자 혼합 8자리 이상.'
-      pwInputBottomAlert.hidden = false
+
+      // 마크업의 hidden을 css의 style.visibility로 수정
+      // pwInputBottomAlert.hidden = false
+      pwInputBottomAlert.style.visibility = 'visible'
       newAddPwValue.focus()
       return
     }
@@ -56,7 +81,10 @@ function signupLogic() {
     // 4. 이메일 검사 (빈값 + 구조적 오류 차단)
     if (newEmail === '') {
       emailInputBottomAlert.textContent = '이메일 주소를 입력해 주세요.'
-      emailInputBottomAlert.hidden = false
+
+      // 마크업의 hidden을 css의 style.visibility로 수정
+      // emailInputBottomAlert.hidden = false
+      emailInputBottomAlert.style.visibility = 'visible'
       newAddEmailValue.focus()
       return
     }
@@ -65,7 +93,10 @@ function signupLogic() {
     if (!emailRegex.test(newEmail)) {
       emailInputBottomAlert.textContent =
         '"아이디@domain.com" 형식으로 작성해주세요.'
-      emailInputBottomAlert.hidden = false
+
+      // 마크업의 hidden을 css의 style.visibility로 수정
+      // emailInputBottomAlert.hidden = false
+      emailInputBottomAlert.style.visibility = 'visible'
       newAddEmailValue.focus()
       return
     }
@@ -81,7 +112,10 @@ function signupLogic() {
       // 데이터가 존재하면 중복된 아이디임
       if (Array.isArray(members) && members.length > 0) {
         idInputBottomAlert.textContent = '이미 사용 중인 아이디입니다.'
-        idInputBottomAlert.hidden = false
+
+        // 마크업의 hidden을 css의 style.visibility로 수정
+        // idInputBottomAlert.hidden = false
+        idInputBottomAlert.style.visibility = 'visible'
         newAddIdValue.focus()
         return // 중복이면 여기서 가입 중단!
       }
@@ -92,7 +126,10 @@ function signupLogic() {
 
       if (Array.isArray(emailMembers) && emailMembers.length > 0) {
         emailInputBottomAlert.textContent = '이미 사용 중인 이메일입니다.'
-        emailInputBottomAlert.hidden = false
+
+        // 마크업의 hidden을 css의 style.visibility로 수정
+        // emailInputBottomAlert.hidden = false
+        emailInputBottomAlert.style.visibility = 'visible'
         newAddEmailValue.focus()
         return
       }
