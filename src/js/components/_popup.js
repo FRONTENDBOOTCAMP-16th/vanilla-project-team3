@@ -239,11 +239,10 @@ function heartLists(heartList, bookItems) {
 }
 
 async function removeHeart(bookItems, bookList) {
-   // 테스트 코드
+  // 테스트 코드
   console.log(bookItems)
 
-
-  if(!bookList) return
+  if (!bookList) return
 
   // 따로 분리하기 일단 작성
   // const user = await getUser(EMAIL, loadEmail.email)
@@ -258,10 +257,8 @@ async function removeHeart(bookItems, bookList) {
     // 테스트 코드
     console.log(idNumber)
 
-    if(!deleteButton) return
+    if (!deleteButton) return
 
-    
-      
     // 찜 항목 삭제
     // 해당 찜 항목 불러오기
     // 유저 아이디 불러오기 (이메일기준 호출)
@@ -279,15 +276,13 @@ async function removeHeart(bookItems, bookList) {
     } */
 
     // 삭제라기보단
-    // 남은 배열들을 updateData에 넣어줘야함 
+    // 남은 배열들을 updateData에 넣어줘야함
 
-    
     // 해당 id JSON에서 가지고온것 지우기
     // 지워서 보내야하나? 자동으로 보내지나?
     // await putUser(updateUrl, updateData)
   })
 }
-
 
 // 마이페이지 내부 userId 변경하는 함수
 function updateUserDiSplay() {
