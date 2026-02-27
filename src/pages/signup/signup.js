@@ -11,6 +11,9 @@ const emailInputBottomAlert = document.querySelector('.new-email-blank-warning')
 // 송신(submit) 버튼 요소 가져오기
 const sendingSignup = document.querySelector('.submit-button')
 
+// 아이디 정규식 (영문, 숫자 조합 4~20자)
+const idRegex = /^[a-zA-Z0-9]{4,20}$/
+
 // 비밀번호 정규식 (영문, 숫자, 특수문자 조합 8자 이상)
 const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
 
@@ -45,6 +48,11 @@ function signupLogic() {
 
       // 마크업의 hidden을 css의 style.visibility로 수정
       // idInputBottomAlert.hidden = false
+      idInputBottomAlert.style.visibility = 'visible'
+      newAddIdValue.focus()
+      return
+    } else if (!idRegex.test(newId)) {
+      idInputBottomAlert.textContent = '영문, 숫자 4~20자로 입력해주세요.'
       idInputBottomAlert.style.visibility = 'visible'
       newAddIdValue.focus()
       return
