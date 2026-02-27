@@ -199,10 +199,16 @@ async function getHeartList() {
   // 하트찍은 책 ID 매칭
   const bookItems = await Promise.all(heartID.map((id) => getData('id', id)))
 
+  const bookList = document.querySelector('.book-list')
   const heartList = document.querySelectorAll('.book-list li')
   if (!heartList) throw new Error('[data-book]을 찾지 못하였습니다.')
 
-  // 책리스트 동적으로 가져오기
+  heartLists(heartList, bookItems, bookList)
+  removeHeart(bookItems, bookList)
+}
+
+// 책리스트 동적으로 가져오기
+function heartLists(heartList, bookItems) {
   heartList.forEach((item, index) => {
     const currentBook = bookItems[index]
 
@@ -211,6 +217,7 @@ async function getHeartList() {
     item.innerHTML = `
       <button type="button" class="delete-item-button" aria-label="삭제">
         <svg
+          data-delete="button"
           class="delete-item-button"
           width="24"
           height="24"
@@ -230,6 +237,57 @@ async function getHeartList() {
     `
   })
 }
+
+async function removeHeart(bookItems, bookList) {
+   // 테스트 코드
+  console.log(bookItems)
+
+
+  if(!bookList) return
+
+  // 따로 분리하기 일단 작성
+  // const user = await getUser(EMAIL, loadEmail.email)
+  // const updateUrl = `${VITE_API_BASE_URL}/todayPhrase/user/${user.id}`
+
+  bookList.addEventListener('click', (e) => {
+    e.preventDefault()
+    const target = e.target
+    const deleteButton = target.closest('[data-delete="button"]')
+    const idNumber = bookItems.map((item) => item['id'])
+
+    // 테스트 코드
+    console.log(idNumber)
+
+    if(!deleteButton) return
+
+    
+      
+    // 찜 항목 삭제
+    // 해당 찜 항목 불러오기
+    // 유저 아이디 불러오기 (이메일기준 호출)
+    // 삭제버튼 눌렀을때 해당 id가지고 오기
+
+    // 3번째것을 눌렀을때 삭제
+    // index를 활용
+    // idNumber[index]랑 index랑 같은것을 삭제
+    //  === 남은 배열들을 걸러서 넣어줘야함 << 이 생각이 안들어 ㅠㅠㅠㅠㅠㅠㅠㅠㅠ
+    /* const targetId = (targetId) => {
+      const updateHeart = idNumber.filter((id) => {
+        return id !== targetId
+      })
+      console.log("음 되나요? :", updateHeart)
+    } */
+
+    // 삭제라기보단
+    // 남은 배열들을 updateData에 넣어줘야함 
+
+    
+    // 해당 id JSON에서 가지고온것 지우기
+    // 지워서 보내야하나? 자동으로 보내지나?
+    // await putUser(updateUrl, updateData)
+  })
+}
+
 
 // 마이페이지 내부 userId 변경하는 함수
 function updateUserDiSplay() {
