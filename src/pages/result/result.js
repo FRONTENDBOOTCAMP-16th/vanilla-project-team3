@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import { loadStorage } from '../../js/utils'
 import {
   IS_CHECKED_KEY,
@@ -22,8 +21,7 @@ import {
 } from '../../js/components/_imageLoading.js'
 import { shareResult } from '../../js/components/_share.js'
 import { getData, getUser } from '../../../api/api.js'
-void EMAIL
-void getUser
+
 
 /**
  * 이 파일은 페이지가 로드될 때 실행되며,
@@ -43,10 +41,16 @@ const allBooks = await getData()
 
 let mood = {}
 let weather = {}
+let viewed = []
 
+// 로그인 유저의 viewed 가져오기
+if (loadEmail) {
+  const userData = await getUser(EMAIL, loadEmail.email)
+  viewed = userData.viewed || []
+}
+console.log('viewed 갯수:', viewed.length)
 // 이번에 선택한 감정/날씨를 localStorage에서 가져오기
 const savedEmoji = JSON.parse(localStorage.getItem(IMOJI)) || []
-console.log('savedEmoji:', savedEmoji)
 savedEmoji.forEach((item) => {
   if (['happy', 'sad', 'soso', 'bad'].includes(item)) {
     mood[item] = 1
@@ -97,7 +101,7 @@ async function handleResultDisplay() {
       currentData = await getSharedData(sharedTitle, sharedIds, urlParams)
     } else {
       showLoadingDisplay()
-      const recommended = getRecommendations(allBooks, mood, weather)
+      const recommended = getRecommendations(allBooks, mood, weather, viewed)
       console.log('recommended 결과:', recommended.length, '권')
       console.log('mood:', mood)
       console.log('weather:', weather)
