@@ -223,7 +223,7 @@ export async function updateViewedIds(newIds) {
       ...userData,
       viewed: updatedViewed,
     })
-    console.log(`[Success] 유저 ${targetId}번 노출 기록 업데이트 완료`)
+    // console.log(`[Success] 유저 ${targetId}번 노출 기록 업데이트 완료`)
   } catch (error) {
     console.error('[Error] 기록 업데이트 중 오류 발생:', error.message)
   }

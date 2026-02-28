@@ -112,10 +112,6 @@ async function handleResultDisplay() {
     }
 
     if (currentData) {
-      console.log(
-        '최종 추천:',
-        currentData.map((b) => `${b.bookTitle} (${b.mood})`),
-      )
       displayPhraseResult(currentData)
       bindShareEvent(currentData)
     } else {

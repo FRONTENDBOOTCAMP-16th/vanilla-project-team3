@@ -59,9 +59,7 @@ export function scoreBook(book, mood, weather) {
       }
     })
   }
-  console.log(
-    `${book.bookTitle}: mood=${book.mood}, weather=${book.weather}, 총점=${score}`,
-  )
+
   return score
 }
 
