@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import { loadStorage } from '../../js/utils'
 import {
   IS_CHECKED_KEY,
@@ -9,8 +8,7 @@ import {
 import {
   getRecommendations,
   updateHeartToServer,
-  updateGenrePreference,
-} from '../../js/service/bookService.js'
+} from '../../js/services/booService.js'
 import {
   displayPhraseResult,
   filterData,
@@ -22,8 +20,6 @@ import {
 } from '../../js/components/_imageLoading.js'
 import { shareResult } from '../../js/components/_share.js'
 import { getData, getUser } from '../../../api/api.js'
-void EMAIL
-void getUser
 
 /**
  * 이 파일은 페이지가 로드될 때 실행되며,
@@ -37,30 +33,27 @@ if (!container) throw new Error('문서에서 .container 요소를 찾을 수 �
 const doubleCheckedGroups = container.querySelectorAll(
   '[data-checked="doubleChecked"]',
 )
-const loadEmail = loadStorage(LOGIN_AUTH_DATA)
 const buttons = container.querySelectorAll('[data-checked="doubleChecked"]')
-const allBooks = await getData()
 
-let mood = {}
-let weather = {}
+/**
+ * 페이지 초기 진입 시 실행
+ */
+async function initPage() {
+  const loadEmail = loadStorage(LOGIN_AUTH_DATA)
 
-// 이번에 선택한 감정/날씨를 localStorage에서 가져오기
-const savedEmoji = JSON.parse(localStorage.getItem(IMOJI)) || []
-console.log('savedEmoji:', savedEmoji)
-savedEmoji.forEach((item) => {
-  if (['happy', 'sad', 'soso', 'bad'].includes(item)) {
-    mood[item] = 1
+  // 기본 데이터 로드
+  const allBooks = await getData()
+
+  if (loadEmail?.email) {
+    const user = await getUser(EMAIL, loadEmail.email)
+    // 추천 로직 실행 (필요 시 결과 활용)
+    getRecommendations(allBooks, user.mood_counts, user.weather_counts)
   }
-  if (['sunny', 'rainy', 'snowy', 'dusty', 'cloudy'].includes(item)) {
-    weather[item] = 1
-  }
-})
 
-// 페이지 초기화
-init()
-
-function init() {
   applyDisableIfChecked()
+  syncEmojiCheckboxes()
+  handleResultDisplay()
+  bindHeartEvents()
 }
 
 // UI: 체크박스 비활성화 상태 반영
@@ -72,17 +65,17 @@ function applyDisableIfChecked() {
   })
 }
 
-// 스토리지에 저장된 감정/날씨 -> 체크로 변환
-if (loadStorage(IMOJI)) {
+// UI: 저장된 이모지 체크박스 동기화
+function syncEmojiCheckboxes() {
   const savedEmojis = loadStorage(IMOJI)
-  if (savedEmojis) {
-    buttons.forEach((checkbox) => {
-      const checkImojis = checkbox.querySelectorAll('[data-value]')
-      checkImojis.forEach((input) => {
-        if (savedEmojis.includes(input.dataset.value)) input.checked = true
-      })
+  if (!savedEmojis) return
+
+  buttons.forEach((checkbox) => {
+    const checkImojis = checkbox.querySelectorAll('[data-value]')
+    checkImojis.forEach((input) => {
+      if (savedEmojis.includes(input.dataset.value)) input.checked = true
     })
-  }
+  })
 }
 
 // 메인 로직: 결과 표시 (공유 vs 일반)
@@ -97,23 +90,10 @@ async function handleResultDisplay() {
       currentData = await getSharedData(sharedTitle, sharedIds, urlParams)
     } else {
       showLoadingDisplay()
-      const recommended = getRecommendations(allBooks, mood, weather)
-      console.log('recommended 결과:', recommended.length, '권')
-      console.log('mood:', mood)
-      console.log('weather:', weather)
-
-      if (recommended && recommended.length > 0) {
-        currentData = recommended
-      } else {
-        currentData = await getLocalOrCalculatedData()
-      }
+      currentData = await getLocalOrCalculatedData()
     }
 
     if (currentData) {
-      console.log(
-        '최종 추천:',
-        currentData.map((b) => `${b.bookTitle} (${b.mood})`),
-      )
       displayPhraseResult(currentData)
       bindShareEvent(currentData)
     } else {
@@ -176,31 +156,22 @@ function bindShareEvent(data) {
 }
 
 function bindHeartEvents() {
+  // 동적 생성 대응을 위해 이벤트 위임이나 setTimeout 사용 (기존 코드 유지)
   setTimeout(() => {
     document.querySelectorAll('.save-button').forEach((btn) => {
       btn.addEventListener('click', () => {
-        if (!loadEmail) return // ← 이거 추가
-
         const imgSrc = btn.querySelector('.book-cover-img')?.src
         const cachedData = JSON.parse(
           localStorage.getItem('cachedBookData') || '[]',
         )
         const book = cachedData.find((b) => b.bookCover === imgSrc)
         if (book) {
-          const isActive = btn.classList.contains('heart-active')
-          updateHeartToServer(book.id, isActive)
-          if (book.tags) {
-            updateGenrePreference(book.tags, isActive ? 1 : -1)
-          }
+          updateHeartToServer(book.id, btn.classList.contains('heart-active'))
         }
       })
     })
   }, 1500)
 }
 
-async function initPage() {
-  await handleResultDisplay()
-  bindHeartEvents()
-}
 // 실행
-initPage()
+window.addEventListener('DOMContentLoaded', initPage)

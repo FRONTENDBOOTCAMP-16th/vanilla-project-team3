@@ -24,7 +24,7 @@
     .autu-title {
       padding-block-end: 20px;
       text-align: center;
-      font-size: 32px;
+      font-size: 26px;
       font-weight: 700;
       color: var(--white);
     }
@@ -37,16 +37,18 @@
     .autu-box-container {
       display: flex;
       flex-flow: nowrap column;
-      gap: 40px;
+
+      /* 에러 메시지 공간을 위해 전체 gap을 40->20px 으로 줄임 */
+      gap: 20px;
 
       .add-box {
-        inline-size: 340px;
+        inline-size: 240px;
         block-size: 52px;
         padding: 20px;
         background-color: rgba(255, 255, 255, 0.5);
         border-radius: 10px;
         color: var(--button-text);
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 400;
       }
 
@@ -55,6 +57,10 @@
         font-size: 14px;
         font-weight: 400;
         color: var(--white);
+
+        /* 경고 메시지 나올 때 input 상자 위로 안 밀리도록 설정 */
+        visibility: hidden; /* 마크업에서 사용하는 hidden 대체 */
+        min-block-size: 1.5em; /* 공간 확보 */
       }
 
       .submit-button {
@@ -83,14 +89,14 @@
     flex-flow: nowrap row;
     justify-content: space-between;
     align-items: center;
-    inline-size: 340px;
+    inline-size: 240px;
     padding-block-start: 40px;
 
     .join-to-button {
       text-decoration: none;
       text-align: center;
       align-content: center;
-      inline-size: 210px;
+      inline-size: 160px;
       block-size: 30px;
       padding: 0;
       background-color: var(--button-color);
@@ -103,6 +109,30 @@
     .join-caption {
       font-size: 12px;
       color: var(--white);
+    }
+  }
+
+  /* 기존 원본 코드에서 모바일 크기로 수정하고, 데스크탑용 사이즈는 따로 작성 */
+  @media (min-width: 1024px) {
+    .autu-box-form {
+      .autu-title {
+        font-size: 32px;
+      }
+
+      .autu-box-container {
+        .add-box {
+          inline-size: 340px;
+          font-size: 16px;
+        }
+      }
+    }
+
+    .join-button {
+      inline-size: 340px;
+
+      .join-to-button {
+        inline-size: 210px;
+      }
     }
   }
 }

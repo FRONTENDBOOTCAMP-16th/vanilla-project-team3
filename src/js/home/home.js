@@ -1,14 +1,14 @@
 const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
-import { removeStorage } from '../utils'
+import { loadStorage, removeStorage } from '../utils'
 import { saveStorage } from '/src/js/utils/index.js'
 import { IS_CHECKED_KEY, IMOJI } from '/src/js/constants/index.js'
 import { getData, getUser, putUser } from '../../../api/api.js'
-import { EMAIL } from '../constants/index.js'
+import { EMAIL, LOGIN_AUTH_DATA } from '../constants/index.js'
 import { initSession, logout } from '../../pages/login/loginSession.js'
 
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
-
+const loadEmail = loadStorage(LOGIN_AUTH_DATA)
 const submitButton = container.querySelector('.user-test-check')
 const noti = document.querySelector('.emoji-noti')
 const doubleCheckedGroups = document.querySelectorAll(
@@ -107,7 +107,10 @@ async function handleSubmitClick(e) {
   }
 
   try {
-    await emojiTotalList()
+    // 회원일때만 감정/날씨 저장 실행
+    if (loadStorage(LOGIN_AUTH_DATA)) {
+      await emojiTotalList()
+    }
 
     // 비회원 페이지로 이동할 때 로컬 스토리지에 키 설정
     saveStorage(IS_CHECKED_KEY, 'true')
@@ -159,8 +162,7 @@ async function emojiTotalList() {
   })
 
   // getUser로 날씨/감정 가져오기
-  // 현재 유저 로그인 기능이 없어서 일단 임시로 아무 이메일로 호출하여 테스트함
-  const user = await getUser(EMAIL, 'user2@example.com')
+  const user = await getUser(EMAIL, loadEmail.email)
   const updateUrl = `${VITE_API_BASE_URL}/todayPhrase/user/${user.id}`
   const weather = user.weather_counts
   const mood = user.mood_counts
@@ -172,10 +174,11 @@ async function emojiTotalList() {
   // 체크한 감정에 담긴 각각의 data-value를 꺼내 감정 선택한것에 +1 카운트 해줌
   imojis.forEach((item) => {
     if (item in updateData.weather_counts) {
-      updateData.weather_counts[item] += 1
+      updateData.weather_counts[item] =
+        (updateData.weather_counts[item] || 0) + 1
     }
     if (item in updateData.mood_counts) {
-      updateData.mood_counts[item] += 1
+      updateData.mood_counts[item] = (updateData.mood_counts[item] || 0) + 1
     }
   })
 
