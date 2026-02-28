@@ -1,5 +1,5 @@
 // import { getData } from '../../../api/api.js'
-// import { runSmartRecommendation } from './_smartRecommendBridge.js'
+import { runSmartRecommendation } from './_smartRecommendBridge.js'
 
 // 로딩 시간 설정 (밀리초)
 const LOADING_TIMEOUT = 400
@@ -12,8 +12,9 @@ const resultDisplay = document.querySelector('.result-display')
 const loadingDisplay = document.querySelector('.loading-display')
 const resultContentDisplay = document.querySelector('.result-content-display')
 
+// 로컬 변수 selectedJsonData를 제거하고 파일 전체에서 window.selectedJsonData로 통일
 // API에서 가져온 데이터를 저장할 변수
-let selectedJsonData = null
+// let selectedJsonData = null
 
 // 이미지 프리로드 상태 추적
 let isImagePreloaded = false
@@ -61,7 +62,12 @@ let preloadStartTime = null
 
 // 한번 추천한 책은 제외하고 필터링한 데이터를 보여주는 함수
 window.addEventListener('DOMContentLoaded', () => {
-  // runSmartRecommendation() // 브릿지 파일에 있는 함수 실행!
+  runSmartRecommendation() // 브릿지 파일에 있는 함수 실행!
+
+  // smartBridge 파일에 있는 함수에서 보낸 신호 받고 handleShowResult()를 호출
+  window.addEventListener('recommendationReady', () => { // ← 추가
+    handleShowResult()
+  })
 })
 
 // // 테스트용: 페이지 로드 후 자동으로 결과 표시 (개발 중 확인용)
@@ -71,9 +77,11 @@ window.addEventListener('DOMContentLoaded', () => {
 // }, 1500) // API 로드 시간을 고려해 1.5초로 설정
 
 // 결과 표시 핸들러 함수
+// 하단 즉시 실행 제거
+// 로컬 변수 selectedJsonData를 제거하고 파일 전체에서 window.selectedJsonData로 통일
 function handleShowResult() {
   // 데이터가 아직 로드되지 않은 경우
-  if (!selectedJsonData) {
+  if (!window.selectedJsonData) {
     console.warn('데이터가 아직 준비되지 않았습니다.')
     return
   }
@@ -86,20 +94,20 @@ function handleShowResult() {
   if (isImagePreloaded) {
     // 이미지가 이미 로드된 경우: 최소 로딩 시간만 보장
     setTimeout(() => {
-      displayPhraseResult(selectedJsonData)
+      displayPhraseResult(window.selectedJsonData)
       hideLoadingDisplay()
     }, LOADING_TIMEOUT)
   } else {
     // 이미지가 아직 로드되지 않은 경우: 로드 완료 대기
     preloadImage(
-      selectedJsonData.bookCover,
+      window.selectedJsonData.bookCover,
       () => {
         // 이미지 로드 성공
         const elapsedTime = Date.now() - preloadStartTime
         const remainingTime = Math.max(0, LOADING_TIMEOUT - elapsedTime)
 
         setTimeout(() => {
-          displayPhraseResult(selectedJsonData)
+          displayPhraseResult(window.selectedJsonData)
           hideLoadingDisplay()
         }, remainingTime)
       },
@@ -107,7 +115,7 @@ function handleShowResult() {
         // 이미지 로드 실패
         console.error('이미지를 불러오는 중 오류가 발생했습니다.')
         setTimeout(() => {
-          displayPhraseResult(selectedJsonData)
+          displayPhraseResult(window.selectedJsonData)
           hideLoadingDisplay()
         }, LOADING_TIMEOUT)
       },
@@ -166,4 +174,4 @@ function displayPhraseResult({
 const userTestCheckButton = document.querySelector('.user-test-check')
 userTestCheckButton.addEventListener('click', handleShowResult)
 */
-handleShowResult()
+// handleShowResult() // 즉시 실행 제거
