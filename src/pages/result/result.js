@@ -22,7 +22,6 @@ import {
 import { shareResult } from '../../js/components/_share.js'
 import { getData, getUser } from '../../../api/api.js'
 
-
 /**
  * 이 파일은 페이지가 로드될 때 실행되며,
  * DOM에 접근하고 UI를 렌더링하는 역할을 수행합니다.

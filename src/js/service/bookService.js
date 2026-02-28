@@ -46,22 +46,24 @@ export function scoreBook(book, mood, weather) {
   })
 
   // 감정 교차 추천 점수
-if (mood) {
-  Object.entries(mood).forEach(([moodName, count]) => {
-    if (count) {
-      // 직접 매칭: 선택한 감정과 같은 책
-      if (book.mood === moodName) {
-        score += MOOD_DIRECT_POINT
+  if (mood) {
+    Object.entries(mood).forEach(([moodName, count]) => {
+      if (count) {
+        // 직접 매칭: 선택한 감정과 같은 책
+        if (book.mood === moodName) {
+          score += MOOD_DIRECT_POINT
+        }
+        // 교차 추천: 매핑된 감정 책 (직접 매칭이 아닌 경우만)
+        const pairMood = MOOD_PAIR[moodName]
+        if (pairMood && book.mood === pairMood && book.mood !== moodName) {
+          score += MOOD_PAIR_POINT
+        }
       }
-      // 교차 추천: 매핑된 감정 책 (직접 매칭이 아닌 경우만)
-      const pairMood = MOOD_PAIR[moodName]
-      if (pairMood && book.mood === pairMood && book.mood !== moodName) {
-        score += MOOD_PAIR_POINT
-      }
-    }
-  })
-}
-  console.log(`${book.bookTitle}: mood=${book.mood}, weather=${book.weather}, 총점=${score}`)
+    })
+  }
+  console.log(
+    `${book.bookTitle}: mood=${book.mood}, weather=${book.weather}, 총점=${score}`,
+  )
   return score
 }
 
