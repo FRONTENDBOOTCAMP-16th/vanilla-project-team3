@@ -1,5 +1,5 @@
 const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
-
+import DOMPurify from 'dompurify'
 import { getData, getUser, putUser } from '../../../api/api'
 import { EMAIL, LOGIN_AUTH_DATA } from '../constants'
 import { initSession } from '../../pages/login/loginSession'
@@ -228,7 +228,8 @@ function heartLists(heartList, bookItems) {
 
     if (!currentBook) return
 
-    item.innerHTML = `
+    // 리터널로 HTML구조 제작
+    const changeHTML = `
       <button type="button" class="delete-item-button" aria-label="삭제">
         <svg
           data-delete="button"
@@ -250,6 +251,14 @@ function heartLists(heartList, bookItems) {
         <img src="${currentBook.bookCover}" alt="${currentBook.author}" />
       </a>
     `
+
+    // 리터널로 만든 구조에 안전하게 sanitize로 변환
+    const cleanHTML = DOMPurify.sanitize(changeHTML, {
+      ADD_ATTR: ['target'],
+    })
+
+    // innerHTML로 삽입
+    item.innerHTML = cleanHTML
   })
 }
 
