@@ -1,3 +1,4 @@
+
 import { loadStorage } from '../../js/utils'
 import {
   IS_CHECKED_KEY,
@@ -42,12 +43,6 @@ let mood = {}
 let weather = {}
 let viewed = []
 
-// 로그인 유저의 viewed 가져오기
-if (loadEmail) {
-  const userData = await getUser(EMAIL, loadEmail.email)
-  viewed = userData.viewed || []
-}
-console.log('viewed 갯수:', viewed.length)
 // 이번에 선택한 감정/날씨를 localStorage에서 가져오기
 const savedEmoji = JSON.parse(localStorage.getItem(IMOJI)) || []
 savedEmoji.forEach((item) => {
@@ -59,6 +54,11 @@ savedEmoji.forEach((item) => {
   }
 })
 
+// 로그인 유저의 viewed 가져오기
+if (loadEmail) {
+  const userData = await getUser(EMAIL, loadEmail.email)
+  viewed = userData.viewed || []
+}
 // 페이지 초기화
 init()
 
@@ -87,6 +87,8 @@ if (loadStorage(IMOJI)) {
     })
   }
 }
+
+
 
 // 메인 로직: 결과 표시 (공유 vs 일반)
 async function handleResultDisplay() {
