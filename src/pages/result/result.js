@@ -1,4 +1,3 @@
-
 import { loadStorage } from '../../js/utils'
 import {
   IS_CHECKED_KEY,
@@ -87,8 +86,6 @@ if (loadStorage(IMOJI)) {
     })
   }
 }
-
-
 
 // 메인 로직: 결과 표시 (공유 vs 일반)
 async function handleResultDisplay() {

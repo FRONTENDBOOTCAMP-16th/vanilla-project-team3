@@ -45,20 +45,20 @@ export function scoreBook(book, mood, weather) {
     }
   })
 
-// 감정 직접 매칭 + 교차 추천 점수
-if (mood) {
-  Object.entries(mood).forEach(([moodName, count]) => {
-    if (count) {
-      if (book.mood === moodName) {
-        score += MOOD_DIRECT_POINT
+  // 감정 직접 매칭 + 교차 추천 점수
+  if (mood) {
+    Object.entries(mood).forEach(([moodName, count]) => {
+      if (count) {
+        if (book.mood === moodName) {
+          score += MOOD_DIRECT_POINT
+        }
+        const pairMood = MOOD_PAIR[moodName]
+        if (pairMood && book.mood === pairMood && book.mood !== moodName) {
+          score += MOOD_PAIR_POINT
+        }
       }
-      const pairMood = MOOD_PAIR[moodName]
-      if (pairMood && book.mood === pairMood && book.mood !== moodName) {
-        score += MOOD_PAIR_POINT
-      }
-    }
-  })
-}
+    })
+  }
   console.log(
     `${book.bookTitle}: mood=${book.mood}, weather=${book.weather}, 총점=${score}`,
   )
