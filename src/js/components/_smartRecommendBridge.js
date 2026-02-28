@@ -44,6 +44,9 @@ export async function runSmartRecommendation() {
 
       // 6. 하위 호환성: 기존 전역 변수 시스템을 사용하는 코드들을 위해 첫 번째 데이터 저장
       window.selectedJsonData = result[0]
+
+      // 데이터 준비가 완료된 시점에 이벤트를 쏴주기
+      window.dispatchEvent(new CustomEvent('recommendationReady')) // ← 추가
     }
   } catch (error) {
     console.error('추천 실행 중 에러:', error)
