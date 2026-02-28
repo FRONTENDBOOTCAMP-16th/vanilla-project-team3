@@ -65,7 +65,8 @@ window.addEventListener('DOMContentLoaded', () => {
   runSmartRecommendation() // 브릿지 파일에 있는 함수 실행!
 
   // smartBridge 파일에 있는 함수에서 보낸 신호 받고 handleShowResult()를 호출
-  window.addEventListener('recommendationReady', () => { // ← 추가
+  window.addEventListener('recommendationReady', () => {
+    // ← 추가
     handleShowResult()
   })
 })
