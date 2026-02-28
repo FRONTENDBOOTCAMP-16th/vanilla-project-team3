@@ -40,7 +40,7 @@ init()
 function init() {
   applyDisableIfChecked()
   console.log('user mood_counts:', mood)
-console.log('user weather_counts:', weather)
+  console.log('user weather_counts:', weather)
   // const 상수 선언
   const recommended = getRecommendations(allBooks, mood, weather)
   localStorage.setItem('selectedBookList', JSON.stringify(recommended))
@@ -58,9 +58,6 @@ function applyDisableIfChecked() {
   })
 }
 
-
-
-
 // 날씨,기분 점수 계산
 // TODO =====================================================
 
@@ -71,7 +68,9 @@ function scoreBook(book, mood, weather) {
   // 현재 날씨 점수
   score += scoreCalculate(book, 'weather', weather)
 
-  console.log(`${book.bookTitle}: 기분점수=${scoreCalculate(book, 'mood', mood)}, 날씨점수=${scoreCalculate(book, 'weather', weather)}`)
+  console.log(
+    `${book.bookTitle}: 기분점수=${scoreCalculate(book, 'mood', mood)}, 날씨점수=${scoreCalculate(book, 'weather', weather)}`,
+  )
 
   // 좋아요 기반 장르 선호도 점수
   const preference = JSON.parse(localStorage.getItem('genrePreference') || '{}')
@@ -82,18 +81,17 @@ function scoreBook(book, mood, weather) {
     }
   })
 
-    // 감정 교차 추천 점수
-if (mood) {
-  Object.entries(mood).forEach(([moodName, count]) => {
-    if (count && MOOD_PAIR[moodName]) {
-      const pairMood = MOOD_PAIR[moodName]
-      if (book.mood === pairMood) {
-        score += MOOD_PAIR_POINT
-        
+  // 감정 교차 추천 점수
+  if (mood) {
+    Object.entries(mood).forEach(([moodName, count]) => {
+      if (count && MOOD_PAIR[moodName]) {
+        const pairMood = MOOD_PAIR[moodName]
+        if (book.mood === pairMood) {
+          score += MOOD_PAIR_POINT
+        }
       }
-    }
-  })
-}
+    })
+  }
 
   return score
 }
@@ -137,9 +135,11 @@ function getRecommendations(allBooks, mood, weather) {
     .filter((book) => book.score !== -Infinity)
     .sort((a, b) => b.score - a.score)
 
-
   const topFour = scored.slice(0, 4)
-  console.log('최종 추천 4권:', topFour.map(b => `${b.bookTitle} (${b.mood}, ${b.score}점)`))
+  console.log(
+    '최종 추천 4권:',
+    topFour.map((b) => `${b.bookTitle} (${b.mood}, ${b.score}점)`),
+  )
   return topFour
 }
 
