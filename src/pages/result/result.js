@@ -40,7 +40,7 @@ const buttons = container.querySelectorAll('[data-checked="doubleChecked"]')
  * 페이지 초기 진입 시 실행
  */
 async function initPage() {
-   window.__skipSmartRecommendation = true
+  window.__skipSmartRecommendation = true
   const loadEmail = loadStorage(LOGIN_AUTH_DATA)
 
   // 이번에 선택한 감정/날씨를 localStorage에서 가져오기
@@ -108,7 +108,7 @@ async function handleResultDisplay(allBooks, mood, weather, viewed) {
     } else {
       showLoadingDisplay()
       const recommended = getRecommendations(allBooks, mood, weather, viewed)
-     
+
       if (recommended && recommended.length > 0) {
         currentData = recommended
       } else {
@@ -118,8 +118,8 @@ async function handleResultDisplay(allBooks, mood, weather, viewed) {
     }
 
     if (currentData) {
-  displayPhraseResult(currentData)
-  bindShareEvent(currentData)
+      displayPhraseResult(currentData)
+      bindShareEvent(currentData)
     } else {
       alert('저장된 데이터가 존재하지 않습니다.')
       location.href = '/index.html'
@@ -154,8 +154,8 @@ async function getSharedData(title, ids, params) {
 
 // 일반 진입 데이터 로직
 async function getLocalOrCalculatedData() {
-const savedLocalData = localStorage.getItem('selectedBookList')
-if (savedLocalData) return JSON.parse(savedLocalData)
+  const savedLocalData = localStorage.getItem('selectedBookList')
+  if (savedLocalData) return JSON.parse(savedLocalData)
 
   const savedEmoji = JSON.parse(localStorage.getItem(IMOJI))
   if (savedEmoji) {
@@ -188,7 +188,7 @@ function bindHeartEvents(loadEmail, allBooks) {
         // const isActive = btn.classList.toggle('heart-active')
         // btn.setAttribute('aria-pressed', isActive ? 'true' : 'false')
         const isActive = btn.classList.contains('heart-active')
-        
+
         const imgSrc = btn.querySelector('.book-cover-img')?.src
         const cachedData = JSON.parse(
           localStorage.getItem('cachedBookData') || '[]',
@@ -198,9 +198,14 @@ function bindHeartEvents(loadEmail, allBooks) {
           updateHeartToServer(book.id, isActive)
           if (book.tags) {
             updateGenrePreference(book.tags, isActive ? 1 : -1)
-            const preference = JSON.parse(localStorage.getItem('genrePreference') || '{}')
-    const allTags = [...new Set(allBooks.flatMap(b => b.tags || []))]
-    console.log('전체 태그별 점수:', allTags.map(tag => `${tag}: ${preference[tag] || 0}점`))
+            const preference = JSON.parse(
+              localStorage.getItem('genrePreference') || '{}',
+            )
+            const allTags = [...new Set(allBooks.flatMap((b) => b.tags || []))]
+            console.log(
+              '전체 태그별 점수:',
+              allTags.map((tag) => `${tag}: ${preference[tag] || 0}점`),
+            )
           }
         }
       })

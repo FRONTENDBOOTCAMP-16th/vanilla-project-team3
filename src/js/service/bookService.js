@@ -25,9 +25,9 @@ export function scoreCalculate(book, key, value) {
 
 const MOOD_PAIR = {
   happy: 'happy',
-  sad: 'happy',
-  soso: 'happy',
-  bad: 'happy',
+  sad: 'sad',
+  soso: 'soso',
+  bad: 'bad',
 }
 const MOOD_PAIR_POINT = 1
 const MOOD_DIRECT_POINT = 3
@@ -74,7 +74,10 @@ export function getRecommendations(allBooks, mood, weather, viewed = []) {
     .sort((a, b) => b.score - a.score)
     .slice(0, 4)
 
-  console.log('추천 4권:', result.map(b => `${b.bookTitle}`))
+  console.log(
+    '추천 4권:',
+    result.map((b) => `${b.bookTitle}`),
+  )
   return result
 }
 
