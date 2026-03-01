@@ -190,10 +190,15 @@ function bindHeartEvents(loadEmail, allBooks) {
         const isActive = btn.classList.contains('heart-active')
 
         const imgSrc = btn.querySelector('.book-cover-img')?.src
-        const cachedData = JSON.parse(
-          localStorage.getItem('cachedBookData') || '[]',
-        )
-        const book = cachedData.find((b) => b.bookCover === imgSrc)
+
+        // [수정] cachedBookData 대신 allBooks 직접 사용
+        // cachedBookData가 없거나 "undefined" 문자열일 경우 에러 방지
+        // const cachedData = JSON.parse(
+        //   localStorage.getItem('cachedBookData') || '[]',
+        // )
+        // const book = cachedData.find((b) => b.bookCover === imgSrc)
+        const book = allBooks.find((b) => b.bookCover === imgSrc)
+
         if (book) {
           // localStorage heart 배열 업데이트
           const savedData = JSON.parse(
@@ -211,14 +216,15 @@ function bindHeartEvents(loadEmail, allBooks) {
           updateHeartToServer(book.id, isActive)
           if (book.tags) {
             updateGenrePreference(book.tags, isActive ? 1 : -1)
-            const preference = JSON.parse(
-              localStorage.getItem('genrePreference') || '{}',
-            )
-            const allTags = [...new Set(allBooks.flatMap((b) => b.tags || []))]
-            console.log(
-              '전체 태그별 점수:',
-              allTags.map((tag) => `${tag}: ${preference[tag] || 0}점`),
-            )
+            // [수정] 디버깅용 console.log 제거
+            // const preference = JSON.parse(
+            //   localStorage.getItem('genrePreference') || '{}',
+            // )
+            // const allTags = [...new Set(allBooks.flatMap((b) => b.tags || []))]
+            // console.log(
+            //   '전체 태그별 점수:',
+            //   allTags.map((tag) => `${tag}: ${preference[tag] || 0}점`),
+            // )
           }
         }
       })
