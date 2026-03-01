@@ -64,7 +64,7 @@ export function scoreBook(book, mood, weather) {
 }
 
 export function getRecommendations(allBooks, mood, weather, viewed = []) {
-  return allBooks
+  const result = allBooks
     .filter((book) => !viewed.includes(String(book.id)))
     .map((book) => ({
       ...book,
@@ -73,6 +73,9 @@ export function getRecommendations(allBooks, mood, weather, viewed = []) {
     .filter((book) => book.score !== -Infinity)
     .sort((a, b) => b.score - a.score)
     .slice(0, 4)
+
+  console.log('추천 4권:', result.map(b => `${b.bookTitle}`))
+  return result
 }
 
 // 선호도 및 찜하기 관련 서버 통신
