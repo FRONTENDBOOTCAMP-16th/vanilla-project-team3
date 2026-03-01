@@ -126,7 +126,9 @@ function signupLogic() {
       const emailCheckResponse = await fetch(`${USERS_API}?email=${newEmail}`)
       // const emailMembers = await emailCheckResponse.json()
       // [수정] 404면 중복 없음(빈 배열)으로 처리, json() 파싱 에러 방지
-      const emailMembers = emailCheckResponse.ok ? await emailCheckResponse.json() : []
+      const emailMembers = emailCheckResponse.ok
+        ? await emailCheckResponse.json()
+        : []
 
       if (Array.isArray(emailMembers) && emailMembers.length > 0) {
         emailInputBottomAlert.textContent = '이미 사용 중인 이메일입니다.'
