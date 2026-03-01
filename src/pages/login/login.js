@@ -1,4 +1,4 @@
-const baseURL = import.meta.env.VITE_BASE_URL
+// const baseURL = import.meta.env.VITE_BASE_URL
 import { getUser } from '../../../api/api'
 import { ID, LOGIN_AUTH_DATA } from '../../js/constants'
 
@@ -78,6 +78,7 @@ async function isLogin(resultID, resultPassword) {
 
     localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(safeUserData))
     alert('로그인을 성공하였습니다.')
-    window.location.href = `${baseURL}/index.html`
+    // window.location.href = `${baseURL}/index.html`
+    window.location.href = `/index.html`
   }
 }

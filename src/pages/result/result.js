@@ -195,15 +195,19 @@ function bindHeartEvents(loadEmail, allBooks) {
         )
         const book = cachedData.find((b) => b.bookCover === imgSrc)
         if (book) {
-            // localStorage heart 배열 업데이트
-  const savedData = JSON.parse(localStorage.getItem(LOGIN_AUTH_DATA) || '{}')
-  if (isActive) {
-    savedData.heart = [...(savedData.heart || []), String(book.id)]
-  } else {
-    savedData.heart = (savedData.heart || []).filter(id => id !== String(book.id))
-  }
+          // localStorage heart 배열 업데이트
+          const savedData = JSON.parse(
+            localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
+          )
+          if (isActive) {
+            savedData.heart = [...(savedData.heart || []), String(book.id)]
+          } else {
+            savedData.heart = (savedData.heart || []).filter(
+              (id) => id !== String(book.id),
+            )
+          }
           localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(savedData))
-          
+
           updateHeartToServer(book.id, isActive)
           if (book.tags) {
             updateGenrePreference(book.tags, isActive ? 1 : -1)
