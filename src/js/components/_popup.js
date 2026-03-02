@@ -74,66 +74,69 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  // 메인 화면 등의 찜 버튼(하트) 클릭 시 (다중 요소 대응)
-  saveBtns.forEach((btn) => {
-    // [수정] async 추가 (await 사용을 위해)
-    btn.addEventListener('click', async () => {
-      // 1. 로그인 확인
-      if (!isLoggedIn) {
-        loginDialog?.showModal()
-        return
-      }
+  // 결과 페이지에서는 result.js가 찜 이벤트를 처리하므로 중복 실행 방지
+  if (!document.querySelector('.result-display')) {
+   // 메인 화면 등의 찜 버튼(하트) 클릭 시 (다중 요소 대응)
+   saveBtns.forEach((btn) => {
+     // [수정] async 추가 (await 사용을 위해)
+     btn.addEventListener('click', async () => {
+        // 1. 로그인 확인
+        if (!isLoggedIn) {
+          loginDialog?.showModal()
+          return
+         }
 
-      // 2. 갯수 제한 체크 (최대 6개까지만 허용)
-      const isAlreadyActive = btn.classList.contains('heart-active')
-
-      // [수정] 기존 li 개수로 체크하던 방식 → heart 배열 길이로 체크
-      // 기존 코드 (li 개수로 체크 - 항상 0 나옴)
-      // const currentCount = bookList
-      //   ? bookList.querySelectorAll('li:not(:empty)').length
-      //   : 0
-      const savedData = JSON.parse(
-        localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
-      )
-      const currentCount = savedData?.heart?.length ?? 0
-
-      if (!isAlreadyActive && currentCount >= 6) {
-        heartLimitDialog?.showModal() // 6개 초과 시 찜 제한 안내 팝업
-      } else {
-        toggleHeart(btn)
-
-        const imgSrc = btn.querySelector('.book-cover-img').src
-        const currentData = JSON.parse(
-          localStorage.getItem('selectedBookList') || '[]',
-        )
-        const book = currentData.find((b) => b.bookCover === imgSrc)
-
-        if (book) {
-          const nowActive = btn.classList.contains('heart-active')
-
-          // [추가] localStorage heart 배열도 업데이트 (6개 제한 체크에 사용)
-          const latestData = JSON.parse(
-            localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
-          )
-          if (nowActive) {
-            latestData.heart = [...(latestData.heart || []), String(book.id)]
-          } else {
-            latestData.heart = (latestData.heart || []).filter(
-              (id) => id !== String(book.id),
-            )
-          }
-          localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(latestData))
-
-          // [추가] 서버에 찜 추가/삭제 반영
-          await updateHeartToServer(book.id, nowActive)
-
-          if (book.tags) {
-            updateGenrePreference(book.tags, nowActive ? 1 : -1)
+       // 2. 갯수 제한 체크 (최대 6개까지만 허용)
+       const isAlreadyActive = btn.classList.contains('heart-active')
+ 
+       // [수정] 기존 li 개수로 체크하던 방식 → heart 배열 길이로 체크
+       // 기존 코드 (li 개수로 체크 - 항상 0 나옴)
+       // const currentCount = bookList
+       //   ? bookList.querySelectorAll('li:not(:empty)').length
+       //   : 0
+       const savedData = JSON.parse(
+         localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
+       )
+       const currentCount = savedData?.heart?.length ?? 0
+ 
+       if (!isAlreadyActive && currentCount >= 6) {
+         heartLimitDialog?.showModal() // 6개 초과 시 찜 제한 안내 팝업
+        } else {
+         toggleHeart(btn)
+ 
+         const imgSrc = btn.querySelector('.book-cover-img').src
+         const currentData = JSON.parse(
+           localStorage.getItem('selectedBookList') || '[]',
+         )
+         const book = currentData.find((b) => b.bookCover === imgSrc)
+ 
+         if (book) {
+           const nowActive = btn.classList.contains('heart-active')
+ 
+           // [추가] localStorage heart 배열도 업데이트 (6개 제한 체크에 사용)
+           const latestData = JSON.parse(
+             localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
+           )
+           if (nowActive) {
+             latestData.heart = [...(latestData.heart || []), String(book.id)]
+           } else {
+             latestData.heart = (latestData.heart || []).filter(
+               (id) => id !== String(book.id),
+             )
+           }
+           localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(latestData))
+ 
+           // [추가] 서버에 찜 추가/삭제 반영
+           await updateHeartToServer(book.id, nowActive)
+ 
+           if (book.tags) {
+             updateGenrePreference(book.tags, nowActive ? 1 : -1)
+           }
           }
         }
-      }
+      })
     })
-  })
+  }
 
   // 비밀번호 변경 팝업 열기
   if (changePWBtn) {

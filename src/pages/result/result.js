@@ -180,56 +180,62 @@ function bindShareEvent(data) {
 }
 
 function bindHeartEvents(loadEmail, allBooks) {
-  setTimeout(() => {
-    document.querySelectorAll('.save-button').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        if (!loadEmail) return
+  // [수정] setTimeout(1500) 제거 - initPage에서 await로 순서가 보장되므로 불필요
+  // setTimeout(() => {
+  document.querySelectorAll('.save-button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!loadEmail) return
 
-        // const isActive = btn.classList.toggle('heart-active')
-        // btn.setAttribute('aria-pressed', isActive ? 'true' : 'false')
-        const isActive = btn.classList.contains('heart-active')
+      // [수정] 클릭 전 상태를 읽던 방식 → 토글 먼저 하고 토글 후 상태를 읽는 방식으로 변경
+      // 기존 코드: const isActive = btn.classList.contains('heart-active')
+      const isActive = btn.classList.toggle('heart-active')
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false')
 
-        const imgSrc = btn.querySelector('.book-cover-img')?.src
+      const imgSrc = btn.querySelector('.book-cover-img')?.src
+      // [수정] cachedBookData 대신 allBooks 직접 사용
+      // cachedBookData가 없거나 "undefined" 문자열일 경우 에러 방지
+      // const cachedData = JSON.parse(
+      //   localStorage.getItem('cachedBookData') || '[]',
+      // )
+      // const book = cachedData.find((b) => b.bookCover === imgSrc)
+      const book = allBooks.find((b) => b.bookCover === imgSrc)
+      if (book) {
+        const savedData = JSON.parse(
+          localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
+        )
 
-        // [수정] cachedBookData 대신 allBooks 직접 사용
-        // cachedBookData가 없거나 "undefined" 문자열일 경우 에러 방지
-        // const cachedData = JSON.parse(
-        //   localStorage.getItem('cachedBookData') || '[]',
-        // )
-        // const book = cachedData.find((b) => b.bookCover === imgSrc)
-        const book = allBooks.find((b) => b.bookCover === imgSrc)
-
-        if (book) {
-          // localStorage heart 배열 업데이트
-          const savedData = JSON.parse(
-            localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
+        if (isActive) {
+          // [수정] 중복 체크 없이 push하던 방식 → includes로 중복 체크 후 추가
+          // 기존 코드: savedData.heart = [...(savedData.heart || []), String(book.id)]
+          const currentHeart = savedData.heart || []
+          if (!currentHeart.includes(String(book.id))) {
+            savedData.heart = [...currentHeart, String(book.id)]
+          }
+        } else {
+          savedData.heart = (savedData.heart || []).filter(
+            (id) => id !== String(book.id),
           )
-          if (isActive) {
-            savedData.heart = [...(savedData.heart || []), String(book.id)]
-          } else {
-            savedData.heart = (savedData.heart || []).filter(
-              (id) => id !== String(book.id),
-            )
-          }
-          localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(savedData))
-
-          updateHeartToServer(book.id, isActive)
-          if (book.tags) {
-            updateGenrePreference(book.tags, isActive ? 1 : -1)
-            // [수정] 디버깅용 console.log 제거
-            // const preference = JSON.parse(
-            //   localStorage.getItem('genrePreference') || '{}',
-            // )
-            // const allTags = [...new Set(allBooks.flatMap((b) => b.tags || []))]
-            // console.log(
-            //   '전체 태그별 점수:',
-            //   allTags.map((tag) => `${tag}: ${preference[tag] || 0}점`),
-            // )
-          }
         }
-      })
+
+        localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(savedData))
+        updateHeartToServer(book.id, isActive)
+
+        if (book.tags) {
+          updateGenrePreference(book.tags, isActive ? 1 : -1)
+          // [수정] 디버깅용 console.log 제거
+          // const preference = JSON.parse(
+          //   localStorage.getItem('genrePreference') || '{}',
+          // )
+          // const allTags = [...new Set(allBooks.flatMap((b) => b.tags || []))]
+          // console.log(
+          //   '전체 태그별 점수:',
+          //   allTags.map((tag) => `${tag}: ${preference[tag] || 0}점`),
+          // )
+        }
+      }
     })
-  }, 1500)
+  })
+  // }, 1500)
 }
 
 // 실행
