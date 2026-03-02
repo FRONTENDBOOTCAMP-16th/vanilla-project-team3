@@ -21,6 +21,7 @@ import {
 } from '../../js/components/_imageLoading.js'
 import { shareResult } from '../../js/components/_share.js'
 import { getData, getUser } from '../../../api/api.js'
+import { updateUserDiSplay } from '../../js/components/_popup.js'
 
 /**
  * 이 파일은 페이지가 로드될 때 실행되며,
@@ -58,6 +59,10 @@ async function initPage() {
     }
   })
 
+  // [추가] 이미 찜한 책 id 목록 가져오기
+  const savedData = JSON.parse(localStorage.getItem(LOGIN_AUTH_DATA) || '{}')
+  const heartIds = (savedData.heart || []).map(Number)
+
   // 로그인 유저의 viewed 가져오기
   if (loadEmail?.email) {
     const userData = await getUser(EMAIL, loadEmail.email)
@@ -67,10 +72,13 @@ async function initPage() {
   // 기본 데이터 로드
   const allBooks = await getData()
 
+  // [추가] viewed에 찜한 책도 포함시켜서 추천에서 제외
+  const excludeIds = [...new Set([...viewed, ...heartIds])]
+
   applyDisableIfChecked()
   syncEmojiCheckboxes()
-  await handleResultDisplay(allBooks, mood, weather, viewed)
-  bindHeartEvents(loadEmail, allBooks)
+  await handleResultDisplay(allBooks, mood, weather, excludeIds)
+  bindHeartEvents(allBooks) // loadEmail 제거
 }
 
 // UI: 체크박스 비활성화 상태 반영
@@ -179,11 +187,12 @@ function bindShareEvent(data) {
   }
 }
 
-function bindHeartEvents(loadEmail, allBooks) {
+function bindHeartEvents(allBooks) { // loadEmail 파라미터 제거
   // [수정] setTimeout(1500) 제거 - initPage에서 await로 순서가 보장되므로 불필요
   // setTimeout(() => {
   document.querySelectorAll('.save-button').forEach((btn) => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
+      const loadEmail = loadStorage(LOGIN_AUTH_DATA)  // ← 클릭 시점에 읽기
       if (!loadEmail) return
 
       // [수정] 클릭 전 상태를 읽던 방식 → 토글 먼저 하고 토글 후 상태를 읽는 방식으로 변경
@@ -199,6 +208,7 @@ function bindHeartEvents(loadEmail, allBooks) {
       // )
       // const book = cachedData.find((b) => b.bookCover === imgSrc)
       const book = allBooks.find((b) => b.bookCover === imgSrc)
+
       if (book) {
         const savedData = JSON.parse(
           localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
@@ -218,7 +228,16 @@ function bindHeartEvents(loadEmail, allBooks) {
         }
 
         localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(savedData))
-        updateHeartToServer(book.id, isActive)
+        // [수정] await 추가 - 서버 반영 완료 후 마이페이지 업데이트
+        await updateHeartToServer(book.id, isActive)
+
+        // [추가] 찜 해제 시 마이페이지 팝업이 열려있으면 즉시 반영
+        if (!isActive) {
+          const myPageDialog = document.querySelector('.my-page-dialog')
+          if (myPageDialog?.open) {
+            updateUserDiSplay()
+          }
+        }
 
         if (book.tags) {
           updateGenrePreference(book.tags, isActive ? 1 : -1)
