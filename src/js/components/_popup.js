@@ -396,7 +396,7 @@ async function removeHeart(bookList) {
 
     // 최신 heart 배열 기준으로 필터링
     const updateHeart = latestUser.heart.filter(
-      (id) => id !== String(deleteBookValue),
+      (id) => String(id) !== String(deleteBookValue),
     )
 
     const updateData = {
