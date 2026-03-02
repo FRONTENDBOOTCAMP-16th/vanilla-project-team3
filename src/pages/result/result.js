@@ -60,7 +60,7 @@ async function initPage() {
 
   // [추가] 이미 찜한 책 id 목록 가져오기
   const savedData = JSON.parse(localStorage.getItem(LOGIN_AUTH_DATA) || '{}')
-  const heartIds = (savedData.heart || []).map(Number)
+  const heartIds = (savedData.heart || []).map(String)
 
   // 로그인 유저의 viewed 가져오기
   if (loadEmail?.email) {
@@ -125,7 +125,9 @@ async function handleResultDisplay(allBooks, mood, weather, viewed) {
     } else {
       // 일반 추천 진입 시 로딩 시작
       showLoadingDisplay()
-      const recommended = getRecommendations(allBooks, mood, weather, viewed)
+      // const recommended = getRecommendations(allBooks, mood, weather, viewed)
+      const filteredBooks = allBooks.filter((b) => !viewed.includes(String(b.id)))
+      const recommended = getRecommendations(filteredBooks, mood, weather, viewed)
 
       if (recommended && recommended.length > 0) {
         currentData = recommended
@@ -214,6 +216,16 @@ function bindShareEvent(data) {
 }
 
 function bindHeartEvents(allBooks) {
+    const heartLimitConfirmBtn = document.querySelector('.heart-list-dialog .confirm-button')
+  heartLimitConfirmBtn?.addEventListener('click', () => {
+    const heartLimitDialog = document.querySelector('.heart-list-dialog')
+    const myPageDialog = document.querySelector('.my-page-dialog')
+    heartLimitDialog?.close()
+    updateUserDiSplay()
+    myPageDialog?.showModal()
+  })
+
+
   // loadEmail 파라미터 제거
   // [수정] setTimeout(1500) 제거 - initPage에서 await로 순서가 보장되므로 불필요
   // setTimeout(() => {
@@ -224,6 +236,16 @@ function bindHeartEvents(allBooks) {
         // [수정] 비회원이면 로그인 팝업 표시
         const loginDialog = document.querySelector('.login-dialog')
         loginDialog?.showModal()
+        return
+      }
+
+      const isAlreadyActive = btn.classList.contains('heart-active')
+      const savedData = JSON.parse(localStorage.getItem(LOGIN_AUTH_DATA) || '{}')
+      const currentCount = (savedData?.heart || []).length
+
+      if (!isAlreadyActive && currentCount >= 6) {
+        const heartLimitDialog = document.querySelector('.heart-list-dialog')
+        heartLimitDialog?.showModal()
         return
       }
 

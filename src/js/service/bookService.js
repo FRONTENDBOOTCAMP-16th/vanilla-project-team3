@@ -80,6 +80,12 @@ export function scoreBook(book, mood, weather) {
     })
   }
 
+  if (book.bookTitle === '빨강 머리 앤') {
+  console.log('빨강 머리 앤 점수:', score)
+  console.log('mood 점수:', scoreCalculate(book, 'mood', mood))
+  console.log('weather 점수:', scoreCalculate(book, 'weather', weather))
+}
+
   return score
 }
 
@@ -103,14 +109,22 @@ export function getRecommendations(allBooks, mood, weather, viewed = []) {
     // 3. 유효한 점수를 가진 책만 필터링
     .filter((book) => book.score !== -Infinity)
     // 4. 점수가 높은 순(내림차순)으로 정렬
-    .sort((a, b) => b.score - a.score)
-    // 5. 상위 4권만 추출
+    .sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score
+      return Math.random() - 0.5
+    })
+
+    // 5. (임시) 중복 API 필터링
+    .filter((book, index, self) =>
+      index === self.findIndex((b) => b.bookTitle === book.bookTitle)
+    )
+    // 6. 상위 4권만 추출
     .slice(0, 4)
 
   // 디버깅을 위해 추천된 책 제목을 콘솔에 출력합니다.
   console.log(
     '추천 4권:',
-    result.map((b) => `${b.bookTitle}`),
+    result.map((b) => `[ID:${b.id}] ${b.bookTitle}`),
   )
   return result
 }

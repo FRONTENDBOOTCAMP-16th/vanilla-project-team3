@@ -157,13 +157,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const latestData = JSON.parse(
               localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
             )
-            if (nowActive) {
-              latestData.heart = [...(latestData.heart || []), String(book.id)]
-            } else {
-              latestData.heart = (latestData.heart || []).filter(
-                (id) => id !== String(book.id),
-              )
-            }
+         if (nowActive) {
+  const alreadyIn = (latestData.heart || []).includes(String(book.id))
+  if (!alreadyIn) {
+    latestData.heart = [...(latestData.heart || []), String(book.id)]
+  }
+}
             localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(latestData))
 
             // [추가] 서버에 찜 추가/삭제 반영
