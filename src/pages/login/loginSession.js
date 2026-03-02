@@ -5,6 +5,8 @@ import { removeStorage } from '../../js/utils'
 
 const SESSION_FLAG = 'session_active'
 
+const SESSION_FLAG = 'session_active'
+
 // 2. 전역 상태 변수 선언 (다른 파일에서 이 상태를 참조할 수 있도록 export)
 export let isLoggedIn = false // 현재 로그인 여부 (true/false)
 export let currentUser = null // 현재 로그인한 유저의 데이터 객체 (비로그인 시 null)

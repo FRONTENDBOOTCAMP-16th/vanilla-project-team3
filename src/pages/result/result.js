@@ -19,6 +19,7 @@ import {
 } from '../../js/components/_imageLoading.js'
 import { shareResult } from '../../js/components/_share.js'
 import { getData, getUser } from '../../../api/api.js'
+import { updateUserDiSplay } from '../../js/components/_popup.js'
 
 /**
  * 이 파일은 결과 페이지의 렌더링을 담당하며, 사용자의 선택과 서버 데이터를 결합합니다.
@@ -57,7 +58,11 @@ async function initPage() {
     }
   })
 
-  // 로그인 상태인 경우, 서버에서 유저의 '이미 본 도서(viewed)' 정보를 동기화
+  // [추가] 이미 찜한 책 id 목록 가져오기
+  const savedData = JSON.parse(localStorage.getItem(LOGIN_AUTH_DATA) || '{}')
+  const heartIds = (savedData.heart || []).map(Number)
+
+  // 로그인 유저의 viewed 가져오기
   if (loadEmail?.email) {
     const userData = await getUser(EMAIL, loadEmail.email)
     viewed = userData.viewed || []
@@ -66,15 +71,13 @@ async function initPage() {
   // 전체 도서 데이터(DB) 로드
   const allBooks = await getData()
 
-  // UI 초기화: 이전에 체크한 항목 복구 및 잠금
+  // [추가] viewed에 찜한 책도 포함시켜서 추천에서 제외
+  const excludeIds = [...new Set([...viewed, ...heartIds])]
+
   applyDisableIfChecked()
   syncEmojiCheckboxes()
-
-  // 추천 로직을 거쳐 최종 결과를 화면에 출력
-  await handleResultDisplay(allBooks, mood, weather, viewed)
-
-  // 하트(좋아요) 클릭 시 동작하는 이벤트 바인딩
-  bindHeartEvents(loadEmail, allBooks)
+  await handleResultDisplay(allBooks, mood, weather, excludeIds)
+  bindHeartEvents(allBooks) // loadEmail 제거
 }
 
 /**
@@ -210,63 +213,80 @@ function bindShareEvent(data) {
   }
 }
 
-/**
- * [좋아요/하트] 클릭 시 서버 저장 및 장르 선호도 점수 반영
- */
-function bindHeartEvents(loadEmail, allBooks) {
-  // 동적 생성된 UI 요소를 기다리기 위해 1.5초 지연 실행
-  setTimeout(() => {
-    document.querySelectorAll('.save-button').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        if (!loadEmail) return // 비로그인 시 동작 방지
+function bindHeartEvents(allBooks) {
+  // loadEmail 파라미터 제거
+  // [수정] setTimeout(1500) 제거 - initPage에서 await로 순서가 보장되므로 불필요
+  // setTimeout(() => {
+  document.querySelectorAll('.save-button').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const loadEmail = loadStorage(LOGIN_AUTH_DATA) // ← 클릭 시점에 읽기
+      if (!loadEmail) {
+        // [수정] 비회원이면 로그인 팝업 표시
+        const loginDialog = document.querySelector('.login-dialog')
+        loginDialog?.showModal()
+        return
+      }
 
-        // 현재 버튼에 하트가 켜져있는지 확인 (UI 상태 확인)
-        const isActive = btn.classList.contains('heart-active')
-        const imgSrc = btn.querySelector('.book-cover-img')?.src
+      // [수정] 클릭 전 상태를 읽던 방식 → 토글 먼저 하고 토글 후 상태를 읽는 방식으로 변경
+      // 기존 코드: const isActive = btn.classList.contains('heart-active')
+      const isActive = btn.classList.toggle('heart-active')
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false')
 
-        // 이미지 경로를 대조하여 전체 도서 데이터 중 어떤 책인지 식별
-        // [수정] cachedBookData 대신 allBooks 직접 사용
-        // cachedBookData가 없거나 "undefined" 문자열일 경우 에러 방지
-        // const cachedData = JSON.parse(
-        //   localStorage.getItem('cachedBookData') || '[]',
-        // )
-        // const book = cachedData.find((b) => b.bookCover === imgSrc)
-        const book = allBooks.find((b) => b.bookCover === imgSrc)
+      const imgSrc = btn.querySelector('.book-cover-img')?.src
+      // [수정] cachedBookData 대신 allBooks 직접 사용
+      // cachedBookData가 없거나 "undefined" 문자열일 경우 에러 방지
+      // const cachedData = JSON.parse(
+      //   localStorage.getItem('cachedBookData') || '[]',
+      // )
+      // const book = cachedData.find((b) => b.bookCover === imgSrc)
+      const book = allBooks.find((b) => b.bookCover === imgSrc)
 
-        if (book) {
-          // 1. 로컬 스토리지의 하트 리스트 업데이트 (세션 유지용)
-          const savedData = JSON.parse(
-            localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
-          )
-          if (isActive) {
-            savedData.heart = [...(savedData.heart || []), String(book.id)]
-          } else {
-            savedData.heart = (savedData.heart || []).filter(
-              (id) => id !== String(book.id),
-            )
+      if (book) {
+        const savedData = JSON.parse(
+          localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
+        )
+
+        if (isActive) {
+          // [수정] 중복 체크 없이 push하던 방식 → includes로 중복 체크 후 추가
+          // 기존 코드: savedData.heart = [...(savedData.heart || []), String(book.id)]
+          const currentHeart = savedData.heart || []
+          if (!currentHeart.includes(String(book.id))) {
+            savedData.heart = [...currentHeart, String(book.id)]
           }
-          localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(savedData))
+        } else {
+          savedData.heart = (savedData.heart || []).filter(
+            (id) => id !== String(book.id),
+          )
+        }
 
-          // 2. 서버 DB에 하트 상태 전송
-          updateHeartToServer(book.id, isActive)
+        localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(savedData))
+        // [수정] await 추가 - 서버 반영 완료 후 마이페이지 업데이트
+        await updateHeartToServer(book.id, isActive)
 
-          // 3. 사용자의 취향 학습: 해당 도서의 태그(장르)에 점수 부여 (+1 / -1)
-          if (book.tags) {
-            updateGenrePreference(book.tags, isActive ? 1 : -1)
-            // [수정] 디버깅용 console.log 제거
-            // const preference = JSON.parse(
-            //   localStorage.getItem('genrePreference') || '{}',
-            // )
-            // const allTags = [...new Set(allBooks.flatMap((b) => b.tags || []))]
-            // console.log(
-            //   '전체 태그별 점수:',
-            //   allTags.map((tag) => `${tag}: ${preference[tag] || 0}점`),
-            // )
+        // [추가] 찜 해제 시 마이페이지 팝업이 열려있으면 즉시 반영
+        if (!isActive) {
+          const myPageDialog = document.querySelector('.my-page-dialog')
+          if (myPageDialog?.open) {
+            updateUserDiSplay()
           }
         }
-      })
+
+        if (book.tags) {
+          updateGenrePreference(book.tags, isActive ? 1 : -1)
+          // [수정] 디버깅용 console.log 제거
+          // const preference = JSON.parse(
+          //   localStorage.getItem('genrePreference') || '{}',
+          // )
+          // const allTags = [...new Set(allBooks.flatMap((b) => b.tags || []))]
+          // console.log(
+          //   '전체 태그별 점수:',
+          //   allTags.map((tag) => `${tag}: ${preference[tag] || 0}점`),
+          // )
+        }
+      }
     })
-  }, 1500)
+  })
+  // }, 1500)
 }
 
 // 초기 실행 시작

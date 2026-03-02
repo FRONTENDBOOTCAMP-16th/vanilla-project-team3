@@ -10,6 +10,13 @@ if (!sessionStorage.getItem(SESSION_FLAG)) {
   localStorage.removeItem(LOGIN_AUTH_DATA)
 }
 
+const SESSION_FLAG = 'session_active'
+
+// ✅ 추가: 페이지 로드 시 세션 플래그 확인 → 없으면 localStorage 초기화
+if (!sessionStorage.getItem(SESSION_FLAG)) {
+  localStorage.removeItem(LOGIN_AUTH_DATA)
+}
+
 const form = document.querySelector('.autu-box-container')
 if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.')
 const id = form.querySelector('.id-box')
@@ -32,7 +39,6 @@ function init() {
  */
 function bindEvent() {
   if (form) {
-    // 폼 내부에 값이 입력될 때마다 버튼 스타일 업데이트를 위해 호출
     form.addEventListener('submit', (e) => e.preventDefault())
     form.addEventListener('input', handleFormChange)
     // 폼 내부의 클릭 발생 시 처리 (특히 로그인 버튼)
