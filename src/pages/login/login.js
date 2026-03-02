@@ -110,7 +110,6 @@ async function checkeEmailPassword() {
  * 최종 로그인 처리: 로컬 스토리지에 세션을 저장하고 페이지를 이동시킵니다.
  */
 async function isLogin(resultID, resultPassword) {
-  console.log('isLogin 실행됨', resultID, resultPassword)
   if (resultID && resultPassword) {
     // [추가] 서버에 로그인 상태 저장
     await UserAPI.updateUserData(resultID.id, {
