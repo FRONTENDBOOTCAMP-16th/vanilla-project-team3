@@ -1,4 +1,5 @@
 import { LOGIN_AUTH_DATA } from '../../js/constants'
+import { removeStorage } from '../../js/utils'
 
 export let isLoggedIn = false
 export let currentUser = null
@@ -20,6 +21,7 @@ export function logout() {
   localStorage.removeItem(LOGIN_AUTH_DATA)
   isLoggedIn = false
   currentUser = null
+  removeStorage('genrePreference')
 
   alert('로그아웃 되었습니다.')
   // 페이지를 새로고침(이동)하면 home.js가 실행되면서
