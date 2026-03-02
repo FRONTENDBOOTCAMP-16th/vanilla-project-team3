@@ -9,7 +9,7 @@ export let currentUser = null
 export function initSession() {
   const userData = localStorage.getItem(LOGIN_AUTH_DATA)
   const sessionActive = sessionStorage.getItem(SESSION_FLAG)
-  
+
   if (userData && sessionActive) {
     isLoggedIn = true
     currentUser = JSON.parse(userData)

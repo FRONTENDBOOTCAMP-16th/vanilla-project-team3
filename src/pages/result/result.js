@@ -194,7 +194,12 @@ function bindHeartEvents(allBooks) {
   document.querySelectorAll('.save-button').forEach((btn) => {
     btn.addEventListener('click', async () => {
       const loadEmail = loadStorage(LOGIN_AUTH_DATA) // ← 클릭 시점에 읽기
-      if (!loadEmail) return
+      if (!loadEmail) {
+        // [수정] 비회원이면 로그인 팝업 표시
+        const loginDialog = document.querySelector('.login-dialog')
+        loginDialog?.showModal()
+        return
+      }
 
       // [수정] 클릭 전 상태를 읽던 방식 → 토글 먼저 하고 토글 후 상태를 읽는 방식으로 변경
       // 기존 코드: const isActive = btn.classList.contains('heart-active')
