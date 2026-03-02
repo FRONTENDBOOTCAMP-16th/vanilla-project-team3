@@ -24,7 +24,7 @@ function init() {
 
 function bindEvent() {
   if (form) {
-     form.addEventListener('submit', (e) => e.preventDefault())
+    form.addEventListener('submit', (e) => e.preventDefault())
     form.addEventListener('input', handleFormChange)
     form.addEventListener('click', handleFormClick)
   }
@@ -52,7 +52,7 @@ function handleFormChange() {
 
 // 아이디과 비밀번호 확인
 async function checkeEmailPassword() {
-   console.log('체크 함수 실행됨') 
+  console.log('체크 함수 실행됨')
   const resultID = await getUser(ID, id.value)
 
   // 가입 정보가 없는 아이디
@@ -81,7 +81,7 @@ async function checkeEmailPassword() {
 
 // 로그인 후 메인페이지로 이동
 async function isLogin(resultID, resultPassword) {
-   console.log('isLogin 실행됨', resultID, resultPassword) 
+  console.log('isLogin 실행됨', resultID, resultPassword)
   if (resultID && resultPassword) {
     // 비밀번호를 제외한 user 전체 데이터 객체를 저장
     const safeUserData = { ...resultID }
