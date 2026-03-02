@@ -1,3 +1,5 @@
+/* global Typed */ // 외부 라이브러리인 Typed.js를 전역으로 사용하겠다는 선언
+
 /**
  * [1] 사용자가 선택한 체크박스 값들을 가져오는 함수
  * @param {string} valueName - HTML input의 name 속성값

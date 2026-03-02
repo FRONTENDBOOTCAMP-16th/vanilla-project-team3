@@ -51,8 +51,7 @@ function handleDetectBrowserLoadOrForward() {
     removeStorage(IS_CHECKED_KEY)
     removeStorage(IMOJI)
     disableSubmitButtonState()
-  }
-  else if (type === 'back_forward') {
+  } else if (type === 'back_forward') {
     enableSubmitButtonState()
   }
 }

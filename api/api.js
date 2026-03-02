@@ -77,7 +77,7 @@ const getActiveUserId = () => {
 /* ============================================================ */
 
 /**
- * 1. 기존 getData 로직 
+ * 1. 기존 getData 로직
  */
 export async function getData(key, value) {
   try {
