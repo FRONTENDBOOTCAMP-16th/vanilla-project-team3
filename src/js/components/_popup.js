@@ -235,7 +235,7 @@ async function getHeartList() {
     return
   }
 
-  const heartID = heart.map((item) => Number(item.trim()))
+  const heartID = heart.map((item) => Number(item))
 
   // [수정] getData 전체 가져온 후 find로 id 매칭 (기존 Promise.all 방식 대체)
   // 하트찍은 책 find로 ID 매칭

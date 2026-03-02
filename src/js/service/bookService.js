@@ -23,6 +23,15 @@ export function scoreCalculate(book, key, value) {
   return score
 }
 
+const MOOD_PAIR = {
+  happy: 'happy',
+  sad: 'sad',
+  soso: 'soso',
+  bad: 'bad',
+}
+const MOOD_PAIR_POINT = 1
+const MOOD_DIRECT_POINT = 3
+
 export function scoreBook(book, mood, weather) {
   let score = 0
   score += scoreCalculate(book, 'mood', mood)
@@ -35,11 +44,28 @@ export function scoreBook(book, mood, weather) {
       score += preference[tag] * SCORE_POINT
     }
   })
+
+  // 감정 직접 매칭 + 교차 추천 점수
+  if (mood) {
+    Object.entries(mood).forEach(([moodName, count]) => {
+      if (count) {
+        if (book.mood === moodName) {
+          score += MOOD_DIRECT_POINT
+        }
+        const pairMood = MOOD_PAIR[moodName]
+        if (pairMood && book.mood === pairMood && book.mood !== moodName) {
+          score += MOOD_PAIR_POINT
+        }
+      }
+    })
+  }
+
   return score
 }
 
-export function getRecommendations(allBooks, mood, weather) {
-  return allBooks
+export function getRecommendations(allBooks, mood, weather, viewed = []) {
+  const result = allBooks
+    .filter((book) => !viewed.includes(String(book.id)))
     .map((book) => ({
       ...book,
       score: scoreBook(book, mood, weather),
@@ -47,6 +73,12 @@ export function getRecommendations(allBooks, mood, weather) {
     .filter((book) => book.score !== -Infinity)
     .sort((a, b) => b.score - a.score)
     .slice(0, 4)
+
+  console.log(
+    '추천 4권:',
+    result.map((b) => `${b.bookTitle}`),
+  )
+  return result
 }
 
 // 선호도 및 찜하기 관련 서버 통신

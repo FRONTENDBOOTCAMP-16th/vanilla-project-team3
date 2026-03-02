@@ -8,6 +8,7 @@ import {
 import {
   getRecommendations,
   updateHeartToServer,
+  updateGenrePreference,
 } from '../../js/service/bookService.js'
 import {
   displayPhraseResult,
@@ -39,21 +40,37 @@ const buttons = container.querySelectorAll('[data-checked="doubleChecked"]')
  * 페이지 초기 진입 시 실행
  */
 async function initPage() {
+  window.__skipSmartRecommendation = true
   const loadEmail = loadStorage(LOGIN_AUTH_DATA)
+
+  // 이번에 선택한 감정/날씨를 localStorage에서 가져오기
+  let mood = {}
+  let weather = {}
+  let viewed = []
+
+  const savedEmoji = JSON.parse(localStorage.getItem(IMOJI)) || []
+  savedEmoji.forEach((item) => {
+    if (['happy', 'sad', 'soso', 'bad'].includes(item)) {
+      mood[item] = 1
+    }
+    if (['sunny', 'rainy', 'snowy', 'dusty', 'cloudy'].includes(item)) {
+      weather[item] = 1
+    }
+  })
+
+  // 로그인 유저의 viewed 가져오기
+  if (loadEmail?.email) {
+    const userData = await getUser(EMAIL, loadEmail.email)
+    viewed = userData.viewed || []
+  }
 
   // 기본 데이터 로드
   const allBooks = await getData()
 
-  if (loadEmail?.email) {
-    const user = await getUser(EMAIL, loadEmail.email)
-    // 추천 로직 실행 (필요 시 결과 활용)
-    getRecommendations(allBooks, user.mood_counts, user.weather_counts)
-  }
-
   applyDisableIfChecked()
   syncEmojiCheckboxes()
-  handleResultDisplay()
-  bindHeartEvents()
+  await handleResultDisplay(allBooks, mood, weather, viewed)
+  bindHeartEvents(loadEmail, allBooks)
 }
 
 // UI: 체크박스 비활성화 상태 반영
@@ -79,7 +96,7 @@ function syncEmojiCheckboxes() {
 }
 
 // 메인 로직: 결과 표시 (공유 vs 일반)
-async function handleResultDisplay() {
+async function handleResultDisplay(allBooks, mood, weather, viewed) {
   const urlParams = new URLSearchParams(window.location.search)
   const sharedTitle = urlParams.get('title')
   const sharedIds = urlParams.get('ids')
@@ -90,7 +107,14 @@ async function handleResultDisplay() {
       currentData = await getSharedData(sharedTitle, sharedIds, urlParams)
     } else {
       showLoadingDisplay()
-      currentData = await getLocalOrCalculatedData()
+      const recommended = getRecommendations(allBooks, mood, weather, viewed)
+
+      if (recommended && recommended.length > 0) {
+        currentData = recommended
+      } else {
+        console.log('getLocalOrCalculatedData 사용')
+        currentData = await getLocalOrCalculatedData()
+      }
     }
 
     if (currentData) {
@@ -155,18 +179,53 @@ function bindShareEvent(data) {
   }
 }
 
-function bindHeartEvents() {
-  // 동적 생성 대응을 위해 이벤트 위임이나 setTimeout 사용 (기존 코드 유지)
+function bindHeartEvents(loadEmail, allBooks) {
   setTimeout(() => {
     document.querySelectorAll('.save-button').forEach((btn) => {
       btn.addEventListener('click', () => {
+        if (!loadEmail) return
+
+        // const isActive = btn.classList.toggle('heart-active')
+        // btn.setAttribute('aria-pressed', isActive ? 'true' : 'false')
+        const isActive = btn.classList.contains('heart-active')
+
         const imgSrc = btn.querySelector('.book-cover-img')?.src
-        const cachedData = JSON.parse(
-          localStorage.getItem('cachedBookData') || '[]',
-        )
-        const book = cachedData.find((b) => b.bookCover === imgSrc)
+
+        // [수정] cachedBookData 대신 allBooks 직접 사용
+        // cachedBookData가 없거나 "undefined" 문자열일 경우 에러 방지
+        // const cachedData = JSON.parse(
+        //   localStorage.getItem('cachedBookData') || '[]',
+        // )
+        // const book = cachedData.find((b) => b.bookCover === imgSrc)
+        const book = allBooks.find((b) => b.bookCover === imgSrc)
+
         if (book) {
-          updateHeartToServer(book.id, btn.classList.contains('heart-active'))
+          // localStorage heart 배열 업데이트
+          const savedData = JSON.parse(
+            localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
+          )
+          if (isActive) {
+            savedData.heart = [...(savedData.heart || []), String(book.id)]
+          } else {
+            savedData.heart = (savedData.heart || []).filter(
+              (id) => id !== String(book.id),
+            )
+          }
+          localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(savedData))
+
+          updateHeartToServer(book.id, isActive)
+          if (book.tags) {
+            updateGenrePreference(book.tags, isActive ? 1 : -1)
+            // [수정] 디버깅용 console.log 제거
+            // const preference = JSON.parse(
+            //   localStorage.getItem('genrePreference') || '{}',
+            // )
+            // const allTags = [...new Set(allBooks.flatMap((b) => b.tags || []))]
+            // console.log(
+            //   '전체 태그별 점수:',
+            //   allTags.map((tag) => `${tag}: ${preference[tag] || 0}점`),
+            // )
+          }
         }
       })
     })
@@ -174,4 +233,4 @@ function bindHeartEvents() {
 }
 
 // 실행
-window.addEventListener('DOMContentLoaded', initPage)
+initPage()
