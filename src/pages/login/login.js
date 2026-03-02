@@ -10,13 +10,6 @@ if (!sessionStorage.getItem(SESSION_FLAG)) {
   localStorage.removeItem(LOGIN_AUTH_DATA)
 }
 
-const SESSION_FLAG = 'session_active'
-
-// ✅ 추가: 페이지 로드 시 세션 플래그 확인 → 없으면 localStorage 초기화
-if (!sessionStorage.getItem(SESSION_FLAG)) {
-  localStorage.removeItem(LOGIN_AUTH_DATA)
-}
-
 const form = document.querySelector('.autu-box-container')
 if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.')
 const id = form.querySelector('.id-box')
