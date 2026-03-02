@@ -142,7 +142,13 @@ function signupLogic() {
 
       // 6. 모든 검사 통과 시 최종 전송
       // MockAPI는 필드가 없으면 자동으로 랜덤 더미 데이터가 들어가서 heart랑 viewed를 추가
-      const userData = { userId: newId, password: newPw, email: newEmail, heart: [], viewed: [] }
+      const userData = {
+        userId: newId,
+        password: newPw,
+        email: newEmail,
+        heart: [],
+        viewed: [],
+      }
       const responseSignUp = await fetch(USERS_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
