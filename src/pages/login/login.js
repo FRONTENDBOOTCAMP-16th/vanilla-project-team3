@@ -93,7 +93,9 @@ async function checkeEmailPassword() {
 
   // [추가] 이미 로그인 중인지 체크
   if (resultID.isLoggedIn) {
-    const force = confirm('다른 기기에서 로그인 중입니다. 강제 로그인하시겠습니까?')
+    const force = confirm(
+      '다른 기기에서 로그인 중입니다. 강제 로그인하시겠습니까?',
+    )
     if (!force) return
     // 확인 누르면 그냥 isLogin으로 진행
   }

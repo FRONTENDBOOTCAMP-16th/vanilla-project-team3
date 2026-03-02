@@ -144,7 +144,7 @@ export async function getUser(key, value) {
       password,
       userId,
       heart,
-      isLoggedIn,  // [추가]
+      isLoggedIn, // [추가]
       mood_counts: { happy, sad, soso, bad },
       weather_counts: { sunny, rainy, snowy, dusty, cloudy },
     } = user
@@ -155,7 +155,7 @@ export async function getUser(key, value) {
       password,
       userId,
       heart,
-      isLoggedIn,  // [추가]
+      isLoggedIn, // [추가]
       mood_counts: { happy, sad, soso, bad },
       weather_counts: { sunny, rainy, snowy, dusty, cloudy },
     }
