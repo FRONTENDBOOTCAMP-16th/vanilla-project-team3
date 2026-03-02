@@ -107,7 +107,9 @@ function signupLogic() {
       // MockAPI에서 ?userId=값으로 조회했을 때
       // 해당 유저가 없으면 404를 반환 (서버 동작, 콘솔에 나옴)
       const checkResponse = await fetch(`${USERS_API}?userId=${newId}`)
-      const members = await checkResponse.json()
+      // const members = await checkResponse.json()
+      // [수정] 404면 중복 없음(빈 배열)으로 처리, json() 파싱 에러 방지
+      const members = checkResponse.ok ? await checkResponse.json() : []
 
       // 데이터가 존재하면 중복된 아이디임
       if (Array.isArray(members) && members.length > 0) {
@@ -122,7 +124,11 @@ function signupLogic() {
 
       // 5-1. 이메일 중복 검사 (추가)
       const emailCheckResponse = await fetch(`${USERS_API}?email=${newEmail}`)
-      const emailMembers = await emailCheckResponse.json()
+      // const emailMembers = await emailCheckResponse.json()
+      // [수정] 404면 중복 없음(빈 배열)으로 처리, json() 파싱 에러 방지
+      const emailMembers = emailCheckResponse.ok
+        ? await emailCheckResponse.json()
+        : []
 
       if (Array.isArray(emailMembers) && emailMembers.length > 0) {
         emailInputBottomAlert.textContent = '이미 사용 중인 이메일입니다.'
