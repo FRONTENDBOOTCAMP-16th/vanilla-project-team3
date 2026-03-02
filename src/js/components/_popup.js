@@ -20,7 +20,7 @@ function checkEmptyList() {
 
   // [수정] 빈 li 제외하고 실제 내용 있는 li만 카운트
   const filledItems = [...bookList.querySelectorAll('li')].filter(
-    (li) => li.innerHTML.trim() !== ''
+    (li) => li.innerHTML.trim() !== '',
   )
 
   // [수정] innerHTML로 li를 날리는 대신 empty-msg 요소만 추가/제거
@@ -128,13 +128,14 @@ document.addEventListener('DOMContentLoaded', () => {
           // )
           const rawSelected = localStorage.getItem('selectedBookList')
           const rawCached = localStorage.getItem('cachedBookData')
-          const validData = (raw) => raw && raw !== 'undefined' && raw !== 'null'
-          
+          const validData = (raw) =>
+            raw && raw !== 'undefined' && raw !== 'null'
+
           const currentData = validData(rawSelected)
             ? JSON.parse(rawSelected)
             : validData(rawCached)
               ? JSON.parse(rawCached)
-              : await getData()  // 둘 다 없으면 API에서 직접 가져오기
+              : await getData() // 둘 다 없으면 API에서 직접 가져오기
 
           const book = currentData.find((b) => b.bookCover === imgSrc)
 

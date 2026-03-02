@@ -187,12 +187,13 @@ function bindShareEvent(data) {
   }
 }
 
-function bindHeartEvents(allBooks) { // loadEmail 파라미터 제거
+function bindHeartEvents(allBooks) {
+  // loadEmail 파라미터 제거
   // [수정] setTimeout(1500) 제거 - initPage에서 await로 순서가 보장되므로 불필요
   // setTimeout(() => {
   document.querySelectorAll('.save-button').forEach((btn) => {
     btn.addEventListener('click', async () => {
-      const loadEmail = loadStorage(LOGIN_AUTH_DATA)  // ← 클릭 시점에 읽기
+      const loadEmail = loadStorage(LOGIN_AUTH_DATA) // ← 클릭 시점에 읽기
       if (!loadEmail) return
 
       // [수정] 클릭 전 상태를 읽던 방식 → 토글 먼저 하고 토글 후 상태를 읽는 방식으로 변경
