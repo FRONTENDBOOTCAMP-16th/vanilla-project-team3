@@ -21,6 +21,7 @@ import {
 } from '../../js/components/_imageLoading.js'
 import { shareResult } from '../../js/components/_share.js'
 import { getData, getUser } from '../../../api/api.js'
+import { updateUserDiSplay } from '../../js/components/_popup.js'
 
 /**
  * 이 파일은 페이지가 로드될 때 실행되며,
@@ -58,6 +59,10 @@ async function initPage() {
     }
   })
 
+  // [추가] 이미 찜한 책 id 목록 가져오기
+  const savedData = JSON.parse(localStorage.getItem(LOGIN_AUTH_DATA) || '{}')
+  const heartIds = (savedData.heart || []).map(Number)
+
   // 로그인 유저의 viewed 가져오기
   if (loadEmail?.email) {
     const userData = await getUser(EMAIL, loadEmail.email)
@@ -67,10 +72,13 @@ async function initPage() {
   // 기본 데이터 로드
   const allBooks = await getData()
 
+  // [추가] viewed에 찜한 책도 포함시켜서 추천에서 제외
+  const excludeIds = [...new Set([...viewed, ...heartIds])]
+
   applyDisableIfChecked()
   syncEmojiCheckboxes()
-  await handleResultDisplay(allBooks, mood, weather, viewed)
-  bindHeartEvents(loadEmail, allBooks)
+  await handleResultDisplay(allBooks, mood, weather, excludeIds)
+  bindHeartEvents(allBooks) // loadEmail 제거
 }
 
 // UI: 체크박스 비활성화 상태 반영
@@ -179,57 +187,75 @@ function bindShareEvent(data) {
   }
 }
 
-function bindHeartEvents(loadEmail, allBooks) {
-  setTimeout(() => {
-    document.querySelectorAll('.save-button').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        if (!loadEmail) return
+function bindHeartEvents(allBooks) {
+  // loadEmail 파라미터 제거
+  // [수정] setTimeout(1500) 제거 - initPage에서 await로 순서가 보장되므로 불필요
+  // setTimeout(() => {
+  document.querySelectorAll('.save-button').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const loadEmail = loadStorage(LOGIN_AUTH_DATA) // ← 클릭 시점에 읽기
+      if (!loadEmail) return
 
-        // const isActive = btn.classList.toggle('heart-active')
-        // btn.setAttribute('aria-pressed', isActive ? 'true' : 'false')
-        const isActive = btn.classList.contains('heart-active')
+      // [수정] 클릭 전 상태를 읽던 방식 → 토글 먼저 하고 토글 후 상태를 읽는 방식으로 변경
+      // 기존 코드: const isActive = btn.classList.contains('heart-active')
+      const isActive = btn.classList.toggle('heart-active')
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false')
 
-        const imgSrc = btn.querySelector('.book-cover-img')?.src
+      const imgSrc = btn.querySelector('.book-cover-img')?.src
+      // [수정] cachedBookData 대신 allBooks 직접 사용
+      // cachedBookData가 없거나 "undefined" 문자열일 경우 에러 방지
+      // const cachedData = JSON.parse(
+      //   localStorage.getItem('cachedBookData') || '[]',
+      // )
+      // const book = cachedData.find((b) => b.bookCover === imgSrc)
+      const book = allBooks.find((b) => b.bookCover === imgSrc)
 
-        // [수정] cachedBookData 대신 allBooks 직접 사용
-        // cachedBookData가 없거나 "undefined" 문자열일 경우 에러 방지
-        // const cachedData = JSON.parse(
-        //   localStorage.getItem('cachedBookData') || '[]',
-        // )
-        // const book = cachedData.find((b) => b.bookCover === imgSrc)
-        const book = allBooks.find((b) => b.bookCover === imgSrc)
+      if (book) {
+        const savedData = JSON.parse(
+          localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
+        )
 
-        if (book) {
-          // localStorage heart 배열 업데이트
-          const savedData = JSON.parse(
-            localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
-          )
-          if (isActive) {
-            savedData.heart = [...(savedData.heart || []), String(book.id)]
-          } else {
-            savedData.heart = (savedData.heart || []).filter(
-              (id) => id !== String(book.id),
-            )
+        if (isActive) {
+          // [수정] 중복 체크 없이 push하던 방식 → includes로 중복 체크 후 추가
+          // 기존 코드: savedData.heart = [...(savedData.heart || []), String(book.id)]
+          const currentHeart = savedData.heart || []
+          if (!currentHeart.includes(String(book.id))) {
+            savedData.heart = [...currentHeart, String(book.id)]
           }
-          localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(savedData))
+        } else {
+          savedData.heart = (savedData.heart || []).filter(
+            (id) => id !== String(book.id),
+          )
+        }
 
-          updateHeartToServer(book.id, isActive)
-          if (book.tags) {
-            updateGenrePreference(book.tags, isActive ? 1 : -1)
-            // [수정] 디버깅용 console.log 제거
-            // const preference = JSON.parse(
-            //   localStorage.getItem('genrePreference') || '{}',
-            // )
-            // const allTags = [...new Set(allBooks.flatMap((b) => b.tags || []))]
-            // console.log(
-            //   '전체 태그별 점수:',
-            //   allTags.map((tag) => `${tag}: ${preference[tag] || 0}점`),
-            // )
+        localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(savedData))
+        // [수정] await 추가 - 서버 반영 완료 후 마이페이지 업데이트
+        await updateHeartToServer(book.id, isActive)
+
+        // [추가] 찜 해제 시 마이페이지 팝업이 열려있으면 즉시 반영
+        if (!isActive) {
+          const myPageDialog = document.querySelector('.my-page-dialog')
+          if (myPageDialog?.open) {
+            updateUserDiSplay()
           }
         }
-      })
+
+        if (book.tags) {
+          updateGenrePreference(book.tags, isActive ? 1 : -1)
+          // [수정] 디버깅용 console.log 제거
+          // const preference = JSON.parse(
+          //   localStorage.getItem('genrePreference') || '{}',
+          // )
+          // const allTags = [...new Set(allBooks.flatMap((b) => b.tags || []))]
+          // console.log(
+          //   '전체 태그별 점수:',
+          //   allTags.map((tag) => `${tag}: ${preference[tag] || 0}점`),
+          // )
+        }
+      }
     })
-  }, 1500)
+  })
+  // }, 1500)
 }
 
 // 실행
