@@ -78,6 +78,7 @@ async function initPage() {
   syncEmojiCheckboxes()
   await handleResultDisplay(allBooks, mood, weather, excludeIds)
   bindHeartEvents(allBooks) // loadEmail 제거
+  syncHeartStatus(allBooks)
 }
 
 /**
@@ -211,6 +212,29 @@ function bindShareEvent(data) {
       shareResult(data) // SNS 공유 로직 실행
     }
   }
+}
+
+/**
+ * [화면 전환] 화면 전환해도 찜한 목록 그대로 표시
+ */
+function syncHeartStatus(allBooks) {
+  const savedData = loadStorage(LOGIN_AUTH_DATA) || {}
+  const hearts = savedData.heart || []
+  const buttons = document.querySelectorAll('.save-button')
+
+  // img경로를 비교하여 id를 찾은 후 해당 id에 하트추가
+  buttons.forEach((button) => {
+    const imgSrc = button.querySelector('.book-cover-img')?.src
+    const book = allBooks.find((item) => item.bookCover === imgSrc)
+
+    if (book && hearts.includes(String(book.id))) {
+      button.classList.add('heart-active')
+      button.setAttribute('aria-pressed', 'true')
+    } else {
+      button.classList.remove('heart-active')
+      button.setAttribute('aria-pressed', 'false')
+    }
+  })
 }
 
 function bindHeartEvents(allBooks) {
