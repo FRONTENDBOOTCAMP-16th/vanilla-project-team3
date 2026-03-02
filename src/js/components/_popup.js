@@ -328,7 +328,7 @@ async function removeHeart(bookList) {
     const latestUser = await getUser(EMAIL, loadEmail.email)
     // 현재 선택한 ID만 제외하고 새로운 하트 배열을 만듭니다.
     const updateHeart = latestUser.heart.filter(
-      (id) => id !== String(deleteBookValue),
+      (id) => String(id) !== String(deleteBookValue),
     )
     const updateData = { ...latestUser, heart: updateHeart }
 
