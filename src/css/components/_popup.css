@@ -83,13 +83,11 @@
   transform: scale(1);
 }
 
-/* 활성화 상태: On 아이콘은 나타남 */
 .save-button.heart-active .icon-heart-on {
   opacity: 1;
   transform: scale(1);
 }
 
-/* 활성화 상태: 아이콘 사라짐 */
 .save-button.heart-active .icon-heart-off {
   opacity: 0;
 }

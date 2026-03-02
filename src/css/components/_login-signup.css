@@ -37,8 +37,6 @@
     .autu-box-container {
       display: flex;
       flex-flow: nowrap column;
-
-      /* 에러 메시지 공간을 위해 전체 gap을 40->20px 으로 줄임 */
       gap: 20px;
 
       .add-box {
@@ -57,10 +55,8 @@
         font-size: 14px;
         font-weight: 400;
         color: var(--white);
-
-        /* 경고 메시지 나올 때 input 상자 위로 안 밀리도록 설정 */
-        visibility: hidden; /* 마크업에서 사용하는 hidden 대체 */
-        min-block-size: 1.5em; /* 공간 확보 */
+        visibility: hidden; 
+        min-block-size: 1.5em;
       }
 
       .submit-button {

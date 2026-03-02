@@ -1,4 +1,3 @@
-// 외부 유틸리티 및 상수 데이터를 임포트합니다.
 import { loadStorage } from '../utils'
 import { LOGIN_AUTH_DATA } from '../constants'
 
@@ -6,8 +5,6 @@ import { LOGIN_AUTH_DATA } from '../constants'
  * 이 파일은 특정 페이지에 종속되지 않으며,
  * 데이터 계산 및 API 통신과 관련된 비즈니스 로직을 담습니다.
  */
-
-// API 기본 주소와 점수 계산에 사용될 기본 단위 점수를 설정합니다.
 const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
 const SCORE_POINT = 1
 
@@ -21,9 +18,8 @@ const SCORE_POINT = 1
 export function scoreCalculate(book, key, value) {
   if (!value) return 0
   let score = 0
-  const tagKey = book[key] || [] // 책에 등록된 태그 목록 (없으면 빈 배열)
+  const tagKey = book[key] || []
 
-  // 사용자가 선택한 각 항목과 책의 태그를 비교하여 점수를 합산합니다.
   Object.entries(value).forEach(([name, count]) => {
     if (tagKey.includes(name)) {
       score += count * SCORE_POINT
@@ -32,7 +28,6 @@ export function scoreCalculate(book, key, value) {
   return score
 }
 
-// 감정 매칭을 위한 쌍(Pair) 정의 및 가중치 점수 설정
 const MOOD_PAIR = {
   happy: 'happy',
   sad: 'sad',
@@ -54,7 +49,6 @@ export function scoreBook(book, mood, weather) {
   score += scoreCalculate(book, 'weather', weather)
 
   // 2. 장르 선호도(genrePreference) 점수 합산
-  // 로컬 스토리지에서 사용자의 장르 취향 데이터를 가져와 책의 태그와 대조합니다.
   const preference = JSON.parse(localStorage.getItem('genrePreference') || '{}')
   const tags = book.tags || []
   tags.forEach((tag) => {
@@ -107,11 +101,6 @@ export function getRecommendations(allBooks, mood, weather, viewed = []) {
     // 5. 상위 4권만 추출
     .slice(0, 4)
 
-  // 디버깅을 위해 추천된 책 제목을 콘솔에 출력합니다.
-  console.log(
-    '추천 4권:',
-    result.map((b) => `${b.bookTitle}`),
-  )
   return result
 }
 
@@ -125,7 +114,6 @@ export function updateGenrePreference(tags, change) {
   const preference = JSON.parse(localStorage.getItem('genrePreference') || '{}')
   tags.forEach((tag) => {
     preference[tag] = (preference[tag] || 0) + change
-    // 점수가 0 이하면 해당 장르를 선호 목록에서 삭제하여 최적화합니다.
     if (preference[tag] <= 0) delete preference[tag]
   })
   localStorage.setItem('genrePreference', JSON.stringify(preference))
@@ -139,7 +127,7 @@ export function updateGenrePreference(tags, change) {
  */
 export async function updateHeartToServer(bookId, isAdding) {
   const loginData = loadStorage(LOGIN_AUTH_DATA)
-  if (!loginData || !loginData.id) return // 로그인이 안 되어 있으면 중단
+  if (!loginData || !loginData.id) return
 
   try {
     // 1. 현재 서버에 저장된 유저 데이터를 먼저 가져옵니다.

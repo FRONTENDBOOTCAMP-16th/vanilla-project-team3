@@ -22,12 +22,9 @@ function checkEmptyList() {
   const bookList = document.querySelector('.book-list')
   if (!bookList) return
 
-  // [수정] 빈 li 제외하고 실제 내용 있는 li만 카운트
   const filledItems = [...bookList.querySelectorAll('li')].filter(
     (li) => li.innerHTML.trim() !== '',
   )
-
-  // [수정] innerHTML로 li를 날리는 대신 empty-msg 요소만 추가/제거
   const existingMsg = bookList.querySelector('.empty-msg')
 
   // 목록 요소가 존재하고, 자식 요소(li)가 하나도 없을 때 실행
@@ -44,20 +41,7 @@ function checkEmptyList() {
 }
 
 /**
- * [2] 비밀번호 변경 폼 초기화
- * 팝업을 닫거나 새로 열 때 입력했던 값과 에러 메시지를 싹 지워줍니다.
- */
-// function resetPWForm() {
-//   const pwForm = document.querySelector('.pw-form')
-//   if (pwForm) {
-//     pwForm.reset()
-//     const errorMsg = document.querySelector('.pw-error-msg')
-//     if (errorMsg) errorMsg.style.display = 'none'
-//   }
-// }
-
-/**
- * [3] 하트(찜) 버튼 상태 토글
+ * [2] 하트(찜) 버튼 상태 토글
  * 버튼의 색상(클래스)을 바꾸고, 시각장애인용 리더기(aria-pressed)에 상태를 알립니다.
  */
 function toggleHeart(button) {
@@ -75,8 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginDialog = document.querySelector('.login-dialog')
   const myPageDialog = document.querySelector('.my-page-dialog')
   const heartLimitDialog = document.querySelector('.heart-list-dialog')
-  const changePWDialog = document.querySelector('.change-pw-dialog')
-  // const pwForm = document.querySelector('.pw-form')
   const delBookListBtn = document.querySelector('.delete-book-list-button')
   const closeBtns = document.querySelectorAll('.close-dialog')
 
@@ -105,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!document.querySelector('.result-display')) {
     // 메인 화면 등의 찜 버튼(하트) 클릭 시 (다중 요소 대응)
     saveBtns.forEach((btn) => {
-      // [수정] async 추가 (await 사용을 위해)
       btn.addEventListener('click', async () => {
         // 1. 로그인 확인
         if (!isLoggedIn) {
@@ -115,12 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. 갯수 제한 체크 (최대 6개까지만 허용)
         const isAlreadyActive = btn.classList.contains('heart-active')
-
-        // [수정] 기존 li 개수로 체크하던 방식 → heart 배열 길이로 체크
-        // 기존 코드 (li 개수로 체크 - 항상 0 나옴)
-        // const currentCount = bookList
-        //   ? bookList.querySelectorAll('li:not(:empty)').length
-        //   : 0
         const savedData = JSON.parse(
           localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
         )
@@ -132,11 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
           toggleHeart(btn)
 
           const imgSrc = btn.querySelector('.book-cover-img').src
-          // [수정] selectedBookList가 없을 때 cachedBookData도 시도
-          // 홈 페이지는 selectedBookList가 없고 cachedBookData를 사용함
-          // const currentData = JSON.parse(
-          //   localStorage.getItem('selectedBookList') || '[]',
-          // )
           const rawSelected = localStorage.getItem('selectedBookList')
           const rawCached = localStorage.getItem('cachedBookData')
           const validData = (raw) =>
@@ -152,8 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
           if (book) {
             const nowActive = btn.classList.contains('heart-active')
-
-            // [추가] localStorage heart 배열도 업데이트 (6개 제한 체크에 사용)
             const latestData = JSON.parse(
               localStorage.getItem(LOGIN_AUTH_DATA) || '{}',
             )
@@ -165,10 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
               )
             }
             localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(latestData))
-
-            // [추가] 서버에 찜 추가/삭제 반영
             await updateHeartToServer(book.id, nowActive)
-
             if (book.tags) {
               updateGenrePreference(book.tags, nowActive ? 1 : -1)
             }
@@ -178,29 +143,11 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  // --- 비밀번호 변경 폼 제출 처리 ---
-  // if (pwForm) {
-  //   pwForm.addEventListener('submit', (e) => {
-  //     const newPw = document.querySelector('#new-pw')?.value || ''
-  //     const confirmPw = document.querySelector('#confirm-pw')?.value || ''
-  //     const errorMsg = document.querySelector('.pw-error-msg')
-
-  //     if (newPw !== confirmPw) {
-  //       e.preventDefault() // 비번 다르면 전송 막기
-  //       if (errorMsg) errorMsg.style.display = 'block'
-  //       return
-  //     }
-  //     alert('비밀번호가 변경되었습니다.')
-  //     changePWDialog?.close()
-  //   })
-  // }
-
   // --- 공통 닫기 버튼 (모든 팝업의 X 버튼) ---
   closeBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       const dialog = btn.closest('dialog')
       if (dialog) {
-        if (dialog === changePWDialog) resetPWForm() // 비번창은 내용 리셋
         dialog.close()
       }
     })
@@ -214,68 +161,34 @@ document.addEventListener('DOMContentLoaded', () => {
       delBookListBtn.textContent = isEditMode ? '편집 완료' : '찜 항목 삭제'
     }
   })
-
-  // removeHeart에서 서버 반영 + 화면 제거를 같이 처리하고 있어서 주석 처리
-  // // 찜 목록 개별 삭제 (이벤트 위임 활용)
-  // // bookList 내부에 동적으로 생성되는 삭제 버튼 클릭 시 대응
-  // bookList?.addEventListener('click', (e) => {
-  //   const delBtn = e.target.closest('.delete-item-button')
-  //   if (delBtn) {
-  //     const targetLi = delBtn.closest('li')
-  //     if (targetLi) {
-  //       // 투명도 애니메이션 후 요소 제거
-  //       targetLi.style.opacity = '0'
-  //       targetLi.style.transition = '0.3s'
-  //       setTimeout(() => {
-  //         targetLi.remove()
-  //         checkEmptyList() // 삭제 후 목록이 비었는지 확인
-  //       }, 300)
-  //     }
-  //   }
-  // })
-
-  // 초기 로드 시 목록이 비어있는지 확인
-  // [수정] 초기 로드 시 li를 지워버려서 getHeartList가 동작 못함 → 제거
-  // checkEmptyList()
 })
 
 /**
- * [4] 찜 목록 데이터 호출 및 그리기 준비
+ * [3] 찜 목록 데이터 호출 및 그리기 준비
  */
 async function getHeartList() {
-  // [수정] heartList를 먼저 체크해서 DOM이 없으면 조기 종료
   const bookList = document.querySelector('.book-list')
   const heartList = document.querySelectorAll('.book-list li')
   if (heartList.length === 0) return
 
-  // [수정] localStorage에서 먼저 heart 가져오기 (서버 응답 대기 없이 즉시 반영)
-  // const user = await getUser(EMAIL, loadEmail.email)
-  // const heart = await user.heart
   const savedData = JSON.parse(localStorage.getItem(LOGIN_AUTH_DATA) || '{}')
   const heart = savedData?.heart || []
 
   if (!isLoggedIn || !currentUser) return
 
   const heartID = heart.map((item) => Number(item))
-  // [수정] getData 전체 가져온 후 find로 id 매칭 (기존 Promise.all 방식 대체)
-  // 하트찍은 책 find로 ID 매칭
-  // const bookItems = await Promise.all(heartID.map((id) => getData('id', id)))
   const allBooks = await getData()
   const bookItems = heartID
     .map((id) => allBooks.find((book) => book.id === id))
     .filter(Boolean)
 
-  // [수정] heartLists는 li 목록 렌더링만 해서 bookList 불필요
-  // heartLists(heartList, bookItems, bookList)
   heartLists(heartList, bookItems)
-  // 그려진 요소들에 각각 삭제 기능을 붙여줍니다.
   removeHeart(bookList)
-  // [추가] 렌더링 완료 후 빈 목록 체크
   checkEmptyList()
 }
 
 /**
- * [5] 책 리스트를 HTML로 변환하여 화면에 그리는 함수
+ * [4] 책 리스트를 HTML로 변환하여 화면에 그리는 함수
  */
 function heartLists(heartList, bookItems) {
   heartList.forEach((item, index) => {
@@ -285,7 +198,6 @@ function heartLists(heartList, bookItems) {
       return
     }
 
-    // 리터널로 HTML구조 제작
     const changeHTML = `
       <button type="button" class="delete-item-button" aria-label="삭제">
       <svg
@@ -309,18 +221,16 @@ function heartLists(heartList, bookItems) {
       </a>
     `
 
-    // 리터널로 만든 구조에 안전하게 sanitize로 변환
     const cleanHTML = DOMPurify.sanitize(changeHTML, {
       ADD_ATTR: ['target'],
     })
 
-    // innerHTML로 삽입
     item.innerHTML = cleanHTML
   })
 }
 
 /**
- * [6] 찜 목록 개별 삭제 처리 (가장 복잡하고 중요한 로직)
+ * [5] 찜 목록 개별 삭제 처리 (가장 복잡하고 중요한 로직)
  */
 async function removeHeart(bookList) {
   if (!bookList) return
@@ -374,7 +284,6 @@ async function removeHeart(bookList) {
 }
 
 // 마이페이지 내부 userId 변경하는 함수
-// [수정] export 추가 - result.js에서 찜 해제 시 마이페이지 즉시 반영을 위해
 export function updateUserDiSplay() {
   const { isLoggedIn: loginStatus, currentUser: user } = initSession()
   if (loginStatus && user) {
