@@ -1,84 +1,109 @@
-// const baseURL = import.meta.env.VITE_BASE_URL
-import { getUser } from '../../../api/api'
-import { ID, LOGIN_AUTH_DATA } from '../../js/constants'
+// 1. 외부 모듈 및 설정값 가져오기
+// const baseURL = import.meta.env.VITE_BASE_URL // (현재 주석 처리됨) 환경 변수에서 기본 URL을 가져오는 설정
+import { getUser } from '../../../api/api' // 서버(또는 Mock API)에서 사용자 데이터를 가져오는 함수
+import { ID, LOGIN_AUTH_DATA } from '../../js/constants' // 프로젝트 내에서 반복 사용되는 고정값(상수)들
 
-const form = document.querySelector('.autu-box-container')
-if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.')
-const id = form.querySelector('.id-box')
-const password = form.querySelector('.pw-box')
-const noti = form.querySelector('.noti-blank-warning')
-const login = form.querySelector('.submit-button')
+// 2. DOM 요소 선택 (화면의 HTML 태그들을 자바스크립트로 연결)
+const form = document.querySelector('.autu-box-container') // 로그인 폼 전체 컨테이너
+if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.') // 예외 처리: 폼이 없으면 에러 발생
+const id = form.querySelector('.id-box') // 아이디 입력창
+const password = form.querySelector('.pw-box') // 비밀번호 입력창
+const noti = form.querySelector('.noti-blank-warning') // "아이디/비번 확인" 경고 문구 요소
+const login = form.querySelector('.submit-button') // 로그인 제출 버튼
 
+// 3. 실행 초기화
 init()
 
+/**
+ * 초기 실행 함수: 이벤트를 바인딩합니다.
+ */
 function init() {
   bindEvent()
 }
 
+/**
+ * 이벤트 바인딩 함수: 사용자의 입력이나 클릭을 감시합니다.
+ */
 function bindEvent() {
   if (form) {
+    // 폼 내부에 값이 입력될 때마다 버튼 스타일 업데이트를 위해 호출
     form.addEventListener('input', handleFormChange)
+    // 폼 내부의 클릭 발생 시 처리 (특히 로그인 버튼)
     form.addEventListener('click', handleFormClick)
   }
 }
 
+/**
+ * 클릭 이벤트 핸들러: 클릭된 요소가 로그인 버튼인지 확인합니다.
+ */
 function handleFormClick(e) {
   const target = e.target
 
   if (target === login) {
-    e.preventDefault()
+    e.preventDefault() // 폼 제출 시 페이지가 새로고침되는 기본 동작을 방지
 
-    // 아이디와 비밀번호 입력 되었을 시 로그인
+    // 아이디와 비밀번호가 입력되었는지 확인 후 로그인 로직 실행
     checkeEmailPassword()
   }
 }
 
-// 버튼 스타일 적용
+/**
+ * 실시간 입력 감지 함수: 버튼의 활성화/비활성화 상태를 시각적으로 제어합니다.
+ * (aria-disabled 속성을 활용하여 웹 접근성을 고려함)
+ */
 function handleFormChange() {
+  // 아이디와 비밀번호 입력창에 모두 값이 존재할 때
   if (id.value && password.value) {
-    login.setAttribute('aria-disabled', 'false')
+    login.setAttribute('aria-disabled', 'false') // 버튼 활성화 상태 표시
   } else {
-    login.setAttribute('aria-disabled', 'true')
+    login.setAttribute('aria-disabled', 'true') // 버튼 비활성화 상태 표시
   }
 }
 
-// 아이디과 비밀번호 확인
+/**
+ * 핵심 로직: 입력받은 정보와 저장된 유저 정보를 비교합니다.
+ */
 async function checkeEmailPassword() {
+  // 1. 입력된 아이디를 기반으로 서버에서 유저 정보를 가져옴 (비동기 처리)
   const resultID = await getUser(ID, id.value)
 
-  // 가입 정보가 없는 아이디
+  // 2. 가입 정보가 없는 경우 (아이디가 존재하지 않음)
   if (!resultID) {
-    // 마크업의 hidden을 css의 style.visibility로 수정
-    // noti.hidden = false
+    // 경고 메시지를 화면에 표시함
     noti.style.visibility = 'visible'
-    return
+    return // 함수 종료
   }
 
+  // 3. 가져온 유저 데이터의 비밀번호와 입력한 비밀번호를 비교
   const isPassword = resultID.password === password.value
 
-  // 비밀번호가 틀린 경우
+  // 4. 비밀번호가 틀린 경우
   if (!isPassword) {
-    // 마크업의 hidden을 css의 style.visibility로 수정
-    // noti.hidden = false
+    // 경고 메시지를 화면에 표시함
     noti.style.visibility = 'visible'
-    return
+    return // 함수 종료
   }
 
-  // 전부 통과한 경우
+  // 5. 아이디와 비밀번호가 모두 일치하면 경고창을 숨기고 로그인 처리 진행
   noti.hidden = true
   isLogin(resultID, isPassword)
 }
 
-// 로그인 후 메인페이지로 이동
+/**
+ * 최종 로그인 처리: 로컬 스토리지에 세션을 저장하고 페이지를 이동시킵니다.
+ */
 async function isLogin(resultID, resultPassword) {
   if (resultID && resultPassword) {
-    // 비밀번호를 제외한 user 전체 데이터 객체를 저장
+    // 보안을 위해 비밀번호를 제외한 유저 전체 데이터 객체 복사
     const safeUserData = { ...resultID }
-    delete safeUserData.password
+    delete safeUserData.password // 복사본에서 비밀번호 필드만 삭제
 
+    // 로컬 스토리지(브라우저 저장소)에 유저 정보 저장 (JSON 문자열로 변환)
     localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(safeUserData))
+
     alert('로그인을 성공하였습니다.')
-    // window.location.href = `${baseURL}/index.html`
+
+    // 메인 페이지로 이동 (index.html)
     window.location.href = `/index.html`
   }
 }

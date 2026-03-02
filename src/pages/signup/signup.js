@@ -1,57 +1,58 @@
-// input 변수 생성
-const newAddIdValue = document.getElementById('new-id-input-area')
-const newAddPwValue = document.getElementById('new-pw-input-area')
-const newAddEmailValue = document.getElementById('new-email-input-area')
+// 1. DOM 요소 참조: 사용자가 입력하는 input창들과 경고 메시지를 보여줄 span 요소들을 가져옵니다.
+const newAddIdValue = document.getElementById('new-id-input-area') // 아이디 입력란
+const newAddPwValue = document.getElementById('new-pw-input-area') // 비밀번호 입력란
+const newAddEmailValue = document.getElementById('new-email-input-area') // 이메일 입력란
 
-// input 하단 span 요소 가져오기
+// 각 입력란 하단에 나타날 경고 문구 요소들
 const idInputBottomAlert = document.querySelector('.new-id-blank-warning')
 const pwInputBottomAlert = document.querySelector('.new-pw-blank-warning')
 const emailInputBottomAlert = document.querySelector('.new-email-blank-warning')
 
-// 송신(submit) 버튼 요소 가져오기
+// 최종 가입 버튼
 const sendingSignup = document.querySelector('.submit-button')
 
-// 아이디 정규식 (영문, 숫자 조합 4~20자)
+// 2. 정규표현식(Regex) 설정: 입력 데이터의 형식을 강제합니다.
+// 아이디: 영문 대소문자, 숫자 조합으로 4~20자 사이
 const idRegex = /^[a-zA-Z0-9]{4,20}$/
 
-// 비밀번호 정규식 (영문, 숫자, 특수문자 조합 8자 이상)
+// 비밀번호: 영문, 숫자, 특수문자가 각각 최소 하나 이상 포함되어야 하며 8자 이상
 const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
 
-// [수정] doro@naver..naver.com 같은 연속 마침표를 막는 이메일 정규식
-// const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-// 위에 수정된 정규식은 .. 두번이 여전히 작성됨
-// 연속 마침표(..), 도메인 시작/끝 마침표 차단 이메일 정규식
+/**
+ * 이메일 정규식 설명:
+ * - 연속된 마침표(..) 차단
+ * - 도메인의 시작과 끝에 마침표 차단
+ * - 일반적인 이메일 구조(@와 .com 등)를 엄격하게 검사
+ */
 const emailRegex =
   /^[a-zA-Z0-9_%+-]+(\.[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/
 
+// 회원 정보를 저장하고 조회할 서버 API 주소 (MockAPI)
 const USERS_API = 'https://69898725c04d974bc69f8907.mockapi.io/todayPhrase/user'
 
+/**
+ * 회원가입 메인 로직 함수
+ */
 function signupLogic() {
   sendingSignup.addEventListener('click', async (e) => {
-    e.preventDefault()
+    e.preventDefault() // 버튼 클릭 시 페이지 새로고침 방지
 
+    // 입력값의 앞뒤 공백을 제거하여 가져옵니다.
     const newId = newAddIdValue.value.trim()
     const newPw = newAddPwValue.value.trim()
     const newEmail = newAddEmailValue.value.trim()
 
-    // 1. 초기화
-    // 마크업의 hidden을 css의 style.visibility로 수정
-    // idInputBottomAlert.hidden = true
-    // pwInputBottomAlert.hidden = true
-    // emailInputBottomAlert.hidden = true
+    // [Step 1] 경고 문구 초기화: 검사를 시작하기 전 모든 경고를 숨깁니다.
     idInputBottomAlert.style.visibility = 'hidden'
     pwInputBottomAlert.style.visibility = 'hidden'
     emailInputBottomAlert.style.visibility = 'hidden'
 
-    // 2. 아이디 빈값 검사
+    // [Step 2] 아이디 유효성 검사
     if (newId === '') {
       idInputBottomAlert.textContent = '아이디 입력은 필수입니다.'
-
-      // 마크업의 hidden을 css의 style.visibility로 수정
-      // idInputBottomAlert.hidden = false
       idInputBottomAlert.style.visibility = 'visible'
-      newAddIdValue.focus()
-      return
+      newAddIdValue.focus() // 사용자가 바로 입력할 수 있게 커서 이동
+      return // 검사 실패 시 함수 종료 (중단)
     } else if (!idRegex.test(newId)) {
       idInputBottomAlert.textContent = '영문, 숫자 4~20자로 입력해주세요.'
       idInputBottomAlert.style.visibility = 'visible'
@@ -59,101 +60,80 @@ function signupLogic() {
       return
     }
 
-    // 3. 비밀번호 검사
+    // [Step 3] 비밀번호 유효성 검사
     if (newPw === '') {
       pwInputBottomAlert.textContent = '비밀번호 입력은 필수입니다.'
-
-      // 마크업의 hidden을 css의 style.visibility로 수정
-      // pwInputBottomAlert.hidden = false
       pwInputBottomAlert.style.visibility = 'visible'
       newAddPwValue.focus()
       return
     } else if (!pwRegex.test(newPw)) {
       pwInputBottomAlert.textContent = '영어, 숫자, 특수문자 혼합 8자리 이상.'
-
-      // 마크업의 hidden을 css의 style.visibility로 수정
-      // pwInputBottomAlert.hidden = false
       pwInputBottomAlert.style.visibility = 'visible'
       newAddPwValue.focus()
       return
     }
 
-    // 4. 이메일 검사 (빈값 + 구조적 오류 차단)
+    // [Step 4] 이메일 유효성 검사
     if (newEmail === '') {
       emailInputBottomAlert.textContent = '이메일 주소를 입력해 주세요.'
-
-      // 마크업의 hidden을 css의 style.visibility로 수정
-      // emailInputBottomAlert.hidden = false
       emailInputBottomAlert.style.visibility = 'visible'
       newAddEmailValue.focus()
       return
     }
-
-    // 이메일 정규식 테스트
     if (!emailRegex.test(newEmail)) {
       emailInputBottomAlert.textContent =
         '"아이디@domain.com" 형식으로 작성해주세요.'
-
-      // 마크업의 hidden을 css의 style.visibility로 수정
-      // emailInputBottomAlert.hidden = false
       emailInputBottomAlert.style.visibility = 'visible'
       newAddEmailValue.focus()
       return
     }
 
     try {
-      // 5. 아이디 중복 검사 (URL에 ? 추가)
-      // MockAPI에서 특정 필드를 찾으려면 ?필드명=값 형태여야 합니다
-      // MockAPI에서 ?userId=값으로 조회했을 때
-      // 해당 유저가 없으면 404를 반환 (서버 동작, 콘솔에 나옴)
+      // [Step 5] 아이디 중복 검사 (비동기 통신)
+      // 서버에 해당 아이디(userId)를 사용하는 유저가 있는지 쿼리 스트링(?userId=)으로 조회합니다.
       const checkResponse = await fetch(`${USERS_API}?userId=${newId}`)
       const members = await checkResponse.json()
 
-      // 데이터가 존재하면 중복된 아이디임
+      // 응답 결과가 배열이고 데이터가 있다면 이미 존재하는 아이디입니다.
       if (Array.isArray(members) && members.length > 0) {
         idInputBottomAlert.textContent = '이미 사용 중인 아이디입니다.'
-
-        // 마크업의 hidden을 css의 style.visibility로 수정
-        // idInputBottomAlert.hidden = false
         idInputBottomAlert.style.visibility = 'visible'
         newAddIdValue.focus()
-        return // 중복이면 여기서 가입 중단!
+        return // 중복된 경우 가입 프로세스 중단
       }
 
-      // 5-1. 이메일 중복 검사 (추가)
+      // [Step 5-1] 이메일 중복 검사
       const emailCheckResponse = await fetch(`${USERS_API}?email=${newEmail}`)
       const emailMembers = await emailCheckResponse.json()
 
       if (Array.isArray(emailMembers) && emailMembers.length > 0) {
         emailInputBottomAlert.textContent = '이미 사용 중인 이메일입니다.'
-
-        // 마크업의 hidden을 css의 style.visibility로 수정
-        // emailInputBottomAlert.hidden = false
         emailInputBottomAlert.style.visibility = 'visible'
         newAddEmailValue.focus()
         return
       }
 
-      // 6. 모든 검사 통과 시 최종 전송
+      // [Step 6] 모든 관문을 통과하면 최종적으로 서버에 유저 정보를 전송(POST)합니다.
       const userData = { userId: newId, password: newPw, email: newEmail }
       const responseSignUp = await fetch(USERS_API, {
-        method: 'POST',
+        method: 'POST', // 새로운 데이터를 생성할 때는 POST 메서드를 사용합니다.
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(userData), // 자바스크립트 객체를 서버가 이해할 수 있는 JSON 문자열로 변환
       })
 
       if (responseSignUp.ok) {
         alert('가입이 완료되었습니다!')
-        window.location.href = '/index.html'
+        window.location.href = '/index.html' // 가입 성공 시 로그인 페이지로 이동
       }
     } catch (error) {
-      console.error(error)
+      console.error('회원가입 중 서버 통신 오류:', error)
     }
   })
 }
 
-// 마크업으로 추가한 list 속성에 대한 작동 코드
-// 자주 사용하는 이메일 도메인 목록
+/**
+ * 이메일 도메인 자동완성 기능: 사용자가 @를 입력하면 대표적인 도메인들을 추천 리스트로 보여줍니다.
+ */
 const emailDomains = [
   '@naver.com',
   '@gmail.com',
@@ -167,20 +147,22 @@ const emailDomains = [
 newAddEmailValue.addEventListener('input', () => {
   const value = newAddEmailValue.value
   const datalist = document.getElementById('email-domains')
-  // 이전에 생성된 option 목록 초기화 (중복 방지)
+
+  // 새로운 추천 목록을 만들기 위해 기존의 목록을 비웁니다.
   datalist.innerHTML = ''
 
-  // @가 포함되어 있을 때만 추천 목록 표시
+  // 사용자가 @를 입력하기 시작했을 때만 추천을 제공합니다.
   if (value.includes('@')) {
-    const localPart = value.split('@')[0] // @ 앞부분 추출
+    const localPart = value.split('@')[0] // @ 앞의 사용자 아이디 부분만 추출
 
-    // 도메인 목록만큼 option 요소를 생성해서 datalist에 추가
+    // 미리 정의된 도메인 리스트를 돌면서 <option> 태그를 생성합니다.
     emailDomains.forEach((domain) => {
       const option = document.createElement('option')
-      option.value = localPart + domain // ex) hong@naver.com
-      datalist.appendChild(option) // datalist에 option 추가
+      option.value = localPart + domain // 사용자가 입력한 아이디 + 도메인 조합 (ex: test@naver.com)
+      datalist.appendChild(option) // <datalist>에 추가하여 화면에 표시
     })
   }
 })
 
+// 가입 로직 실행
 signupLogic()

@@ -1,11 +1,12 @@
-const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
+// 로컬 스토리지 조작 및 API 통신, 세션 관련 함수들을 임포트합니다.
 import { loadStorage, removeStorage } from '../utils'
 import { saveStorage } from '/src/js/utils/index.js'
 import { IS_CHECKED_KEY, IMOJI } from '/src/js/constants/index.js'
-import { getData, getUser, putUser } from '../../../api/api.js'
+import { getData, getUser, UserAPI } from '../../../api/api.js'
 import { EMAIL, LOGIN_AUTH_DATA } from '../constants/index.js'
 import { initSession, logout } from '../../pages/login/loginSession.js'
 
+// 문서 내 주요 요소(컨테이너, 버튼, 노티 등)를 선택합니다.
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
 const loadEmail = loadStorage(LOGIN_AUTH_DATA)
@@ -15,26 +16,28 @@ const doubleCheckedGroups = document.querySelectorAll(
   '[data-checked="doubleChecked"]',
 )
 
+// 노티 표시 시간 및 최대 선택 개수 설정
 const NOTI_HIDE_DELAY = 1800
 const MAX_CHECKED = 2
 
-// 상태 변수
+// 알림 타이머 ID를 저장할 상태 변수
 let notiTimeoutId = null
 
+// 초기화 함수 실행
 init()
 
 function init() {
   bindEvents()
 }
 
-// 노티에 잠깐 트렌지션 삭제 ( 페이지 오퍼시티와 트렌지션 강제 삽입 삭제 )
+// 페이지 진입 시 노티 애니메이션(트랜지션)이 튀는 현상을 막기 위해 잠시 클래스를 제거합니다.
 if (noti) {
-  // 아주 잠깐 뒤에 트랜지션 못하게 막기
   setTimeout(() => {
     noti.classList.remove('no-transition')
   }, 500)
 }
 
+// 각종 클릭 및 변경 이벤트를 바인딩합니다.
 function bindEvents() {
   if (submitButton) {
     submitButton.addEventListener('click', handleSubmitClick)
@@ -44,36 +47,28 @@ function bindEvents() {
     group.addEventListener('change', handleGroupChange)
   })
 
-  // 페이지가 표시될 때 모든 체크박스 초기화
-  // 브라우저 뒤로가기 버튼 클릭했을 때도 항상 초기화하고 싶을 때 사용됨
+  // 브라우저 뒤로가기 버튼 등에 대응하기 위해 페이지 표시 시 초기화 로직 실행
   globalThis.addEventListener('pageshow', handleDetectBrowserLoadOrForward)
 }
 
-// 모든 체크박스를 초기화하는 함수
+// 페이지 접속 방식(신규 로드 vs 뒤로가기)에 따라 스토리지와 버튼 상태를 제어합니다.
 function handleDetectBrowserLoadOrForward() {
-  // Navigation Timing API를 통해 현재 페이지에 어떻게 진입했는지 정보 가져오기
   const [navigation] = performance.getEntriesByType('navigation')
-  // 페이지 진입 유형을 구조 분해 할당으로 추출
   const { type } = navigation
 
-  // 페이지 진입 유형: 로드(새로고침, 초기 접속)
+  // 일반적인 접속 유형일 때 로컬 스토리지 청소 및 버튼 비활성화
   if (type === 'navigate') {
-    // 로컬 스토리지 isChecked, imoji 삭제
     removeStorage(IS_CHECKED_KEY)
     removeStorage(IMOJI)
-
-    // 제출 버튼(링크) 상태 비활성화
     disableSubmitButtonState()
   }
-  // 페이지 진입 유형: 브라우저 뒤로가기 클릭
+  // 뒤로가기/앞으로가기로 진입했을 때는 버튼을 활성화
   else if (type === 'back_forward') {
-    // 제출 버튼(링크) 상태 활성화
     enableSubmitButtonState()
   }
 }
 
-// 현재 선택된 데이터(날씨, 기분)의 유무를 판단 버튼(링크) 상태 변경
-// 접근성: 실시간으로 버튼의 활성 여부를 업데이트합니다.
+// 날씨와 기분이 모두 선택되었는지 확인하여 제출 버튼의 활성/비활성 상태를 업데이트합니다.
 function updateSubmitButtonState() {
   const { weather, mood } = getSelected()
   const isDisabled = !weather || !mood
@@ -81,46 +76,43 @@ function updateSubmitButtonState() {
   isDisabled ? disableSubmitButtonState() : enableSubmitButtonState()
 }
 
-// 버튼(링크)을 활성 상태로 변경
-// 접근성: 스크린 리더 등 보조공학기기에 상태 변화를 알림
+// 버튼 활성화 처리 (접근성 속성 고려)
 function enableSubmitButtonState() {
   if (!submitButton) return
   submitButton.setAttribute('aria-disabled', 'false')
 }
 
-// 버튼(링크)을 비활성 상태로 변경
-// 접근성: 스크린 리더 등 보조공학기기에 상태 변화를 알림
+// 버튼 비활성화 처리 (접근성 속성 고려)
 function disableSubmitButtonState() {
   if (!submitButton) return
   submitButton.setAttribute('aria-disabled', 'true')
 }
 
-// 결과보기 버튼을 눌렀을 때
+// 결과보기 클릭 시 유효성 검사 후 데이터 업로드 및 페이지 이동을 수행합니다.
 async function handleSubmitClick(e) {
   e.preventDefault()
   e.stopImmediatePropagation()
   const { weather, mood } = getSelected()
 
+  // 필수 항목 미선택 시 알림 표시
   if (!weather || !mood) {
     showNoti('기분과 감정을 최소 한개이상 골라주세요')
     return
   }
 
   try {
-    // 회원일때만 감정/날씨 저장 실행
+    // 로그인한 회원일 경우 사용자의 통계(카운트) 데이터를 서버에 업데이트합니다.
     if (loadStorage(LOGIN_AUTH_DATA)) {
       await emojiTotalList()
     }
 
-    // 비회원 페이지로 이동할 때 로컬 스토리지에 키 설정
+    // 로컬 스토리지에 체크 상태 저장 및 선택된 이모지 데이터 저장
     saveStorage(IS_CHECKED_KEY, 'true')
-
-    // 체크된 버튼이 어느 감정인지 스토리지에 기록 넘겨줌
     emojiStorage()
 
     console.log('서버에 데이터 업로드 성공!')
 
-    // 서버 데이터 기다리지 않고 바로 이동
+    // 결과 페이지로 이동
     location.href = '/src/pages/result/result.html'
   } catch (error) {
     console.error('데이터 업로드 실패:', error)
@@ -128,6 +120,7 @@ async function handleSubmitClick(e) {
   }
 }
 
+// 체크박스 그룹 변경 시 선택 개수 제한 로직을 호출합니다.
 function handleGroupChange(e) {
   const input = e.target.closest('input[type="checkbox"]')
   if (!input) return
@@ -140,20 +133,20 @@ function handleGroupChange(e) {
   updateSubmitButtonState()
 }
 
+// 체크박스 선택 개수를 최대 2개로 제한합니다.
 function limitToTwoChecked(groupEl, changedInput) {
   const checkedCount = groupEl.querySelectorAll(
     'input[type="checkbox"]:checked',
   ).length
   if (checkedCount <= MAX_CHECKED) return true
 
-  // 초과면 방금 누른 것 되돌림
+  // 2개 초과 시 방금 클릭한 체크박스를 해제 처리
   changedInput.checked = false
   return false
 }
 
-// 이때까지 선택한 감정들 JSON 데이터로 추가
+// 사용자가 선택한 감정/날씨 항목의 카운트를 서버(DB) 유저 정보에 누적 업데이트합니다.
 async function emojiTotalList() {
-  // 체크박스에 뭘 체크했는지 가져오기
   const checkImojis = container.querySelectorAll(
     '.checkbox-button-area input:checked',
   )
@@ -161,9 +154,7 @@ async function emojiTotalList() {
     return item.dataset.value
   })
 
-  // getUser로 날씨/감정 가져오기
   const user = await getUser(EMAIL, loadEmail.email)
-  const updateUrl = `${VITE_API_BASE_URL}/todayPhrase/user/${user.id}`
   const weather = user.weather_counts
   const mood = user.mood_counts
   const updateData = {
@@ -171,7 +162,7 @@ async function emojiTotalList() {
     mood_counts: { ...mood },
   }
 
-  // 체크한 감정에 담긴 각각의 data-value를 꺼내 감정 선택한것에 +1 카운트 해줌
+  // 데이터셋 값과 일치하는 카운트 수치 증가
   imojis.forEach((item) => {
     if (item in updateData.weather_counts) {
       updateData.weather_counts[item] =
@@ -182,42 +173,39 @@ async function emojiTotalList() {
     }
   })
 
-  // 위에서 감정 선택한 데이터들을 JSON으로 업데이트
-  await putUser(updateUrl, updateData)
+  // 수정된 데이터를 서버에 전송(PUT)
+  await UserAPI.updateUserData(user.id, updateData)
 }
 
-// 체크된것들을 로컬스토리지에 기록 남겨주는 함수
+// 현재 체크된 모든 항목을 배열로 만들어 로컬 스토리지에 저장합니다.
 function emojiStorage() {
   const checkImojis = container.querySelectorAll(
     '.checkbox-button-area input:checked',
   )
-  // 체크 되어있는 유사배열을 진짜 배열로 변환
   const emojiArray = Array.from(checkImojis).map((input) => {
     return input.dataset.value
   })
 
-  // 로컬 스토리지에 해당 체크 리스트를 넘겨줌
   saveStorage(IMOJI, emojiArray)
 }
 
-// 노티 활성화 / 비활성화
+// 상단 알림 메시지(노티)를 표시하고 일정 시간 후 숨깁니다.
 function showNoti(message) {
   if (!noti) return
 
-  // 알람이 떠있으면 타이머 리셋
   if (notiTimeoutId) clearTimeout(notiTimeoutId)
 
   noti.textContent = message
   noti.classList.add('noti-active')
   noti.setAttribute('aria-hidden', 'false')
 
-  // 일정시간 지나면 노티 삭제
   notiTimeoutId = setTimeout(() => {
     noti.classList.remove('noti-active')
     noti.setAttribute('aria-hidden', 'true')
   }, NOTI_HIDE_DELAY)
 }
 
+// 페이지 이탈 시 실행 중인 타이머를 정리합니다.
 // 개선 예시: 페이지 언로드 시 타이머 정리
 function cleanupTimers() {
   if (notiTimeoutId) {
@@ -227,13 +215,17 @@ function cleanupTimers() {
   // 다른 타이머도 정리
 }
 
-// 날씨와 감정 선택
+// 페이지 언로드 이벤트에 정리 함수 연결
+globalThis.addEventListener('beforeunload', cleanupTimers)
+
+// 현재 날씨와 기분 그룹에서 각각 체크된 요소를 반환합니다.
 function getSelected() {
   const weather = container.querySelector('.select-weather input:checked')
   const mood = container.querySelector('.select-mood input:checked')
   return { weather, mood }
 }
 
+// 결과 페이지의 로딩 속도를 위해 도서 데이터를 미리 가져와 캐싱합니다.
 async function prefetchData() {
   try {
     if (localStorage.getItem('cachedBookData')) {
@@ -250,35 +242,38 @@ async function prefetchData() {
   }
 }
 
+// 윈도우 로드 시 데이터 프리페치 수행
 window.addEventListener('load', () => {
   prefetchData()
 })
 
+// DOM 로드 시 이전 결과 리스트 및 선택 이모지 초기화
 window.addEventListener('DOMContentLoaded', () => {
-  // 새로운 테스트를 위해 이전 결과 리스트 삭제
   localStorage.removeItem('selectedBookList')
-  // 선택했던 이모지 초기화
   localStorage.removeItem(IMOJI)
 })
 
-globalThis.addEventListener('beforeunload', cleanupTimers)
-
+// 테스트 확인 버튼 요소 선택 및 이벤트 등록 (직접 이동 로직)
 const testCheckButton = document.querySelector('.user-test-check')
 
 if (testCheckButton) {
   testCheckButton.addEventListener('click', (e) => {
-    e.preventDefault() // 페이지 이동 전 저장 작업을 위해 잠시 대기
+    e.preventDefault()
 
-    // 선택된 값들 스토리지에 저장
     emojiStorage()
     saveStorage(IS_CHECKED_KEY, 'true')
 
-    // 서버 데이터 기다리지 않고 바로 이동
     location.href = '/src/pages/result/result.html'
   })
 }
+
+// 세션 상태를 확인하여 로그인 여부를 판단합니다.
 const { isLoggedIn, currentUser } = initSession()
 
+/**
+ * [로그인 상태별 UI 렌더링]
+ * 로그인 여부에 따라 버튼 텍스트를 변경하고 로그인/회원가입/로그아웃 버튼의 노출을 제어합니다.
+ */
 export function renderLoggedInDisplay() {
   const checkButton = document.querySelector('.user-test-check')
   const loginButton = document.querySelector('.user-login')
@@ -301,4 +296,5 @@ export function renderLoggedInDisplay() {
   }
 }
 
+// 최종 UI 업데이트 실행
 renderLoggedInDisplay()
