@@ -1,16 +1,20 @@
 import { LOGIN_AUTH_DATA } from '../../js/constants'
 import { removeStorage } from '../../js/utils'
 
+const SESSION_FLAG = 'session_active'
+
 export let isLoggedIn = false
 export let currentUser = null
 
 export function initSession() {
   const userData = localStorage.getItem(LOGIN_AUTH_DATA)
-
-  if (userData) {
+  const sessionActive = sessionStorage.getItem(SESSION_FLAG)
+  
+  if (userData && sessionActive) {
     isLoggedIn = true
     currentUser = JSON.parse(userData)
   } else {
+    localStorage.removeItem(LOGIN_AUTH_DATA)
     isLoggedIn = false
     currentUser = null
   }
@@ -19,6 +23,7 @@ export function initSession() {
 
 export function logout() {
   localStorage.removeItem(LOGIN_AUTH_DATA)
+  sessionStorage.removeItem(SESSION_FLAG)
   isLoggedIn = false
   currentUser = null
   removeStorage('genrePreference')
