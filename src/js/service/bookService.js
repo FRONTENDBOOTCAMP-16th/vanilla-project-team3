@@ -80,12 +80,6 @@ export function scoreBook(book, mood, weather) {
     })
   }
 
-  if (book.bookTitle === '빨강 머리 앤') {
-  console.log('빨강 머리 앤 점수:', score)
-  console.log('mood 점수:', scoreCalculate(book, 'mood', mood))
-  console.log('weather 점수:', scoreCalculate(book, 'weather', weather))
-}
-
   return score
 }
 
@@ -115,8 +109,9 @@ export function getRecommendations(allBooks, mood, weather, viewed = []) {
     })
 
     // 5. (임시) 중복 API 필터링
-    .filter((book, index, self) =>
-      index === self.findIndex((b) => b.bookTitle === book.bookTitle)
+    .filter(
+      (book, index, self) =>
+        index === self.findIndex((b) => b.bookTitle === book.bookTitle),
     )
     // 6. 상위 4권만 추출
     .slice(0, 4)

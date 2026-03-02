@@ -225,7 +225,7 @@ function bindHeartEvents(allBooks) {
     myPageDialog?.showModal()
   })
 
-
+  
   // loadEmail 파라미터 제거
   // [수정] setTimeout(1500) 제거 - initPage에서 await로 순서가 보장되므로 불필요
   // setTimeout(() => {
