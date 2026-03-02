@@ -225,6 +225,12 @@ function bindHeartEvents(loadEmail, allBooks) {
         const imgSrc = btn.querySelector('.book-cover-img')?.src
 
         // 이미지 경로를 대조하여 전체 도서 데이터 중 어떤 책인지 식별
+        // [수정] cachedBookData 대신 allBooks 직접 사용
+        // cachedBookData가 없거나 "undefined" 문자열일 경우 에러 방지
+        // const cachedData = JSON.parse(
+        //   localStorage.getItem('cachedBookData') || '[]',
+        // )
+        // const book = cachedData.find((b) => b.bookCover === imgSrc)
         const book = allBooks.find((b) => b.bookCover === imgSrc)
 
         if (book) {
@@ -247,6 +253,15 @@ function bindHeartEvents(loadEmail, allBooks) {
           // 3. 사용자의 취향 학습: 해당 도서의 태그(장르)에 점수 부여 (+1 / -1)
           if (book.tags) {
             updateGenrePreference(book.tags, isActive ? 1 : -1)
+            // [수정] 디버깅용 console.log 제거
+            // const preference = JSON.parse(
+            //   localStorage.getItem('genrePreference') || '{}',
+            // )
+            // const allTags = [...new Set(allBooks.flatMap((b) => b.tags || []))]
+            // console.log(
+            //   '전체 태그별 점수:',
+            //   allTags.map((tag) => `${tag}: ${preference[tag] || 0}점`),
+            // )
           }
         }
       })

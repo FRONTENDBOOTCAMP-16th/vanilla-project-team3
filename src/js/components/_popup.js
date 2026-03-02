@@ -1,5 +1,6 @@
 // 외부 API 통신 함수와 상수, 유틸리티들을 가져옵니다.
 import { getData, getUser, UserAPI } from '../../../api/api'
+import DOMPurify from 'dompurify'
 import { EMAIL, LOGIN_AUTH_DATA } from '../constants'
 import { initSession } from '../../pages/login/loginSession'
 import {
@@ -205,8 +206,8 @@ function heartLists(heartList, bookItems) {
     const currentBook = bookItems[index]
     if (!currentBook) return
 
-    // 리스트 내부에 삭제 버튼과 책 이미지를 삽입합니다.
-    item.innerHTML = `
+    // 리터널로 HTML구조 제작
+    const changeHTML = `
       <button type="button" class="delete-item-button" aria-label="삭제">
         <svg data-delete="button" data-id="${currentBook.id}" ...>
           </svg>
@@ -215,6 +216,14 @@ function heartLists(heartList, bookItems) {
         <img src="${currentBook.bookCover}" alt="${currentBook.author}" />
       </a>
     `
+
+    // 리터널로 만든 구조에 안전하게 sanitize로 변환
+    const cleanHTML = DOMPurify.sanitize(changeHTML, {
+      ADD_ATTR: ['target'],
+    })
+
+    // innerHTML로 삽입
+    item.innerHTML = cleanHTML
   })
 }
 

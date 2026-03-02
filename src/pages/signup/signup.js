@@ -92,7 +92,9 @@ function signupLogic() {
       // [Step 5] 아이디 중복 검사 (비동기 통신)
       // 서버에 해당 아이디(userId)를 사용하는 유저가 있는지 쿼리 스트링(?userId=)으로 조회합니다.
       const checkResponse = await fetch(`${USERS_API}?userId=${newId}`)
-      const members = await checkResponse.json()
+      // const members = await checkResponse.json()
+      // [수정] 404면 중복 없음(빈 배열)으로 처리, json() 파싱 에러 방지
+      const members = checkResponse.ok ? await checkResponse.json() : []
 
       // 응답 결과가 배열이고 데이터가 있다면 이미 존재하는 아이디입니다.
       if (Array.isArray(members) && members.length > 0) {
@@ -104,7 +106,11 @@ function signupLogic() {
 
       // [Step 5-1] 이메일 중복 검사
       const emailCheckResponse = await fetch(`${USERS_API}?email=${newEmail}`)
-      const emailMembers = await emailCheckResponse.json()
+      // const emailMembers = await emailCheckResponse.json()
+      // [수정] 404면 중복 없음(빈 배열)으로 처리, json() 파싱 에러 방지
+      const emailMembers = emailCheckResponse.ok
+        ? await emailCheckResponse.json()
+        : []
 
       if (Array.isArray(emailMembers) && emailMembers.length > 0) {
         emailInputBottomAlert.textContent = '이미 사용 중인 이메일입니다.'

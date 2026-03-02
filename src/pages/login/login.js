@@ -3,13 +3,19 @@
 import { getUser } from '../../../api/api' // 서버(또는 Mock API)에서 사용자 데이터를 가져오는 함수
 import { ID, LOGIN_AUTH_DATA } from '../../js/constants' // 프로젝트 내에서 반복 사용되는 고정값(상수)들
 
-// 2. DOM 요소 선택 (화면의 HTML 태그들을 자바스크립트로 연결)
-const form = document.querySelector('.autu-box-container') // 로그인 폼 전체 컨테이너
-if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.') // 예외 처리: 폼이 없으면 에러 발생
-const id = form.querySelector('.id-box') // 아이디 입력창
-const password = form.querySelector('.pw-box') // 비밀번호 입력창
-const noti = form.querySelector('.noti-blank-warning') // "아이디/비번 확인" 경고 문구 요소
-const login = form.querySelector('.submit-button') // 로그인 제출 버튼
+const SESSION_FLAG = 'session_active'
+
+// ✅ 추가: 페이지 로드 시 세션 플래그 확인 → 없으면 localStorage 초기화
+if (!sessionStorage.getItem(SESSION_FLAG)) {
+  localStorage.removeItem(LOGIN_AUTH_DATA)
+}
+
+const form = document.querySelector('.autu-box-container')
+if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.')
+const id = form.querySelector('.id-box')
+const password = form.querySelector('.pw-box')
+const noti = form.querySelector('.noti-blank-warning')
+const login = form.querySelector('.submit-button')
 
 // 3. 실행 초기화
 init()
@@ -27,6 +33,7 @@ function init() {
 function bindEvent() {
   if (form) {
     // 폼 내부에 값이 입력될 때마다 버튼 스타일 업데이트를 위해 호출
+    form.addEventListener('submit', (e) => e.preventDefault())
     form.addEventListener('input', handleFormChange)
     // 폼 내부의 클릭 발생 시 처리 (특히 로그인 버튼)
     form.addEventListener('click', handleFormClick)
@@ -37,10 +44,10 @@ function bindEvent() {
  * 클릭 이벤트 핸들러: 클릭된 요소가 로그인 버튼인지 확인합니다.
  */
 function handleFormClick(e) {
-  const target = e.target
+  const target = e.target.closest('.submit-button')
 
-  if (target === login) {
-    e.preventDefault() // 폼 제출 시 페이지가 새로고침되는 기본 동작을 방지
+  if (target) {
+    e.preventDefault()
 
     // 아이디와 비밀번호가 입력되었는지 확인 후 로그인 로직 실행
     checkeEmailPassword()
@@ -65,6 +72,7 @@ function handleFormChange() {
  */
 async function checkeEmailPassword() {
   // 1. 입력된 아이디를 기반으로 서버에서 유저 정보를 가져옴 (비동기 처리)
+  console.log('체크 함수 실행됨')
   const resultID = await getUser(ID, id.value)
 
   // 2. 가입 정보가 없는 경우 (아이디가 존재하지 않음)
@@ -76,6 +84,7 @@ async function checkeEmailPassword() {
 
   // 3. 가져온 유저 데이터의 비밀번호와 입력한 비밀번호를 비교
   const isPassword = resultID.password === password.value
+  console.log('isPassword:', isPassword)
 
   // 4. 비밀번호가 틀린 경우
   if (!isPassword) {
@@ -93,6 +102,7 @@ async function checkeEmailPassword() {
  * 최종 로그인 처리: 로컬 스토리지에 세션을 저장하고 페이지를 이동시킵니다.
  */
 async function isLogin(resultID, resultPassword) {
+  console.log('isLogin 실행됨', resultID, resultPassword)
   if (resultID && resultPassword) {
     // 보안을 위해 비밀번호를 제외한 유저 전체 데이터 객체 복사
     const safeUserData = { ...resultID }
@@ -101,6 +111,7 @@ async function isLogin(resultID, resultPassword) {
     // 로컬 스토리지(브라우저 저장소)에 유저 정보 저장 (JSON 문자열로 변환)
     localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(safeUserData))
 
+    sessionStorage.setItem(SESSION_FLAG, 'true')
     alert('로그인을 성공하였습니다.')
 
     // 메인 페이지로 이동 (index.html)

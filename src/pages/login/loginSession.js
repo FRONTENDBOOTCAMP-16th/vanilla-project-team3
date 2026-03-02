@@ -1,6 +1,9 @@
 // 1. 외부 상수 가져오기
 // 'LOGIN_AUTH_DATA'는 로컬 스토리지에서 유저 정보를 저장/조회할 때 사용하는 'Key(이름)' 값입니다.
 import { LOGIN_AUTH_DATA } from '../../js/constants'
+import { removeStorage } from '../../js/utils'
+
+const SESSION_FLAG = 'session_active'
 
 // 2. 전역 상태 변수 선언 (다른 파일에서 이 상태를 참조할 수 있도록 export)
 export let isLoggedIn = false // 현재 로그인 여부 (true/false)
@@ -13,14 +16,15 @@ export let currentUser = null // 현재 로그인한 유저의 데이터 객체 
 export function initSession() {
   // 로컬 스토리지에서 'LOGIN_AUTH_DATA' 이름으로 저장된 문자열 데이터를 가져옵니다.
   const userData = localStorage.getItem(LOGIN_AUTH_DATA)
+  const sessionActive = sessionStorage.getItem(SESSION_FLAG)
 
-  if (userData) {
-    // 데이터가 존재한다면 (로그인 상태라면)
+  if (userData && sessionActive) {
     isLoggedIn = true
     // 문자열 형태인 데이터를 자바스크립트 객체 형태로 변환하여 저장합니다.
     currentUser = JSON.parse(userData)
   } else {
     // 데이터가 없다면 (로그아웃 상태라면) 초기값으로 설정합니다.
+    localStorage.removeItem(LOGIN_AUTH_DATA)
     isLoggedIn = false
     currentUser = null
   }
@@ -36,8 +40,10 @@ export function logout() {
   localStorage.removeItem(LOGIN_AUTH_DATA)
 
   // 2. 메모리 상의 전역 변수들을 초기화합니다.
+  sessionStorage.removeItem(SESSION_FLAG)
   isLoggedIn = false
   currentUser = null
+  removeStorage('genrePreference')
 
   alert('로그아웃 되었습니다.')
 

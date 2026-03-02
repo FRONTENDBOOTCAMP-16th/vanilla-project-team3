@@ -235,6 +235,9 @@ async function prefetchData() {
 
     const allData = await getData()
 
+    // [수정] allData가 없으면 저장 안 함 (undefined 문자열 저장 방지)
+    // localStorage.setItem('cachedBookData', JSON.stringify(allData))
+    if (!allData) return
     localStorage.setItem('cachedBookData', JSON.stringify(allData))
     console.log('✅ Data prefetch 성공')
   } catch (error) {
