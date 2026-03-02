@@ -1,14 +1,15 @@
 // 1. 외부 모듈 및 설정값 가져오기
 // const baseURL = import.meta.env.VITE_BASE_URL // (현재 주석 처리됨) 환경 변수에서 기본 URL을 가져오는 설정
-import { getUser } from '../../../api/api' // 서버(또는 Mock API)에서 사용자 데이터를 가져오는 함수
+import { getUser, UserAPI } from '../../../api/api' // 서버(또는 Mock API)에서 사용자 데이터를 가져오는 함수
 import { ID, LOGIN_AUTH_DATA } from '../../js/constants' // 프로젝트 내에서 반복 사용되는 고정값(상수)들
 
 const SESSION_FLAG = 'session_active'
 
+// 다른 탭에서 새로고침할 때 멀쩡한 localStorage를 지워버리는 부작용이 생겨서 제거
 // ✅ 추가: 페이지 로드 시 세션 플래그 확인 → 없으면 localStorage 초기화
-if (!sessionStorage.getItem(SESSION_FLAG)) {
-  localStorage.removeItem(LOGIN_AUTH_DATA)
-}
+// if (!sessionStorage.getItem(SESSION_FLAG)) {
+//   localStorage.removeItem(LOGIN_AUTH_DATA)
+// }
 
 const form = document.querySelector('.autu-box-container')
 if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.')
@@ -70,8 +71,8 @@ function handleFormChange() {
  * 핵심 로직: 입력받은 정보와 저장된 유저 정보를 비교합니다.
  */
 async function checkeEmailPassword() {
-  // 1. 입력된 아이디를 기반으로 서버에서 유저 정보를 가져옴 (비동기 처리)
   console.log('체크 함수 실행됨')
+  // 1. 입력된 아이디를 기반으로 서버에서 유저 정보를 가져옴 (비동기 처리)
   const resultID = await getUser(ID, id.value)
 
   // 2. 가입 정보가 없는 경우 (아이디가 존재하지 않음)
@@ -83,13 +84,21 @@ async function checkeEmailPassword() {
 
   // 3. 가져온 유저 데이터의 비밀번호와 입력한 비밀번호를 비교
   const isPassword = resultID.password === password.value
-  console.log('isPassword:', isPassword)
 
   // 4. 비밀번호가 틀린 경우
   if (!isPassword) {
     // 경고 메시지를 화면에 표시함
     noti.style.visibility = 'visible'
     return // 함수 종료
+  }
+
+  // [추가] 이미 로그인 중인지 체크
+  if (resultID.isLoggedIn) {
+    const force = confirm(
+      '다른 기기에서 로그인 중입니다. 강제 로그인하시겠습니까?',
+    )
+    if (!force) return
+    // 확인 누르면 그냥 isLogin으로 진행
   }
 
   // 5. 아이디와 비밀번호가 모두 일치하면 경고창을 숨기고 로그인 처리 진행
@@ -103,6 +112,11 @@ async function checkeEmailPassword() {
 async function isLogin(resultID, resultPassword) {
   console.log('isLogin 실행됨', resultID, resultPassword)
   if (resultID && resultPassword) {
+    // [추가] 서버에 로그인 상태 저장
+    await UserAPI.updateUserData(resultID.id, {
+      ...resultID,
+      isLoggedIn: true,
+    })
     // 보안을 위해 비밀번호를 제외한 유저 전체 데이터 객체 복사
     const safeUserData = { ...resultID }
     delete safeUserData.password // 복사본에서 비밀번호 필드만 삭제

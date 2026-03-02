@@ -2,6 +2,8 @@
 // 'LOGIN_AUTH_DATA'는 로컬 스토리지에서 유저 정보를 저장/조회할 때 사용하는 'Key(이름)' 값입니다.
 import { LOGIN_AUTH_DATA } from '../../js/constants'
 import { removeStorage } from '../../js/utils'
+// [추가]
+import { UserAPI } from '../../../api/api'
 
 const SESSION_FLAG = 'session_active'
 
@@ -24,7 +26,9 @@ export function initSession() {
     currentUser = JSON.parse(userData)
   } else {
     // 데이터가 없다면 (로그아웃 상태라면) 초기값으로 설정합니다.
-    localStorage.removeItem(LOGIN_AUTH_DATA)
+    // 세션이 없을 때 localStorage도 같이 지웠는데, 다른 탭에서 열리면
+    // sessionStorage가 없으니 이 코드가 실행되어 기존 탭의 로그인 데이터까지 삭제해버리는 문제가 있어서 제거
+    // localStorage.removeItem(LOGIN_AUTH_DATA)
     isLoggedIn = false
     currentUser = null
   }
@@ -35,7 +39,16 @@ export function initSession() {
 /**
  * 로그아웃 함수: 저장된 세션 정보를 삭제하고 초기화합니다.
  */
-export function logout() {
+export async function logout() {
+  // [추가] 서버에 로그아웃 상태 저장
+  const userData = JSON.parse(localStorage.getItem(LOGIN_AUTH_DATA) || '{}')
+  if (userData.id) {
+    await UserAPI.updateUserData(userData.id, {
+      ...userData,
+      isLoggedIn: false,
+    })
+  }
+
   // 1. 로컬 스토리지에서 유저 정보를 삭제합니다.
   localStorage.removeItem(LOGIN_AUTH_DATA)
 
