@@ -28,6 +28,7 @@
 
 - Git / GitHub
 - VS Code
+- DOMPurify
 
 ---
 
