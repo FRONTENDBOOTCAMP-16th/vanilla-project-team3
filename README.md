@@ -82,27 +82,68 @@
 
 ```
 VANILLA-PROJECT-TEAM3/
-├── public/ # 정적 파일 (빌드 시 루트로 복사됨, favicon 등)
-├───── src/ # 소스 코드 (실제 개발 작업 공간)
-| | ├──css/ # 스타일 시트
-│ | | ├── common
-│ | │ | ├── _a11y.css
-│ | │ | ├── _base.css
-│ | │ | ├── _fonts.css
-│ | │ | ├── _normalize.css
-│ | │ | └── _theme.css
-│ | | └── components/ # (선택) 재사용 가능한 UI 조각 (헤더, 카드 등)
-│ | │   └── _example.css
-| | └── style.css
-| ├──font/ # 폰트
-| | ├──JejuHallasan.woff2
-| | └──PretendardVariable.woff2
-| └──main.js
-├── index.html # 메인 HTML (Vite는 index.html이 루트에 위치)
-├── package.json # 의존성 관리
-├── .gitignore # Git 제외 파일 목록
-├── eslint.config.mjs # eslint 설정 파일
-└── vite.config.mjs # Vite 설정 파일
+src/
+├── css/
+│   ├── common/
+│   │   ├── _a11y.css # 접근성
+│   │   ├── _base.css # 기본 리셋
+│   │   ├── _fonts.css # 폰트 세팅
+│   │   ├── _normalize.css # 정규화
+│   │   └── _theme.css # 색상 테마
+│   ├── components/
+│   │   ├── _button.css # 기본 버튼 
+│   │   ├── _emoji.css # 이모지
+│   │   ├── _index.css # HTML / BODY 세팅
+│   │   ├── _layout.css # 전체 틀 
+│   │   ├── _login-signup.css # 회원가입 / 로그인 폼
+│   │   ├── _morebookinfo.css # 책 상세보기 버튼
+│   │   ├── _navi.css # 네비게이션
+│   │   ├── _popup.css # 팝업
+│   │   ├── _result-display.css # 추천하는 책 페이지
+│   │   ├── _text-copy.css # 문구복사
+│   │   └── _title.css # 타이틀
+│   ├── style.css
+│   ├── font /
+│   │   ├── JejuHallasan.woff2
+│   │   └── PretendardVariable.woff2
+│   └── image
+│
+├── js/
+│   ├── components/
+│   │   ├── _imageLoading.js # 이미지 로딩 함수 모음
+│   │   ├── _phraseLoader.js # 문구 함수 모음
+│   │   ├── _popup.js # 팝업 관련 함수
+│   │   ├── _share.js # 공유 함수
+│   │   └── _text-copy.js # 텍스트 카피 함수
+│   ├── constants/
+│   │   └── index.js # 공용 CONST만 불러오는 파일
+│   ├── services/
+│   │   └── bookService.js # 공통 모듈만 포함하는 파일
+│   └── utils/
+│       └── index.js # utils 호출 함수
+│       └── storage.js # 로컬스토리지 함수
+├── main.js
+├── pages/
+│    ├── login/
+│    │   ├── login.html # 로그인 페이지
+│    │   ├── login.js # 로그인 함수
+│    │   └── loginSession.js # 로그인 세션
+│    ├── result/
+│    │   ├── result.html # result.js 파일을 불러오는 페이지
+│    │   └── result.js # result.html 페이지에서만 호출되어야 하는 파일 (정리)
+│    └── signup/
+│        ├── signup.html # 회원가입 페이지
+│        └── signup.js # 회원가입 함수
+├── .env
+├── .gitignore
+├── .prettierrc
+├── bun.lock
+├── eslint.config.mjs
+├── index.html
+├── index.html
+├── package.json
+├── README.md
+└── vite.config.mjs
 ```
 
 ---
@@ -115,6 +156,41 @@ VANILLA-PROJECT-TEAM3/
 2. 원인 파악
 3. 해결 방법
 4. 배운 점
+
+[문제상황] 
+공유 기능 수정 및 팀원 코드 병합 후, 결과 페이지 진입 시 데이터 로드에 실패함.
+"데이터가 존재하지 않습니다"라는 알림과 함께 메인 페이지(index.html)로 강제 리다이렉트되는 현상 발생.
+일부 로직에서 유저 데이터를 불러오기 전 호출이 일어나 null 혹은 undefined가 전달되어 추천 로직이 정상 작동하지 않음.
+
+[원인]
+모든 페이지에서 공통으로 사용하는 main.js가 _popup.js를 불러오고, _popup.js가 다시 특정 페이지 전용 로직인 result.js를 참조함.
+관심사 분리 실패 : result.js 내부에 UI 렌더링 로직과 데이터 처리(비즈니스 로직)가 뒤섞여 있어, 특정 함수 호출 시 의도치 않게 페이지 전체의 초기화 로직이 간섭을 받음.
+
+[해결]
+비즈니스 로직 분리: result.js에 묶여 있던 데이터 계산 및 API 통신 로직을 별도의 bookService.js로 분리함.
+_popup.js가 더 이상 result.js를 직접 참조하지 않도록 수정하고, 필요한 로직은 분리된 bookService.js에서 가져오도록 변경하여 의존성 오염을 제거함.
+bookService.js: 순수 데이터 처리 및 API 통신 담당 (페이지 종속성 없음).
+result.js: result.html 전용 UI 제어 및 렌더링 담당.
+
+[배운점]
+이론으로 접한 원칙을 코드에 적용하려고 노력했으나 기능 간의 결합도가 높아지는 스파게티 코드를 경험하게 되고 이를 해결하는 과정에서 초기 설계 단계에서 명확한 역할 분리가 얼마나 중요한지 깨닫는 계기가 되었다.
+꼬여있는 로직을 피드백 받은대로 분리하고 재구성하는 리팩토링 과정을 통해서 유지보수가 용이한 설계를 어떻게 하는지 알 수 있는 경험을 할 수 있었다.
+또한 동일한 기능을 중복 구현하거나 코드 충돌이 발생하는 문제를 겪으면서 효율적인 협업 및 분업을 위해서는 정말 세밀한 의논과 협의 과정이 필수라는것을 깨닫게 되었다.
+스파게티 코드를 경험하고 관심사의 분리를 진행하면서 앞으로는 구조를 어떻게 짜야할지 경험을 할 수 있어서 정말 좋은 기회였다.
+팀원들과 협업하는 과정에서 각자 코드를 작업하더라도 코드가 중복되거나 같은 곳에서 작동해 충돌이 일어나게 되는 문제들을 겪으면서 협업은 정말 많은 의논과 협의를 거쳐서 진행해야한다는것도 알게되었다.
+
+1.  문제 상황
+- SPA에서 네비게이션을 눌렀을때 페이지 전환을 해야하는 상황이였습니다. 페이지 전환을 하기위해 이때까지 작업을 한 페이지들을 index.html에 전부 몰아넣어야했고, 버튼을 누르면 class하나로 페이지를 제어했어야 했습니다. 
+
+2. 원인 파악
+- 데이터를 전부 가져오는것이 문제였습니다. email, id, heart 등 한 유저의 모든 정보를 가져와서 비교를 하였어서 느렸었습니다.
+
+3. 해결 방법
+- 
+
+4. 배운 점
+
+
 
 ---
 
