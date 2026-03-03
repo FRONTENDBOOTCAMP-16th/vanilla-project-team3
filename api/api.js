@@ -3,7 +3,7 @@ import { LOGIN_AUTH_DATA } from '../src/js/constants'
 const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
 
 /**
- * [공통] API 호출 전담 함수 (피드백 반영)
+ * [공통] API 호출 전담 함수
  */
 export async function fetchAPI(endpoint, options = {}) {
   try {
@@ -77,13 +77,11 @@ const getActiveUserId = () => {
 /* ============================================================ */
 
 /**
- * 1. 기존 getData 로직 (전체 유지)
+ * 1. 기존 getData 로직
  */
 export async function getData(key, value) {
   try {
     const data = await fetchAPI('/todayPhrase/todaysPhrase')
-
-    // 데이터 마사지 (기존 필드 추출 로직 그대로 유지)
     const massagedData = data.map(
       ({
         id,
@@ -123,7 +121,7 @@ export async function getData(key, value) {
 }
 
 /**
- * 2. 기존 getUser 로직 (보안 로직 포함 유지)
+ * 2. 기존 getUser 로직
  */
 export async function getUser(key, value) {
   if (key === 'password') {
@@ -132,19 +130,17 @@ export async function getUser(key, value) {
   }
 
   try {
-    // 쿼리 스트링 방식 유지
     const data = await fetchAPI(`/todayPhrase/user?${key}=${value}`)
     const user = Array.isArray(data) ? data[0] : data
     if (!user) return null
 
-    // 중첩 구조 구조 분해 할당 유지
     const {
       id,
       email,
       password,
       userId,
       heart,
-      isLoggedIn, // [추가]
+      isLoggedIn,
       mood_counts: { happy, sad, soso, bad },
       weather_counts: { sunny, rainy, snowy, dusty, cloudy },
     } = user
@@ -155,7 +151,7 @@ export async function getUser(key, value) {
       password,
       userId,
       heart,
-      isLoggedIn, // [추가]
+      isLoggedIn,
       mood_counts: { happy, sad, soso, bad },
       weather_counts: { sunny, rainy, snowy, dusty, cloudy },
     }
@@ -166,7 +162,7 @@ export async function getUser(key, value) {
 }
 
 /**
- * 3. 추천 기록 조회 (개선 버전)
+ * 3. 추천 기록 조회
  */
 export async function getViewedIds() {
   const targetId = getActiveUserId()
@@ -182,7 +178,7 @@ export async function getViewedIds() {
 }
 
 /**
- * 4. 추천 기록 업데이트 (중복 방지 로직 포함)
+ * 4. 추천 기록 업데이트
  */
 export async function updateViewedIds(newIds) {
   const targetId = getActiveUserId()
@@ -202,7 +198,7 @@ export async function updateViewedIds(newIds) {
 }
 
 /**
- * 5. 추천 기록 초기화 (오케스트레이션)
+ * 5. 추천 기록 초기화
  */
 export async function resetViewedHistory() {
   const targetId = getActiveUserId()
@@ -212,7 +208,6 @@ export async function resetViewedHistory() {
     const userData = await UserAPI.fetchUserData(targetId)
     const resetData = UserLogic.clearViewedHistory(userData)
     await UserAPI.updateUserData(targetId, resetData)
-    console.log(`유저 ${targetId}번 기록 초기화 완료`)
   } catch (error) {
     console.error('기록 초기화 실패:', error)
   }

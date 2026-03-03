@@ -1,4 +1,3 @@
-// 로컬 스토리지 조작 및 API 통신, 세션 관련 함수들을 임포트합니다.
 import { loadStorage, removeStorage } from '../utils'
 import { saveStorage } from '/src/js/utils/index.js'
 import { IS_CHECKED_KEY, IMOJI } from '/src/js/constants/index.js'
@@ -6,7 +5,6 @@ import { getData, getUser, UserAPI } from '../../../api/api.js'
 import { EMAIL, LOGIN_AUTH_DATA } from '../constants/index.js'
 import { initSession, logout } from '../../pages/login/loginSession.js'
 
-// 문서 내 주요 요소(컨테이너, 버튼, 노티 등)를 선택합니다.
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
 const loadEmail = loadStorage(LOGIN_AUTH_DATA)
@@ -16,28 +14,22 @@ const doubleCheckedGroups = document.querySelectorAll(
   '[data-checked="doubleChecked"]',
 )
 
-// 노티 표시 시간 및 최대 선택 개수 설정
 const NOTI_HIDE_DELAY = 1800
 const MAX_CHECKED = 2
-
-// 알림 타이머 ID를 저장할 상태 변수
 let notiTimeoutId = null
 
-// 초기화 함수 실행
 init()
 
 function init() {
   bindEvents()
 }
 
-// 페이지 진입 시 노티 애니메이션(트랜지션)이 튀는 현상을 막기 위해 잠시 클래스를 제거합니다.
 if (noti) {
   setTimeout(() => {
     noti.classList.remove('no-transition')
   }, 500)
 }
 
-// 각종 클릭 및 변경 이벤트를 바인딩합니다.
 function bindEvents() {
   if (submitButton) {
     submitButton.addEventListener('click', handleSubmitClick)
@@ -47,7 +39,6 @@ function bindEvents() {
     group.addEventListener('change', handleGroupChange)
   })
 
-  // 브라우저 뒤로가기 버튼 등에 대응하기 위해 페이지 표시 시 초기화 로직 실행
   globalThis.addEventListener('pageshow', handleDetectBrowserLoadOrForward)
 }
 
@@ -56,14 +47,11 @@ function handleDetectBrowserLoadOrForward() {
   const [navigation] = performance.getEntriesByType('navigation')
   const { type } = navigation
 
-  // 일반적인 접속 유형일 때 로컬 스토리지 청소 및 버튼 비활성화
   if (type === 'navigate') {
     removeStorage(IS_CHECKED_KEY)
     removeStorage(IMOJI)
     disableSubmitButtonState()
-  }
-  // 뒤로가기/앞으로가기로 진입했을 때는 버튼을 활성화
-  else if (type === 'back_forward') {
+  } else if (type === 'back_forward') {
     enableSubmitButtonState()
   }
 }
@@ -94,7 +82,6 @@ async function handleSubmitClick(e) {
   e.stopImmediatePropagation()
   const { weather, mood } = getSelected()
 
-  // 필수 항목 미선택 시 알림 표시
   if (!weather || !mood) {
     showNoti('기분과 감정을 최소 한개이상 골라주세요')
     return
@@ -106,11 +93,8 @@ async function handleSubmitClick(e) {
       await emojiTotalList()
     }
 
-    // 로컬 스토리지에 체크 상태 저장 및 선택된 이모지 데이터 저장
     saveStorage(IS_CHECKED_KEY, 'true')
     emojiStorage()
-
-    console.log('서버에 데이터 업로드 성공!')
 
     // 결과 페이지로 이동
     location.href = '/src/pages/result/result.html'
@@ -162,7 +146,6 @@ async function emojiTotalList() {
     mood_counts: { ...mood },
   }
 
-  // 데이터셋 값과 일치하는 카운트 수치 증가
   imojis.forEach((item) => {
     if (item in updateData.weather_counts) {
       updateData.weather_counts[item] =
@@ -172,8 +155,6 @@ async function emojiTotalList() {
       updateData.mood_counts[item] = (updateData.mood_counts[item] || 0) + 1
     }
   })
-
-  // 수정된 데이터를 서버에 전송(PUT)
   await UserAPI.updateUserData(user.id, updateData)
 }
 
@@ -206,16 +187,13 @@ function showNoti(message) {
 }
 
 // 페이지 이탈 시 실행 중인 타이머를 정리합니다.
-// 개선 예시: 페이지 언로드 시 타이머 정리
 function cleanupTimers() {
   if (notiTimeoutId) {
     clearTimeout(notiTimeoutId)
     notiTimeoutId = null
   }
-  // 다른 타이머도 정리
 }
 
-// 페이지 언로드 이벤트에 정리 함수 연결
 globalThis.addEventListener('beforeunload', cleanupTimers)
 
 // 현재 날씨와 기분 그룹에서 각각 체크된 요소를 반환합니다.
@@ -229,34 +207,27 @@ function getSelected() {
 async function prefetchData() {
   try {
     if (localStorage.getItem('cachedBookData')) {
-      console.log('✅ 이미 캐시된 데이터가 있습니다.')
       return
     }
 
     const allData = await getData()
 
-    // [수정] allData가 없으면 저장 안 함 (undefined 문자열 저장 방지)
-    // localStorage.setItem('cachedBookData', JSON.stringify(allData))
     if (!allData) return
     localStorage.setItem('cachedBookData', JSON.stringify(allData))
-    console.log('✅ Data prefetch 성공')
   } catch (error) {
     console.error('❌ Data prefetch 실패', error)
   }
 }
 
-// 윈도우 로드 시 데이터 프리페치 수행
 window.addEventListener('load', () => {
   prefetchData()
 })
 
-// DOM 로드 시 이전 결과 리스트 및 선택 이모지 초기화
 window.addEventListener('DOMContentLoaded', () => {
   localStorage.removeItem('selectedBookList')
   localStorage.removeItem(IMOJI)
 })
 
-// 테스트 확인 버튼 요소 선택 및 이벤트 등록 (직접 이동 로직)
 const testCheckButton = document.querySelector('.user-test-check')
 
 if (testCheckButton) {
@@ -271,7 +242,7 @@ if (testCheckButton) {
 }
 
 // 세션 상태를 확인하여 로그인 여부를 판단합니다.
-const { isLoggedIn, currentUser } = initSession()
+const { isLoggedIn } = initSession()
 
 /**
  * [로그인 상태별 UI 렌더링]
@@ -289,7 +260,6 @@ export function renderLoggedInDisplay() {
     joinButton?.classList.add('hidden')
     logoutButton?.classList.remove('hidden')
 
-    console.log(currentUser?.userId, '님 환영합니다!')
     logoutButton?.addEventListener('click', logout)
   } else {
     checkButton.textContent = '비회원 확인하기'
@@ -299,5 +269,4 @@ export function renderLoggedInDisplay() {
   }
 }
 
-// 최종 UI 업데이트 실행
 renderLoggedInDisplay()
