@@ -17,7 +17,6 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 export function handleShowResult(data) {
-  // 만약 인자로 안 들어오면 전역 변수에서라도 가져오게 방어 코드 작성
   const finalData = data || window.selectedJsonData
   if (!finalData) return
 
@@ -32,7 +31,6 @@ export function handleShowResult(data) {
   if (isImagePreloaded) {
     scheduleResultDisplay(data, LOADING_TIMEOUT)
   } else {
-    // [중요] 배열의 첫 번째 책 커버를 프리로드합니다.
     const mainCover = Array.isArray(data) ? data[0].bookCover : data.bookCover
     preloadAndDisplayResult(data, mainCover)
   }
@@ -40,7 +38,6 @@ export function handleShowResult(data) {
 
 function scheduleResultDisplay(data, delay) {
   setTimeout(() => {
-    // phraseLoader에게 4권의 데이터를 그대로 배달합니다.
     displayPhraseResult(data)
     hideLoadingDisplay()
   }, delay)
