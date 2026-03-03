@@ -36,6 +36,9 @@
         <!-- 책 레이아웃 시작 -->
         <section class="section-page-layout">
           <p class="page-layout-subtitle">당신의 기분을 이해해봐요</p>
+          <p class="mobile-noti-message">
+            결과를 확인하시려면 화면을 아래로 내려주세요.
+          </p>
 
           <!-- 이모지 영역 시작 -->
           <article class="section-page-area">
@@ -223,7 +226,7 @@
 
         <section class="result-display">
           <h1 class="sr-only">문구 추천 결과 화면</h1>
-          <article class="loading-display" aria-live="polite">
+          <article class="loading-display result-active" aria-live="polite">
             <svg
               aria-hidden="true"
               class="loading-icon"
@@ -243,10 +246,13 @@
               />
             </svg>
             <p class="sr-only">결과 화면을 기다리는 중입니다.</p>
-            <p class="greeting-message">오늘 하루도 수고하셨어요 :)</p>
+            <p class="greeting-message">
+              오늘 하루도 수고하셨어요 :) <br />
+              잠시만 기다려주세요🍀
+            </p>
           </article>
 
-          <article class="result-content-display result-active">
+          <article class="result-content-display">
             <div class="recommend-phrase" aria-label="추천 문구 결과">
               <p class="book-title">책 제목</p>
               <p class="author">책 저자</p>
