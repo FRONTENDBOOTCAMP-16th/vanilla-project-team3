@@ -71,7 +71,6 @@ function handleFormChange() {
  * 핵심 로직: 입력받은 정보와 저장된 유저 정보를 비교합니다.
  */
 async function checkeEmailPassword() {
-  console.log('체크 함수 실행됨')
   // 1. 입력된 아이디를 기반으로 서버에서 유저 정보를 가져옴 (비동기 처리)
   const resultID = await getUser(ID, id.value)
 

@@ -107,11 +107,6 @@ export function getRecommendations(allBooks, mood, weather, viewed = []) {
     // 5. 상위 4권만 추출
     .slice(0, 4)
 
-  // 디버깅을 위해 추천된 책 제목을 콘솔에 출력합니다.
-  console.log(
-    '추천 4권:',
-    result.map((b) => `${b.bookTitle}`),
-  )
   return result
 }
 
