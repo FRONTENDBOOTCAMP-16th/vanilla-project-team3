@@ -96,8 +96,7 @@ async function handleSubmitClick(e) {
     saveStorage(IS_CHECKED_KEY, 'true')
     emojiStorage()
 
-    console.log('서버에 데이터 업로드 성공!')
-
+    // 결과 페이지로 이동
     location.href = '/src/pages/result/result.html'
   } catch (error) {
     console.error('데이터 업로드 실패:', error)
@@ -208,7 +207,6 @@ function getSelected() {
 async function prefetchData() {
   try {
     if (localStorage.getItem('cachedBookData')) {
-      console.log('✅ 이미 캐시된 데이터가 있습니다.')
       return
     }
 
@@ -216,7 +214,6 @@ async function prefetchData() {
 
     if (!allData) return
     localStorage.setItem('cachedBookData', JSON.stringify(allData))
-    console.log('✅ Data prefetch 성공')
   } catch (error) {
     console.error('❌ Data prefetch 실패', error)
   }
@@ -244,7 +241,8 @@ if (testCheckButton) {
   })
 }
 
-const { isLoggedIn, currentUser } = initSession()
+// 세션 상태를 확인하여 로그인 여부를 판단합니다.
+const { isLoggedIn } = initSession()
 
 /**
  * [로그인 상태별 UI 렌더링]
@@ -262,7 +260,6 @@ export function renderLoggedInDisplay() {
     joinButton?.classList.add('hidden')
     logoutButton?.classList.remove('hidden')
 
-    console.log(currentUser?.userId, '님 환영합니다!')
     logoutButton?.addEventListener('click', logout)
   } else {
     checkButton.textContent = '비회원 확인하기'

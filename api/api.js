@@ -208,7 +208,6 @@ export async function resetViewedHistory() {
     const userData = await UserAPI.fetchUserData(targetId)
     const resetData = UserLogic.clearViewedHistory(userData)
     await UserAPI.updateUserData(targetId, resetData)
-    console.log(`유저 ${targetId}번 기록 초기화 완료`)
   } catch (error) {
     console.error('기록 초기화 실패:', error)
   }
