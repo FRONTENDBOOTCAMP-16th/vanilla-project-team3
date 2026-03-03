@@ -5,7 +5,7 @@
 # Personalized Sentence Curation Site(Vanilla JS)
 
 - HTML, CSS, JavaScript로 구현한 사용자 맞춤 문학 문장 추천 웹 프로젝트
-- 배포 링크: 예정
+- 배포 링크: [https://vanilla-project-team3.netlify.app/]
 
 ---
 

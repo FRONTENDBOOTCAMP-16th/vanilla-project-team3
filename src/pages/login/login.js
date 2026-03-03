@@ -1,16 +1,7 @@
-// 1. 외부 모듈 및 설정값 가져오기
-// const baseURL = import.meta.env.VITE_BASE_URL // (현재 주석 처리됨) 환경 변수에서 기본 URL을 가져오는 설정
-import { getUser, UserAPI } from '../../../api/api' // 서버(또는 Mock API)에서 사용자 데이터를 가져오는 함수
-import { ID, LOGIN_AUTH_DATA } from '../../js/constants' // 프로젝트 내에서 반복 사용되는 고정값(상수)들
+import { getUser, UserAPI } from '../../../api/api'
+import { ID, LOGIN_AUTH_DATA } from '../../js/constants'
 
 const SESSION_FLAG = 'session_active'
-
-// 다른 탭에서 새로고침할 때 멀쩡한 localStorage를 지워버리는 부작용이 생겨서 제거
-// ✅ 추가: 페이지 로드 시 세션 플래그 확인 → 없으면 localStorage 초기화
-// if (!sessionStorage.getItem(SESSION_FLAG)) {
-//   localStorage.removeItem(LOGIN_AUTH_DATA)
-// }
-
 const form = document.querySelector('.autu-box-container')
 if (!form) throw new Error('문서에서 form을 찾을 수 없습니다.')
 const id = form.querySelector('.id-box')
@@ -18,7 +9,6 @@ const password = form.querySelector('.pw-box')
 const noti = form.querySelector('.noti-blank-warning')
 const login = form.querySelector('.submit-button')
 
-// 3. 실행 초기화
 init()
 
 /**
@@ -35,7 +25,6 @@ function bindEvent() {
   if (form) {
     form.addEventListener('submit', (e) => e.preventDefault())
     form.addEventListener('input', handleFormChange)
-    // 폼 내부의 클릭 발생 시 처리 (특히 로그인 버튼)
     form.addEventListener('click', handleFormClick)
   }
 }
@@ -48,8 +37,6 @@ function handleFormClick(e) {
 
   if (target) {
     e.preventDefault()
-
-    // 아이디와 비밀번호가 입력되었는지 확인 후 로그인 로직 실행
     checkeEmailPassword()
   }
 }
@@ -59,11 +46,10 @@ function handleFormClick(e) {
  * (aria-disabled 속성을 활용하여 웹 접근성을 고려함)
  */
 function handleFormChange() {
-  // 아이디와 비밀번호 입력창에 모두 값이 존재할 때
   if (id.value && password.value) {
-    login.setAttribute('aria-disabled', 'false') // 버튼 활성화 상태 표시
+    login.setAttribute('aria-disabled', 'false')
   } else {
-    login.setAttribute('aria-disabled', 'true') // 버튼 비활성화 상태 표시
+    login.setAttribute('aria-disabled', 'true')
   }
 }
 
@@ -76,9 +62,8 @@ async function checkeEmailPassword() {
 
   // 2. 가입 정보가 없는 경우 (아이디가 존재하지 않음)
   if (!resultID) {
-    // 경고 메시지를 화면에 표시함
     noti.style.visibility = 'visible'
-    return // 함수 종료
+    return
   }
 
   // 3. 가져온 유저 데이터의 비밀번호와 입력한 비밀번호를 비교
@@ -86,18 +71,15 @@ async function checkeEmailPassword() {
 
   // 4. 비밀번호가 틀린 경우
   if (!isPassword) {
-    // 경고 메시지를 화면에 표시함
     noti.style.visibility = 'visible'
-    return // 함수 종료
+    return
   }
 
-  // [추가] 이미 로그인 중인지 체크
   if (resultID.isLoggedIn) {
     const force = confirm(
       '다른 기기에서 로그인 중입니다. 강제 로그인하시겠습니까?',
     )
     if (!force) return
-    // 확인 누르면 그냥 isLogin으로 진행
   }
 
   // 5. 아이디와 비밀번호가 모두 일치하면 경고창을 숨기고 로그인 처리 진행
@@ -110,22 +92,19 @@ async function checkeEmailPassword() {
  */
 async function isLogin(resultID, resultPassword) {
   if (resultID && resultPassword) {
-    // [추가] 서버에 로그인 상태 저장
     await UserAPI.updateUserData(resultID.id, {
       ...resultID,
       isLoggedIn: true,
     })
-    // 보안을 위해 비밀번호를 제외한 유저 전체 데이터 객체 복사
-    const safeUserData = { ...resultID }
-    delete safeUserData.password // 복사본에서 비밀번호 필드만 삭제
 
-    // 로컬 스토리지(브라우저 저장소)에 유저 정보 저장 (JSON 문자열로 변환)
+    const safeUserData = { ...resultID }
+    delete safeUserData.password
+
     localStorage.setItem(LOGIN_AUTH_DATA, JSON.stringify(safeUserData))
 
     sessionStorage.setItem(SESSION_FLAG, 'true')
     alert('로그인을 성공하였습니다.')
 
-    // 메인 페이지로 이동 (index.html)
     window.location.href = `/index.html`
   }
 }
