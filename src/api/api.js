@@ -1,4 +1,4 @@
-import { LOGIN_AUTH_DATA } from '../src/js/constants'
+import { LOGIN_AUTH_DATA } from '../js/constants/index'
 
 const VITE_API_BASE_URL = import.meta.env.VITE_DATA_API_URL
 

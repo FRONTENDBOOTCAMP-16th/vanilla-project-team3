@@ -3,7 +3,7 @@ import {
   getViewedIds,
   updateViewedIds,
   resetViewedHistory,
-} from '../../../api/api.js'
+} from '../../api/api.js'
 import { getUniqueRandomData } from './_recommendService.js'
 import { getSelectedValues, filterData } from './_phraseLoader.js'
 import { handleShowResult } from './_imageLoading.js'

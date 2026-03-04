@@ -1,5 +1,5 @@
 // 외부 API 통신 함수와 상수, 유틸리티들을 가져옵니다.
-import { getData, getUser, UserAPI } from '../../../api/api'
+import { getData, getUser, UserAPI } from '../../api/api'
 import DOMPurify from 'dompurify'
 import { EMAIL, LOGIN_AUTH_DATA } from '../constants'
 import { initSession } from '../../pages/login/loginSession'

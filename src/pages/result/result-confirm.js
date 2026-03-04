@@ -15,7 +15,7 @@ import {
   hideLoadingDisplay,
 } from '../../js/components/_imageLoading.js'
 import { shareResult } from '../../js/components/_share.js'
-import { getData, getUser } from '../../../api/api.js'
+import { getData, getUser } from '../../api/api.js'
 import { handleShowResult } from '../../js/components/_imageLoading.js'
 /**
  * 이 파일은 페이지가 로드될 때 실행되며,
