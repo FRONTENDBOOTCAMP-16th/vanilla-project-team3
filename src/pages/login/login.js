@@ -1,4 +1,4 @@
-import { getUser, UserAPI } from '../../../api/api'
+import { getUser, UserAPI } from '../../api/api'
 import { ID, LOGIN_AUTH_DATA } from '../../js/constants'
 
 const SESSION_FLAG = 'session_active'

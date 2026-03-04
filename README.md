@@ -247,6 +247,8 @@ feature/기능/ 해당 개발자 이름
 ```
 VANILLA-PROJECT-TEAM3/
 src/
+├── api/
+│   └── api.js # api 다루는 함수
 ├── css/
 │   ├── common/
 │   │   ├── _a11y.css # 접근성

@@ -1,7 +1,7 @@
 import { loadStorage, removeStorage } from '../utils'
 import { saveStorage } from '/src/js/utils/index.js'
 import { IS_CHECKED_KEY, IMOJI } from '/src/js/constants/index.js'
-import { getData, getUser, UserAPI } from '../../../api/api.js'
+import { getData, getUser, UserAPI } from '../../api/api.js'
 import { EMAIL, LOGIN_AUTH_DATA } from '../constants/index.js'
 import { initSession, logout } from '../../pages/login/loginSession.js'
 

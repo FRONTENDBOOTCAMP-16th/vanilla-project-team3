@@ -1,6 +1,6 @@
 import { LOGIN_AUTH_DATA } from '../../js/constants'
 import { removeStorage } from '../../js/utils'
-import { UserAPI } from '../../../api/api'
+import { UserAPI } from '../../api/api'
 
 const SESSION_FLAG = 'session_active'
 
