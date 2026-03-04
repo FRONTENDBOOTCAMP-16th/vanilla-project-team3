@@ -21,7 +21,6 @@ export function handleShowResult(data) {
   if (!finalData) return
 
   if (!data || (Array.isArray(data) && data.length === 0)) {
-    console.warn('데이터가 준비되지 않았습니다.')
     return
   }
 

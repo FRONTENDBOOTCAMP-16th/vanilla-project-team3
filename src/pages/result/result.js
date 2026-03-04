@@ -21,7 +21,8 @@ import { getData, getUser } from '../../api/api.js'
 import { updateUserDiSplay } from '../../js/components/_popup.js'
 
 /**
- * 이 파일은 결과 페이지의 렌더링을 담당하며, 사용자의 선택과 서버 데이터를 결합합니다.
+ * 이 파일은 페이지가 로드될 때 실행되며,
+ * DOM에 접근하고 UI를 렌더링하는 역할을 수행합니다.
  */
 const container = document.querySelector('.container')
 if (!container) throw new Error('문서에서 .container 요소를 찾을 수 없습니다.')
@@ -32,7 +33,7 @@ const doubleCheckedGroups = container.querySelectorAll(
 const buttons = container.querySelectorAll('[data-checked="doubleChecked"]')
 
 /**
- * [메인 함수] 페이지 진입 시 가장 먼저 실행되는 초기화 로직
+ * 페이지 초기 진입 시 실행되는 메인 함수
  */
 async function initPage() {
   window.__skipSmartRecommendation = true
@@ -67,12 +68,9 @@ async function initPage() {
   syncEmojiCheckboxes()
   await handleResultDisplay(allBooks, mood, weather, excludeIds)
   bindHeartEvents(allBooks)
-  syncHeartStatus(allBooks)
 }
 
-/**
- * [UI] 이미 검사를 완료한 유저라면 체크박스를 비활성화(수정 불가) 처리
- */
+// UI: 이미 검사가 끝났다면(isChecked) 체크박스를 클릭하지 못하게 비활성화합니다.
 function applyDisableIfChecked() {
   const isChecked = loadStorage(IS_CHECKED_KEY) === 'true'
   if (!isChecked) return
@@ -81,9 +79,7 @@ function applyDisableIfChecked() {
   })
 }
 
-/**
- * [UI] 저장되어 있는 이모지 데이터를 바탕으로 체크박스의 체크 상태를 동기화
- */
+// UI: 로컬 스토리지에 저장된 내가 고른 이모지 값을 찾아 체크박스에 체크 표시를 합니다.
 function syncEmojiCheckboxes() {
   const savedEmojis = loadStorage(IMOJI)
   if (!savedEmojis) return
@@ -97,7 +93,7 @@ function syncEmojiCheckboxes() {
 }
 
 /**
- * [로직] 결과 화면 표시 처리 (공유 모드 vs 일반 추천 모드)
+ * 메인 로직: 결과 표시 (직접 접속 vs 공유 링크 접속 구분)
  */
 async function handleResultDisplay(allBooks, mood, weather, viewed) {
   const urlParams = new URLSearchParams(window.location.search)
@@ -137,7 +133,7 @@ async function handleResultDisplay(allBooks, mood, weather, viewed) {
 }
 
 /**
- * [공유] 친구에게 전달받은 URL 파라미터를 분석해 특정 도서 정보 복구
+ * 공유 데이터 파싱: 친구가 공유한 링크의 URL 정보를 분석하여 책 정보를 복원합니다.
  */
 async function getSharedData(title, ids, params) {
   let allData =
@@ -160,7 +156,7 @@ async function getSharedData(title, ids, params) {
 }
 
 /**
- * [보조 로직] 저장된 결과 리스트가 있으면 가져오고, 없으면 필터링 후 랜덤 추출
+ * 일반 진입 데이터 로직: 로컬 스토리지에 저장된 내 선택 결과를 가져오거나 계산합니다.
  */
 async function getLocalOrCalculatedData() {
   const savedLocalData = localStorage.getItem('selectedBookList')
@@ -172,16 +168,15 @@ async function getLocalOrCalculatedData() {
     const allData = cachedData ? JSON.parse(cachedData) : await getData()
     const filtered = filterData(allData, savedEmoji, savedEmoji)
     const result = getRandomData(filtered, 4)
+
     localStorage.setItem('selectedBookList', JSON.stringify(result))
     return result
   }
   return null
 }
 
-/**
- * [공유 버튼] 현재 추천 결과(data)를 외부로 공유할 수 있도록 설정
- */
-function bindShareEvent(data) {
+// 공유하기 버튼 클릭 시 카카오톡이나 링크 복사 등의 기능을 실행하도록 연결합니다.
+export function bindShareEvent(data) {
   const shareButton = document.querySelector('.share-button')
   if (shareButton) {
     shareButton.onclick = (e) => {
@@ -192,27 +187,8 @@ function bindShareEvent(data) {
 }
 
 /**
- * [화면 전환] 화면 전환해도 찜한 목록 그대로 표시
+ * 하트(좋아요) 이벤트 연결: 사용자가 추천된 책의 하트 버튼을 누르면 서버에 저장합니다.
  */
-function syncHeartStatus(allBooks) {
-  const savedData = loadStorage(LOGIN_AUTH_DATA) || {}
-  const hearts = savedData.heart || []
-  const buttons = document.querySelectorAll('.save-button')
-
-  buttons.forEach((button) => {
-    const imgSrc = button.querySelector('.book-cover-img')?.src
-    const book = allBooks.find((item) => item.bookCover === imgSrc)
-
-    if (book && hearts.includes(String(book.id))) {
-      button.classList.add('heart-active')
-      button.setAttribute('aria-pressed', 'true')
-    } else {
-      button.classList.remove('heart-active')
-      button.setAttribute('aria-pressed', 'false')
-    }
-  })
-}
-
 function bindHeartEvents(allBooks) {
   document.querySelectorAll('.save-button').forEach((btn) => {
     btn.addEventListener('click', async () => {
@@ -263,4 +239,4 @@ function bindHeartEvents(allBooks) {
   })
 }
 
-initPage()
+window.addEventListener('DOMContentLoaded', initPage)
